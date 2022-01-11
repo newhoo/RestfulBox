@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.4.10'
+}
+
+group 'io.github.newhoo.restkit'
+version '2.0.1'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+}
+
+intellij {
+    version '2021.2'
+    type 'IU'
+//    localPath '/Applications/IntelliJ IDEA 2.app/Contents'
+
+    pluginName 'RESTKit'
+    updateSinceUntilBuild false
+    downloadSources = true
+    plugins = ['java', 'kotlin']
+    sandboxDirectory = "${rootProject.rootDir}/idea-sandbox"
+}

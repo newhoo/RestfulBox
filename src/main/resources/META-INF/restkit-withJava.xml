@@ -1,0 +1,19 @@
+<idea-plugin>
+    <!-- 无效，要放plugin.xml  -->
+    <!--    <depends optional="true" config-file="restkit-withKotlin.xml">org.jetbrains.kotlin</depends>-->
+
+    <project-components>
+        <component>
+            <implementation-class>io.github.newhoo.restkit.feature.javaimpl.spring.SpringRequestResolver</implementation-class>
+            <loadForDefaultProject/>
+        </component>
+        <component>
+            <implementation-class>io.github.newhoo.restkit.feature.javaimpl.language.JavaLanguageResolver</implementation-class>
+        </component>
+    </project-components>
+
+    <extensions defaultExtensionNs="io.github.newhoo.restkit">
+        <restfulResolver implementation="io.github.newhoo.restkit.feature.javaimpl.spring.SpringRequestResolver$SpringRequestResolverProvider"/>
+        <languageResolver implementation="io.github.newhoo.restkit.feature.javaimpl.language.JavaLanguageResolver$JavaLanguageResolverProvider"/>
+    </extensions>
+</idea-plugin>
