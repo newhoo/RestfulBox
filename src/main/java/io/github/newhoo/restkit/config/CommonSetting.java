@@ -28,17 +28,21 @@ public class CommonSetting {
 
     private boolean saveRequestLog = false;
     private boolean showModuleInSearchEvery = false;
+    private boolean displayTreeListUsingApiDesc = false;
     private boolean enableParameterLibrary = true;
     private String preRequestScriptPath = "";
     private String postRequestScriptPath = "";
+    private String apiFilePath = "";
 
     public boolean isModified(CommonSetting modifiedSetting) {
         return requestTimeout != modifiedSetting.getRequestTimeout()
                 || saveRequestLog != modifiedSetting.isSaveRequestLog()
                 || showModuleInSearchEvery != modifiedSetting.isShowModuleInSearchEvery()
+                || displayTreeListUsingApiDesc != modifiedSetting.isDisplayTreeListUsingApiDesc()
                 || enableParameterLibrary != modifiedSetting.isEnableParameterLibrary()
                 || !StringUtils.equals(preRequestScriptPath, modifiedSetting.getPreRequestScriptPath())
                 || !StringUtils.equals(postRequestScriptPath, modifiedSetting.getPostRequestScriptPath())
+                || !StringUtils.equals(apiFilePath, modifiedSetting.getApiFilePath())
                 || !CollectionUtils.isEqualCollection(enabledWebFrameworks, modifiedSetting.getEnabledWebFrameworks());
     }
 

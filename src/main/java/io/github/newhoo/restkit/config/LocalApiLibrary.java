@@ -18,6 +18,7 @@ import java.util.Objects;
  *
  * @author huzunrong
  * @since 1.0.8
+ * @deprecated
  */
 @Data
 @State(name = "RESTKit_LocalApiLibrary", storages = {@Storage("restkit/RESTKit_LocalApiLibrary.xml")})

@@ -252,6 +252,12 @@ public class RestServiceClient extends JPanel implements DataProvider {
                         sendButton.setEnabled(true);
                     }
                 }
+
+                @Override
+                public void onCancel() {
+                    super.onCancel();
+                    sendButton.setEnabled(true);
+                }
             });
         });
     }
@@ -333,13 +339,7 @@ public class RestServiceClient extends JPanel implements DataProvider {
     }
 
     private void setResponse(String respText) {
-        respText = JsonUtils.format(respText);
-        if (StringUtils.isNotBlank(respText)) {
-            respText = respText.replace("\r", "");
-            // gson会将字符转成unicode，此处需转回来
-            respText = org.apache.commons.lang.StringEscapeUtils.unescapeJava(respText);
-        }
-        setEditorText(responseEditor, respText, project);
+        setEditorText(responseEditor, JsonUtils.format(respText), project);
     }
 
     private void setHttpInfo(String httpInfo) {

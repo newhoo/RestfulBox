@@ -13,9 +13,9 @@ import com.intellij.openapi.project.Project;
 import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.config.CommonSetting;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
-import io.github.newhoo.restkit.config.LocalApiLibrary;
 import io.github.newhoo.restkit.config.SettingConfigurable;
 import io.github.newhoo.restkit.i18n.RestBundle;
+import io.github.newhoo.restkit.restful.local.LocalStoreHelper;
 import io.github.newhoo.restkit.toolwindow.RestServiceToolWindow;
 import io.github.newhoo.restkit.toolwindow.RestToolWindowFactory;
 import io.github.newhoo.restkit.util.HtmlUtil;
@@ -75,7 +75,7 @@ public class ImportApiAction extends AnAction {
                             o.setModuleName(o.getModuleName() + "(import)");
                             o.setTs(System.currentTimeMillis());
                         });
-                        LocalApiLibrary.getInstance(project).getItemList().addAll(restItems);
+                        new LocalStoreHelper(project).asyncAdd(restItems);
                         RestToolWindowFactory.getRestServiceToolWindow(project, RestServiceToolWindow::scheduleUpdateTree);
                     }
                 });

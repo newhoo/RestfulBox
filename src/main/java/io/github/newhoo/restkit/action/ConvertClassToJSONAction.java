@@ -20,14 +20,14 @@ public class ConvertClassToJSONAction extends AnAction {
     public void update(AnActionEvent e) {
         PsiElement psiElement = e.getData(CommonDataKeys.PSI_ELEMENT);
         e.getPresentation().setEnabledAndVisible(psiElement != null
-                && LanguageHelper.getInstance(psiElement.getProject()).canConvertToJSON(psiElement)
+                && LanguageHelper.canConvertToJSON(psiElement)
         );
     }
 
     @Override
     public void actionPerformed(AnActionEvent e) {
         PsiElement psiElement = e.getRequiredData(CommonDataKeys.PSI_ELEMENT);
-        String json = LanguageHelper.getInstance(psiElement.getProject()).convertClassToJSON(psiElement);
+        String json = LanguageHelper.convertClassToJSON(psiElement);
         if (StringUtils.isNotEmpty(json)) {
             CopyPasteManager.getInstance().setContents(new StringSelection(json));
             NotifierUtils.infoBalloon("", "Class object json copied to clipboard successfully.", null, psiElement.getProject());

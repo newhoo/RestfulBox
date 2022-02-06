@@ -4,6 +4,7 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationListener;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.InputValidator;
 import com.intellij.openapi.ui.Messages;
@@ -14,7 +15,8 @@ import io.github.newhoo.restkit.common.RestDataKey;
 import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.config.CommonSetting;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
-import io.github.newhoo.restkit.config.LocalApiLibrary;
+import io.github.newhoo.restkit.config.SettingConfigurable;
+import io.github.newhoo.restkit.restful.local.LocalStoreHelper;
 import io.github.newhoo.restkit.toolwindow.RestServiceToolWindow;
 import io.github.newhoo.restkit.toolwindow.RestToolWindowFactory;
 import io.github.newhoo.restkit.util.HtmlUtil;
@@ -60,28 +62,39 @@ public class SaveApiAction extends AnAction {
         }
         String url = apiInfo.getUrl();
         if (StringUtils.isEmpty(url)) {
-            NotifierUtils.errorBalloon("Save Local Api Error", "Url can't be empty.", project);
+            NotifierUtils.errorBalloon("Save Api Error", "Url can't be empty.", project);
+            return;
+        }
+        CommonSetting commonSetting = CommonSettingComponent.getInstance(project).getState();
+        if (StringUtils.isEmpty(commonSetting.getApiFilePath())) {
+            NotifierUtils.infoBalloon("", "Local api store path is empty. " + HtmlUtil.link("Edit", "Edit"), new NotificationListener.Adapter() {
+                @Override
+                protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent e) {
+                    ShowSettingsUtil.getInstance().showSettingsDialog(project, SettingConfigurable.class);
+                }
+            }, project);
             return;
         }
 
         HttpMethod method = apiInfo.getMethod();
 
-        List<RestItem> library = LocalApiLibrary.getInstance(project).getItemList();
-        List<RestItem> existed = library.stream().filter(item -> url.equals(item.getUrl()) && item.getMethod() == method)
-                                        .collect(Collectors.toList());
+        List<RestItem> restItemInProject = new LocalStoreHelper(project).queryAll();
+        List<RestItem> existed = restItemInProject.stream()
+                                                  .filter(item -> url.equals(item.getUrl()) && item.getMethod() == method)
+                                                  .collect(Collectors.toList());
         if (!existed.isEmpty()) {
-            String msg = String.format("[%s %s] existed %d, how? %s%s, %s", method, url, existed.size(), HtmlUtil.BR, HtmlUtil.link("Update", "Update"), HtmlUtil.link("Save As", "Save As"));
-            NotifierUtils.infoBalloon("Save Local Api", msg, new NotificationListener.Adapter() {
+            String msg = String.format("[%s %s] existed %d, how? %s, %s", method, url, existed.size(), HtmlUtil.link("Update", "Update"), HtmlUtil.link("Save As", "Save As"));
+            NotifierUtils.infoBalloon("Save Api", msg, new NotificationListener.Adapter() {
                 @Override
                 protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent hyperlinkEvent) {
                     notification.expire();
                     switch (hyperlinkEvent.getDescription()) {
                         case "Update": {
-                            saveOrUpdateApi(apiInfo, project, existed);
+                            saveOrUpdateApi(apiInfo, project, existed, restItemInProject);
                             break;
                         }
                         case "Save As": {
-                            saveOrUpdateApi(apiInfo, project, Collections.emptyList());
+                            saveOrUpdateApi(apiInfo, project, Collections.emptyList(), restItemInProject);
                             break;
                         }
                         default:
@@ -89,16 +102,17 @@ public class SaveApiAction extends AnAction {
                 }
             }, project);
         } else {
-            saveOrUpdateApi(apiInfo, project, Collections.emptyList());
+            saveOrUpdateApi(apiInfo, project, Collections.emptyList(), restItemInProject);
         }
     }
 
-    private void saveOrUpdateApi(RestClientApiInfo apiInfo, Project project, List<RestItem> existedList) {
+    private void saveOrUpdateApi(RestClientApiInfo apiInfo, Project project, List<RestItem> existedList, List<RestItem> allRestItemInProject) {
         List<KV> headers = ToolkitUtil.textToKVList(apiInfo.getHeaders());
         List<KV> params = ToolkitUtil.textToKVList(apiInfo.getParams());
         String bodyJson = apiInfo.getBodyJson();
 
-        String desc = Messages.showInputDialog(project, "Input api description", "Api Description", null, null, new InputValidator() {
+        String initialDesc = existedList.isEmpty() ? "" : existedList.get(0).getDescription();
+        String desc = Messages.showInputDialog(project, "Input api description", "Api Description", null, initialDesc, new InputValidator() {
             @Override
             public boolean checkInput(String inputString) {
                 return StringUtils.isNotBlank(inputString);
@@ -113,9 +127,9 @@ public class SaveApiAction extends AnAction {
             return;
         }
 
+        LocalStoreHelper localStoreHelper = new LocalStoreHelper(project);
         if (existedList.isEmpty()) {
-            List<RestItem> library = LocalApiLibrary.getInstance(project).getItemList();
-            String[] moduleNames = library.stream().map(RestItem::getModuleName).distinct().toArray(String[]::new);
+            String[] moduleNames = allRestItemInProject.stream().map(RestItem::getModuleName).distinct().toArray(String[]::new);
             String moduleName = Messages.showEditableChooseDialog("Select or input module name", "Edit Module Name", null, moduleNames, moduleNames.length > 0 ? moduleNames[0] : "local", new InputValidator() {
                 @Override
                 public boolean checkInput(String inputString) {
@@ -130,8 +144,7 @@ public class SaveApiAction extends AnAction {
             if (StringUtils.isEmpty(moduleName)) {
                 return;
             }
-            LocalApiLibrary.getInstance(project).getItemList()
-                           .add(new RestItem(apiInfo.getUrl(), apiInfo.getMethod().name(), headers, params, bodyJson, desc, moduleName, WEB_FRAMEWORK_LOCAL));
+            localStoreHelper.asyncAdd(Collections.singletonList(new RestItem(apiInfo.getUrl(), apiInfo.getMethod().name(), headers, params, bodyJson, desc, moduleName, WEB_FRAMEWORK_LOCAL)));
         } else {
             existedList.forEach(restItem -> {
                 restItem.setHeaders(headers);
@@ -139,6 +152,7 @@ public class SaveApiAction extends AnAction {
                 restItem.setBodyJson(bodyJson);
                 restItem.setDescription(desc);
             });
+            localStoreHelper.asyncReplaceAll(allRestItemInProject);
         }
         RestToolWindowFactory.getRestServiceToolWindow(project, RestServiceToolWindow::scheduleUpdateTree);
     }

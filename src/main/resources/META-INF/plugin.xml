@@ -15,13 +15,21 @@
         <li>Support more jetbrains ides, and provide api local storage by default.</li>
     </ul>
 
-    <a href="https://github.com/newhoo/RESTKit">Document</a> | <a href="https://github.com/newhoo/RESTKit/issues">Issues</a>
+    <a href="https://github.com/newhoo/RESTKit">Github</a> | <a href="https://gitee.com/newhoo/RESTKit">Gitee</a>
     <br/>
 
     <img src="https://raw.githubusercontent.com/newhoo/RESTKit/main/images/plugin.png" />
     ]]></description>
 
     <change-notes><![CDATA[
+        2.0.2
+        <ul>
+            <li>more powerful api local store, support synchronization in different IDE.</li>
+            <li>fix bugs.</li>
+            <br/>
+            <li>API本地存储升级，支持跨IDE同步.</li>
+        </ul>
+
         2.0.1
         <ul>
             <li>support more jetbrains ides.</li>
@@ -58,21 +66,7 @@
     <depends optional="true" config-file="restkit-withMicroservices.xml">com.intellij.modules.microservices</depends>
 
     <project-components>
-        <component>
-            <implementation-class>io.github.newhoo.restkit.config.EnvironmentForm</implementation-class>
-            <loadForDefaultProject/>
-        </component>
-        <component>
-            <implementation-class>io.github.newhoo.restkit.config.SettingForm</implementation-class>
-            <loadForDefaultProject/>
-        </component>
-        <component>
-            <implementation-class>io.github.newhoo.restkit.restful.local.LocalRequestResolver</implementation-class>
-            <loadForDefaultProject/>
-        </component>
-        <component>
-            <implementation-class>io.github.newhoo.restkit.restful.LanguageHelper</implementation-class>
-        </component>
+        <!-- Add your project components here, better not use. -->
     </project-components>
 
     <application-components>
@@ -108,7 +102,7 @@
     </extensionPoints>
 
     <extensions defaultExtensionNs="io.github.newhoo.restkit">
-        <restfulResolver implementation="io.github.newhoo.restkit.restful.local.LocalRequestResolver$LocalCacheResolverProvider"/>
+        <restfulResolver implementation="io.github.newhoo.restkit.restful.local.LocalRequestResolver$FileResolverProvider"/>
     </extensions>
 
     <actions>
@@ -138,6 +132,7 @@
             <action id="RESTKit.OpenPreScriptAction" class="io.github.newhoo.restkit.action.OpenPreScriptAction" text="Open PreScript in Editor"/>
             <action id="RESTKit.OpenPostScriptAction" class="io.github.newhoo.restkit.action.OpenPostScriptAction" text="Open PostScript in Editor"/>
             <action id="RESTKit.OpenRequestLogAction" class="io.github.newhoo.restkit.action.OpenRequestLogAction" text="Open Request Log in Editor"/>
+            <action id="RESTKit.OpenLocalApiFileAction" class="io.github.newhoo.restkit.action.OpenLocalApiFileAction" text="Open Local Api File in Editor"/>
             <action id="RESTKit.ViewDocument" class="io.github.newhoo.restkit.action.ViewDocumentAction" text="View Document"/>
         </group>
 

@@ -20,6 +20,7 @@ import io.github.newhoo.restkit.feature.javaimpl.helper.PsiClassHelper;
 import io.github.newhoo.restkit.feature.javaimpl.spring.SpringRequestMethodAnnotation;
 import io.github.newhoo.restkit.restful.BaseRequestResolver;
 import io.github.newhoo.restkit.restful.LanguageResolver;
+import io.github.newhoo.restkit.restful.ParamResolver;
 import io.github.newhoo.restkit.restful.RequestHelper;
 import io.github.newhoo.restkit.util.TypeUtils;
 import lombok.AllArgsConstructor;
@@ -45,7 +46,7 @@ import static io.github.newhoo.restkit.feature.javaimpl.spring.SpringRequestPara
  * @author huzunrong
  * @since 2.0.0
  */
-public abstract class BaseLanguageResolver extends BaseRequestResolver implements LanguageResolver {
+public abstract class BaseLanguageResolver extends BaseRequestResolver implements ParamResolver, LanguageResolver {
 
     @NotNull
     @Override

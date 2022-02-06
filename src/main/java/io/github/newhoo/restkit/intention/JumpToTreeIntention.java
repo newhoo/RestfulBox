@@ -32,7 +32,7 @@ public class JumpToTreeIntention extends PsiElementBaseIntentionAction implement
 
     @Override
     public boolean isAvailable(@NotNull Project project, Editor editor, @NotNull PsiElement element) {
-        return element.getParent() != null && LanguageHelper.getInstance(element.getParent().getProject()).canNavigateToTree(element.getParent());
+        return element.getParent() != null && LanguageHelper.canNavigateToTree(element.getParent());
     }
 
     @Nls(capitalization = Capitalization.Sentence)

@@ -25,7 +25,7 @@ public class EnvironmentConfigurable implements Configurable {
     private EnvironmentConfigurable(Project project) {
         this.project = project;
         this.environment = Environment.getInstance(project);
-        this.environmentForm = project.getComponent(EnvironmentForm.class);
+        this.environmentForm = new EnvironmentForm(project);
     }
 
     @Nls(capitalization = Capitalization.Title)

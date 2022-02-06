@@ -5,8 +5,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 import io.github.newhoo.restkit.common.BKV;
 import io.github.newhoo.restkit.common.EnvList;
+import io.github.newhoo.restkit.common.RestItem;
+import io.github.newhoo.restkit.config.CommonSetting;
+import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.Environment;
+import io.github.newhoo.restkit.config.LocalApiLibrary;
+import io.github.newhoo.restkit.restful.local.LocalStoreHelper;
 import io.github.newhoo.restkit.util.EnvironmentUtils;
+import io.github.newhoo.restkit.util.FileUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -67,6 +73,20 @@ public class MyStartupActivity implements StartupActivity {
 
             EnvironmentUtils.notifyEnvUpdate(project);
             fromSetting.setValue(KEY_REQUEST_SYNC, true);
+        }
+
+        // 同步api
+        List<RestItem> itemList = LocalApiLibrary.getInstance(project).getItemList();
+        if (!itemList.isEmpty()) {
+            // 默认创建项目级别
+            CommonSetting setting = CommonSettingComponent.getInstance(project).getState();
+            String apiFile = setting.getApiFilePath();
+            if (StringUtils.isEmpty(apiFile)) {
+                apiFile = FileUtils.getApiFilePath(project);
+                setting.setApiFilePath(apiFile);
+            }
+            new LocalStoreHelper(project).asyncAdd(itemList);
+            itemList.clear();
         }
     }
 }

@@ -68,14 +68,12 @@ public class ScriptEditDialog extends JDialog {
     }
 
     private void initScriptEditor(String scriptContent) {
-        if (project.isDefault()) {
-            return;
-        }
-
         AppUIUtil.invokeOnEdt(() -> {
             String scriptText = StringUtils.isNotEmpty(scriptContent) ? scriptContent : DEFAULT_SCRIPT_CONTENT;
 
-            Language language = ObjectUtils.defaultIfNull(Language.findLanguageByID("JAVA"), PlainTextLanguage.INSTANCE);
+            Language language = project.isDefault()
+                    ? PlainTextLanguage.INSTANCE
+                    : ObjectUtils.defaultIfNull(Language.findLanguageByID("JAVA"), PlainTextLanguage.INSTANCE);
 
             scriptEditor = createEditor("RestKitScript.java", language, scriptText, project);
             editPane.add(scriptEditor.getComponent(), BorderLayout.CENTER);

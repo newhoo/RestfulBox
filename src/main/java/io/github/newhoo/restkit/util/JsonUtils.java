@@ -19,7 +19,7 @@ import java.util.List;
 @UtilityClass
 public class JsonUtils {
 
-    private static final Gson GSON = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().serializeNulls().setPrettyPrinting().disableHtmlEscaping().create();
 
     public static String toJson(Object obj) {
         return GSON.toJson(obj);

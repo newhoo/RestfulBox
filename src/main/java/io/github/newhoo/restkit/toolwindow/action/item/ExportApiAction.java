@@ -36,6 +36,12 @@ public class ExportApiAction extends AnAction {
             return;
         }
 
+        // check api item is valid. PsiElement may be invalid
+        if (serviceItems.stream().anyMatch(restItem -> !restItem.isValid())) {
+            NotifierUtils.errorBalloon(RestBundle.message("toolkit.local.api.export.error.title"), RestBundle.message("toolkit.local.api.export.error.content"), project);
+            return;
+        }
+
         ProgressManager.getInstance().run(new Task.Backgroundable(project, "[RESTKit] Export api") {
             @Override
             public void run(@NotNull ProgressIndicator indicator) {

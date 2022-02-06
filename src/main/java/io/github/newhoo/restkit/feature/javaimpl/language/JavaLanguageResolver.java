@@ -3,7 +3,6 @@ package io.github.newhoo.restkit.feature.javaimpl.language;
 import com.intellij.lang.Language;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -177,8 +176,8 @@ public class JavaLanguageResolver extends BaseLanguageResolver {
 
         @NotNull
         @Override
-        public LanguageResolver createLanguageResolver(@NotNull Project project) {
-            return project.getComponent(JavaLanguageResolver.class);
+        public LanguageResolver createLanguageResolver() {
+            return new JavaLanguageResolver();
         }
     }
 }

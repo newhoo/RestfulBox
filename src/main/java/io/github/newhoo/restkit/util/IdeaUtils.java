@@ -149,6 +149,7 @@ public class IdeaUtils {
             }
         }
         final VirtualFile fileByIoFile = LocalFileSystem.getInstance().findFileByIoFile(file);
+        // fileByIoFile.setCharset(StandardCharsets.UTF_8);
         return EditorFactory.getInstance().createEditor(FileDocumentManager.getInstance().getCachedDocument(fileByIoFile));
     }
 

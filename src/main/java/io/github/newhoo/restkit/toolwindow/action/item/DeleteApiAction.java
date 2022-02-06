@@ -4,17 +4,18 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
-import io.github.newhoo.restkit.common.RestItem;
+import com.intellij.openapi.ui.Messages;
 import io.github.newhoo.restkit.common.RestDataKey;
-import io.github.newhoo.restkit.config.LocalApiLibrary;
+import io.github.newhoo.restkit.common.RestItem;
+import io.github.newhoo.restkit.restful.RequestHelper;
+import io.github.newhoo.restkit.restful.RequestResolver;
 import io.github.newhoo.restkit.toolwindow.RestServiceToolWindow;
 import io.github.newhoo.restkit.toolwindow.RestToolWindowFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-
-import static io.github.newhoo.restkit.common.RestConstant.WEB_FRAMEWORK_LOCAL;
 
 /**
  * DeleteApiAction
@@ -26,10 +27,12 @@ public class DeleteApiAction extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
+        Project project = e.getProject();
         List<RestItem> items = RestDataKey.SELECTED_SERVICE.getData(e.getDataContext());
-        boolean match = items != null && items.stream()
-                                              .allMatch(restItem -> WEB_FRAMEWORK_LOCAL.equals(restItem.getFramework()));
-        e.getPresentation().setVisible(match);
+        if (project == null || items == null) {
+            return;
+        }
+        e.getPresentation().setVisible(items.stream().allMatch(RestItem::canDelete));
     }
 
     @Override
@@ -37,10 +40,21 @@ public class DeleteApiAction extends AnAction {
         Project project = e.getRequiredData(CommonDataKeys.PROJECT);
         List<RestItem> items = RestDataKey.SELECTED_SERVICE.getData(e.getDataContext());
         if (items != null) {
-            List<RestItem> delItems = items.stream()
-                                           .filter(restItem -> WEB_FRAMEWORK_LOCAL.equals(restItem.getFramework()))
-                                           .collect(Collectors.toList());
-            LocalApiLibrary.getInstance(project).getItemList().removeAll(delItems);
+            int yesNoDialog = Messages.showYesNoDialog(project, "Delete " + items.size() + " api?", "Delete", null);
+            if (Messages.YES != yesNoDialog) {
+                return;
+            }
+            Map<String, RequestResolver> resolverMap = RequestHelper.getRequestResolvers(project)
+                                                                    .stream()
+                                                                    .collect(Collectors.toMap(RequestResolver::getFrameworkName, o -> o));
+            items.stream()
+                 .collect(Collectors.groupingBy(RestItem::getFramework))
+                 .entrySet()
+                 .stream()
+                 .filter(entry -> resolverMap.containsKey(entry.getKey()))
+                 .forEach(entry -> {
+                     resolverMap.get(entry.getKey()).delete(entry.getValue());
+                 });
             RestToolWindowFactory.getRestServiceToolWindow(project, RestServiceToolWindow::scheduleUpdateTree);
         }
     }

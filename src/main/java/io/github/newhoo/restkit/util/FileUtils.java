@@ -3,6 +3,7 @@ package io.github.newhoo.restkit.util;
 import com.intellij.openapi.project.Project;
 import io.github.newhoo.restkit.common.HttpInfo;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,6 +23,26 @@ import static java.nio.file.StandardOpenOption.CREATE;
 public class FileUtils {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public static String getApiFilePath() {
+        String userHome = System.getProperty("user.home");
+        if (StringUtils.isNotEmpty(userHome)) {
+            userHome = userHome + "/.restkit/";
+            try {
+                Files.createDirectories(Paths.get(userHome));
+                String apiFilePath = userHome + "apifile.json";
+                Files.write(Paths.get(apiFilePath), new byte[0], CREATE);
+                return apiFilePath;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public static String getApiFilePath(Project project) {
+        return getRestDirectory(project) + "apifile.json";
+    }
 
     public static String getRestDirectory(Project project) {
         return project.getBasePath() + "/" + DIRECTORY_STORE_FOLDER + "/restkit/";

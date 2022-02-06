@@ -24,4 +24,28 @@ public interface RequestResolver {
      * find items in project
      */
     List<RestItem> findRestItemInProject(@NotNull Project project);
+
+    /**
+     * add api
+     *
+     * @param itemList not null
+     */
+    default void add(List<RestItem> itemList) {
+    }
+
+    /**
+     * update api
+     *
+     * @param itemList not null
+     */
+    default void update(List<RestItem> itemList) {
+    }
+
+    /**
+     * delete api
+     *
+     * @param itemList not null
+     */
+    default void delete(List<RestItem> itemList) {
+    }
 }

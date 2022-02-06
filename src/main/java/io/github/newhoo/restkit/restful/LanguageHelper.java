@@ -1,7 +1,6 @@
 package io.github.newhoo.restkit.restful;
 
 import com.intellij.lang.Language;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import io.github.newhoo.restkit.restful.ep.LanguageResolverProvider;
 import org.jetbrains.annotations.NotNull;
@@ -18,34 +17,26 @@ import java.util.stream.Collectors;
  */
 public class LanguageHelper {
 
-    private final Map<Language, LanguageResolver> resolverMap;
+    public static final Map<Language, LanguageResolver> LANGUAGE_RESOLVER_MAP = LanguageResolverProvider.EP_NAME.getExtensionList()
+                                                                                                                .stream()
+                                                                                                                .filter(Objects::nonNull)
+                                                                                                                .map(LanguageResolverProvider::createLanguageResolver)
+                                                                                                                .collect(Collectors.toMap(LanguageResolver::getLanguage, o -> o, (o1, o2) -> o1));
 
-    public LanguageHelper(@NotNull Project project) {
-        resolverMap = LanguageResolverProvider.EP_NAME.getExtensionList()
-                                                      .stream()
-                                                      .filter(Objects::nonNull)
-                                                      .map(provider -> provider.createLanguageResolver(project))
-                                                      .collect(Collectors.toMap(LanguageResolver::getLanguage, o -> o));
+    public static boolean canConvertToJSON(@NotNull PsiElement psiElement) {
+        return LANGUAGE_RESOLVER_MAP.containsKey(psiElement.getLanguage())
+                && LANGUAGE_RESOLVER_MAP.get(psiElement.getLanguage()).canConvertToJSON(psiElement);
     }
 
-    public static LanguageHelper getInstance(@NotNull Project project) {
-        return project.getComponent(LanguageHelper.class);
-    }
-
-    public boolean canConvertToJSON(@NotNull PsiElement psiElement) {
-        return resolverMap.containsKey(psiElement.getLanguage())
-                && resolverMap.get(psiElement.getLanguage()).canConvertToJSON(psiElement);
-    }
-
-    public String convertClassToJSON(@NotNull PsiElement psiElement) {
-        if (resolverMap.containsKey(psiElement.getLanguage())) {
-            return resolverMap.get(psiElement.getLanguage()).convertToJSON(psiElement);
+    public static String convertClassToJSON(@NotNull PsiElement psiElement) {
+        if (LANGUAGE_RESOLVER_MAP.containsKey(psiElement.getLanguage())) {
+            return LANGUAGE_RESOLVER_MAP.get(psiElement.getLanguage()).convertToJSON(psiElement);
         }
         return null;
     }
 
-    public boolean canNavigateToTree(@NotNull PsiElement psiElement) {
-        return resolverMap.containsKey(psiElement.getLanguage())
-                && resolverMap.get(psiElement.getLanguage()).canNavigateToTree(psiElement);
+    public static boolean canNavigateToTree(@NotNull PsiElement psiElement) {
+        return LANGUAGE_RESOLVER_MAP.containsKey(psiElement.getLanguage())
+                && LANGUAGE_RESOLVER_MAP.get(psiElement.getLanguage()).canNavigateToTree(psiElement);
     }
 }

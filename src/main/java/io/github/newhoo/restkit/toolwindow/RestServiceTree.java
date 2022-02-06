@@ -32,6 +32,8 @@ import io.github.newhoo.restkit.common.RestDataKey;
 import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.common.RestModule;
 import io.github.newhoo.restkit.common.ToolkitIcons;
+import io.github.newhoo.restkit.config.CommonSetting;
+import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.HttpMethodFilterConfiguration;
 import io.github.newhoo.restkit.restful.RequestHelper;
 import io.github.newhoo.restkit.util.IdeaUtils;
@@ -61,6 +63,7 @@ public class RestServiceTree extends JPanel implements DataProvider {
 
     public static final Logger LOG = Logger.getInstance(RestServiceTree.class);
     private final Project myProject;
+    private final CommonSetting setting;
 
     private final StructureTreeModel<AbstractTreeStructure> myTreeModel;
     public final SimpleTree myTree;
@@ -68,6 +71,7 @@ public class RestServiceTree extends JPanel implements DataProvider {
 
     public RestServiceTree(Project project) {
         myProject = project;
+        setting = CommonSettingComponent.getInstance(project).getState();
 
         myTreeModel = new StructureTreeModel<>(new SimpleTreeStructure() {
             @Override
@@ -272,6 +276,12 @@ public class RestServiceTree extends JPanel implements DataProvider {
                                      .map(requestNode -> requestNode.myRestItem)
                                      .collect(Collectors.toList());
         }
+        if (RestDataKey.ALL_MODULE.is(dataId)) {
+            return myRoot.moduleNodes.stream()
+                                     .map(moduleNode -> moduleNode.restModule.getModuleName())
+                                     .distinct()
+                                     .collect(Collectors.toList());
+        }
         // getMenu保证了不能选择不同类型节点
         if (RestDataKey.SELECTED_SERVICE.is(dataId)) {
             List<RestItem> list = new ArrayList<>();
@@ -289,7 +299,7 @@ public class RestServiceTree extends JPanel implements DataProvider {
             }
             return list;
         }
-        if (RestDataKey.SELECTED_MODULE.is(dataId)) {
+        if (RestDataKey.SELECTED_MODULE_SERVICE.is(dataId)) {
             return getSelectedNodes().stream()
                                      .filter(node -> node instanceof ModuleNode)
                                      .flatMap(node -> ((ModuleNode) node).restModule.getRestItems().stream())
@@ -353,7 +363,8 @@ public class RestServiceTree extends JPanel implements DataProvider {
 
         @Override
         public String getName() {
-            int serviceCount = moduleNodes.stream().mapToInt(moduleNode -> moduleNode.requestNodes.size()).sum();
+            List<Integer> list = moduleNodes.stream().map(moduleNode -> moduleNode.requestNodes.size()).collect(Collectors.toList());
+            int serviceCount = list.stream().mapToInt(i -> i).sum();
             return serviceCount > 0 ? String.format("Found %d services", serviceCount) : "No service found";
         }
 
@@ -437,7 +448,10 @@ public class RestServiceTree extends JPanel implements DataProvider {
                     description = split[0] + "#" + split[1] + "<br/>" + split[2];
                 }
             }
-            getTemplatePresentation().setTooltip(description);
+            String tooltip = "source: " + myRestItem.getFramework() + "<br/>"
+                    + "url: " + myRestItem.getUrl() + "<br/>"
+                    + "desc: " + description;
+            getTemplatePresentation().setTooltip(tooltip);
         }
 
         @Override
@@ -447,6 +461,9 @@ public class RestServiceTree extends JPanel implements DataProvider {
 
         @Override
         public String getName() {
+            if (setting.isDisplayTreeListUsingApiDesc() && StringUtils.isNotEmpty(myRestItem.getDescription())) {
+                return myRestItem.getDescription();
+            }
             return myRestItem.getUrl();
         }
 

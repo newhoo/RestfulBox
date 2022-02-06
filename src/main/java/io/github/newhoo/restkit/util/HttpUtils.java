@@ -27,14 +27,19 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.conn.ManagedHttpClientConnection;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestExecutor;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 
+import javax.net.ssl.SSLContext;
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -150,14 +155,11 @@ public class HttpUtils {
         long startTs = System.currentTimeMillis();
 
         HttpClientContext context = HttpClientContext.create();
-        try (CloseableHttpClient httpClient = HttpClients.custom().setRequestExecutor(getHttpRequestExecutor()).build();
+        try (CloseableHttpClient httpClient = createHttpClient();
              CloseableHttpResponse response = httpClient.execute(request, context)) {
             String hostAddress = (String) context.getAttribute(HTTP_HOSTADDRESS);
 
-            HttpEntity entity = response.getEntity();
-            String result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-            // unicode 转码
-            result = org.apache.commons.lang.StringEscapeUtils.unescapeJava(result);
+            String result = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
             long cost = System.currentTimeMillis() - startTs;
             HttpInfo httpInfo = new HttpInfo(req, new Response(response, result), hostAddress, cost);
@@ -240,6 +242,19 @@ public class HttpUtils {
                 return super.execute(request, conn, context);
             }
         };
+    }
+
+    private static CloseableHttpClient createHttpClient() {
+        HttpClientBuilder builder = HttpClients.custom()
+                                               .setRequestExecutor(getHttpRequestExecutor());
+        try {
+            // https信任所有
+            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (chain, authType) -> true).build();
+            builder.setSSLSocketFactory(new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return builder.build();
     }
 
     private static class MyHttpDelete extends HttpEntityEnclosingRequestBase {

@@ -2,7 +2,7 @@ package io.github.newhoo.restkit.common;
 
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
-import io.github.newhoo.restkit.restful.LanguageResolver;
+import io.github.newhoo.restkit.restful.ParamResolver;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,9 +25,9 @@ public class PsiRestItem extends RestItem implements Navigatable {
     @NotNull
     private final PsiElement psiElement;
     @NotNull
-    private final LanguageResolver resolver;
+    private final ParamResolver resolver;
 
-    public PsiRestItem(@NotNull String url, String requestMethod, @NotNull String moduleName, @NotNull String framework, @NotNull PsiElement psiElement, @NotNull LanguageResolver resolver) {
+    public PsiRestItem(@NotNull String url, String requestMethod, @NotNull String moduleName, @NotNull String framework, @NotNull PsiElement psiElement, @NotNull ParamResolver resolver) {
         super(url, requestMethod, resolver.buildDescription(psiElement), moduleName, framework);
         this.psiElement = psiElement;
         this.resolver = resolver;
@@ -54,6 +54,16 @@ public class PsiRestItem extends RestItem implements Navigatable {
     @Override
     public boolean isValid() {
         return psiElement.isValid();
+    }
+
+    @Override
+    public boolean canUpdate() {
+        return false;
+    }
+
+    @Override
+    public boolean canDelete() {
+        return false;
     }
 
     @Override

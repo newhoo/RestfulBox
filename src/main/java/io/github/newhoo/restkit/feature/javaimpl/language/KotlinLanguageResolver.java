@@ -2,7 +2,6 @@ package io.github.newhoo.restkit.feature.javaimpl.language;
 
 import com.intellij.lang.Language;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -306,8 +305,8 @@ public class KotlinLanguageResolver extends BaseLanguageResolver {
 
         @NotNull
         @Override
-        public LanguageResolver createLanguageResolver(@NotNull Project project) {
-            return project.getComponent(KotlinLanguageResolver.class);
+        public LanguageResolver createLanguageResolver() {
+            return new KotlinLanguageResolver();
         }
     }
 }

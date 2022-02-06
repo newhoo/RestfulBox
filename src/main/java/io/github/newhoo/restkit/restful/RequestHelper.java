@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class RequestHelper {
 
-    public static List<RequestResolver> getRequestResolvers(Project project) {
+    public static List<RequestResolver> getRequestResolvers(@NotNull Project project) {
         return RestfulResolverProvider.EP_NAME.getExtensionList()
                                               .stream()
                                               .filter(Objects::nonNull)
@@ -28,12 +28,13 @@ public class RequestHelper {
                                               .collect(Collectors.toList());
     }
 
-    public static List<RestItem> buildRequestItemList(Project project) {
+    public static List<RestItem> buildRequestItemList(@NotNull Project project) {
         List<RequestResolver> requestResolvers = getRequestResolvers(project);
         Set<String> enabledWebFrameworks = CommonSettingComponent.getInstance(project).getState().getEnabledWebFrameworks();
         return requestResolvers.stream()
                                .filter(requestResolver -> enabledWebFrameworks.contains(requestResolver.getFrameworkName()))
                                .map(resolver -> resolver.findRestItemInProject(project))
+                               .filter(Objects::nonNull)
                                .flatMap(Collection::stream)
                                .filter(Objects::nonNull)
                                .filter(item -> item.getModuleName() != null && item.getUrl() != null)

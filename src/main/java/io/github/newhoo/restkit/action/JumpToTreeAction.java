@@ -19,7 +19,7 @@ public class JumpToTreeAction extends AnAction {
     @Override
     public void update(@NotNull AnActionEvent e) {
         PsiElement psiElement = e.getData(CommonDataKeys.PSI_ELEMENT);
-        boolean bool = psiElement != null && LanguageHelper.getInstance(psiElement.getProject()).canNavigateToTree(psiElement);
+        boolean bool = psiElement != null && LanguageHelper.canNavigateToTree(psiElement);
         e.getPresentation().setEnabledAndVisible(bool);
     }
 

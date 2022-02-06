@@ -28,16 +28,20 @@ public class RestItem {
     /** Request body json */
     private String bodyJson;
 
-    // other info
-
     /** description will display in search everywhere item and tree item */
     private String description;
+
+
+    // other info
 
     /** module name, as group */
     private String moduleName;
 
     /** name that the api item from. e.g. Local for Local api store */
     private String framework;
+
+    /** id, reserve */
+    private long id = 0;
 
     /** timestamp */
     private long ts = System.currentTimeMillis();
@@ -68,6 +72,20 @@ public class RestItem {
     }
 
     public boolean isValid() {
+        return true;
+    }
+
+    /**
+     * for tree list operation: move、update, PsiRestItem should be false
+     */
+    public boolean canUpdate() {
+        return true;
+    }
+
+    /**
+     * for tree list operation: delete, PsiRestItem should be false
+     */
+    public boolean canDelete() {
         return true;
     }
 }

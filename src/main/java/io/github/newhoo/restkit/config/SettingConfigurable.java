@@ -22,7 +22,7 @@ public class SettingConfigurable implements Configurable {
 
     private SettingConfigurable(Project project) {
         this.commonSetting = CommonSettingComponent.getInstance(project).getState();
-        this.settingForm = project.getComponent(SettingForm.class);
+        this.settingForm = new SettingForm(project);
     }
 
     @Nls(capitalization = Capitalization.Title)

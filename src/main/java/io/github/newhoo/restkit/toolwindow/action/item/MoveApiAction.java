@@ -8,7 +8,8 @@ import com.intellij.openapi.ui.InputValidator;
 import com.intellij.openapi.ui.Messages;
 import io.github.newhoo.restkit.common.RestDataKey;
 import io.github.newhoo.restkit.common.RestItem;
-import io.github.newhoo.restkit.config.LocalApiLibrary;
+import io.github.newhoo.restkit.restful.RequestHelper;
+import io.github.newhoo.restkit.restful.RequestResolver;
 import io.github.newhoo.restkit.toolwindow.RestServiceToolWindow;
 import io.github.newhoo.restkit.toolwindow.RestToolWindowFactory;
 import org.apache.commons.collections.CollectionUtils;
@@ -16,8 +17,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
-import static io.github.newhoo.restkit.common.RestConstant.WEB_FRAMEWORK_LOCAL;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * MoveApiAction
@@ -29,9 +30,12 @@ public class MoveApiAction extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        List<RestItem> serviceItems = RestDataKey.SELECTED_SERVICE.getData(e.getDataContext());
-        e.getPresentation().setEnabledAndVisible(serviceItems != null
-                && serviceItems.stream().allMatch(o -> WEB_FRAMEWORK_LOCAL.equals(o.getFramework())));
+        Project project = e.getProject();
+        List<RestItem> items = RestDataKey.SELECTED_SERVICE.getData(e.getDataContext());
+        if (project == null || items == null) {
+            return;
+        }
+        e.getPresentation().setVisible(items.stream().allMatch(RestItem::canUpdate));
     }
 
     @Override
@@ -42,8 +46,8 @@ public class MoveApiAction extends AnAction {
             return;
         }
 
-        List<RestItem> library = LocalApiLibrary.getInstance(project).getItemList();
-        String[] moduleNames = library.stream().map(RestItem::getModuleName).distinct().toArray(String[]::new);
+        List<String> moduleData = RestDataKey.ALL_MODULE.getData(e.getDataContext());
+        String[] moduleNames = CollectionUtils.isNotEmpty(moduleData) ? moduleData.toArray(new String[0]) : new String[0];
         String moduleName = Messages.showEditableChooseDialog("Select or input module name", "Edit Module Name", null, moduleNames, moduleNames.length > 0 ? moduleNames[0] : "local", new InputValidator() {
             @Override
             public boolean checkInput(String inputString) {
@@ -60,6 +64,17 @@ public class MoveApiAction extends AnAction {
         }
 
         serviceItems.forEach(o -> o.setModuleName(moduleName));
+        Map<String, RequestResolver> resolverMap = RequestHelper.getRequestResolvers(project)
+                                                                .stream()
+                                                                .collect(Collectors.toMap(RequestResolver::getFrameworkName, o -> o));
+        serviceItems.stream()
+                    .collect(Collectors.groupingBy(RestItem::getFramework))
+                    .entrySet()
+                    .stream()
+                    .filter(entry -> resolverMap.containsKey(entry.getKey()))
+                    .forEach(entry -> {
+                        resolverMap.get(entry.getKey()).update(entry.getValue());
+                    });
         RestToolWindowFactory.getRestServiceToolWindow(project, RestServiceToolWindow::scheduleUpdateTree);
     }
 }

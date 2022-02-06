@@ -52,7 +52,7 @@ public class EnvironmentForm {
 
     private final Project project;
 
-    private EnvironmentForm(Project project) {
+    public EnvironmentForm(Project project) {
         this.project = project;
 
         initView();
@@ -71,10 +71,10 @@ public class EnvironmentForm {
         // header
         globalHeaderPanel.add(createToolbarPanel(headerModel), BorderLayout.CENTER);
 
-        if (project.isDefault()) {
-            scriptBtn.setEnabled(false);
-            scriptBtn.setVisible(false);
-        }
+//        if (project.isDefault()) {
+//            scriptBtn.setEnabled(false);
+//            scriptBtn.setVisible(false);
+//        }
     }
 
     private void initEvent() {
