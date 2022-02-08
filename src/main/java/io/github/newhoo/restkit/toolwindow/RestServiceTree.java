@@ -5,14 +5,12 @@ import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.DataProvider;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
-import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.ui.AppUIUtil;
 import com.intellij.ui.PopupHandler;
@@ -23,7 +21,7 @@ import com.intellij.ui.treeStructure.SimpleNode;
 import com.intellij.ui.treeStructure.SimpleTree;
 import com.intellij.ui.treeStructure.SimpleTreeStructure;
 import com.intellij.util.Consumer;
-import com.intellij.util.OpenSourceUtil;
+import com.intellij.util.PsiNavigateUtil;
 import com.intellij.util.messages.MessageBus;
 import com.intellij.util.ui.tree.TreeUtil;
 import io.github.newhoo.restkit.common.HttpMethod;
@@ -445,12 +443,12 @@ public class RestServiceTree extends JPanel implements DataProvider {
             if (restItem instanceof PsiRestItem) {
                 String[] split = StringUtils.split(description, "#", 3);
                 if (split.length >= 3) {
-                    description = split[0] + "#" + split[1] + "<br/>" + split[2];
+                    description = split[2];
                 }
             }
-            String tooltip = "source: " + myRestItem.getFramework() + "<br/>"
-                    + "url: " + myRestItem.getUrl() + "<br/>"
-                    + "desc: " + description;
+            String tooltip = "url: " + myRestItem.getUrl() + "<br/>"
+                    + "desc: " + description + "<br/>" +
+                    "from: " + myRestItem.getFramework();
             getTemplatePresentation().setTooltip(tooltip);
         }
 
@@ -461,10 +459,17 @@ public class RestServiceTree extends JPanel implements DataProvider {
 
         @Override
         public String getName() {
+            String name = myRestItem.getUrl();
             if (setting.isDisplayTreeListUsingApiDesc() && StringUtils.isNotEmpty(myRestItem.getDescription())) {
-                return myRestItem.getDescription();
+                name = myRestItem.getDescription();
+                if (myRestItem instanceof PsiRestItem) {
+                    String[] split = StringUtils.split(name, "#", 3);
+                    if (split.length >= 3 && StringUtils.isNotEmpty(split[2])) {
+                        name = split[2];
+                    }
+                }
             }
-            return myRestItem.getUrl();
+            return name;
         }
 
         @Override
@@ -488,9 +493,10 @@ public class RestServiceTree extends JPanel implements DataProvider {
                     RestToolWindowFactory.getRestServiceToolWindow(RestServiceTree.this.myProject, RestServiceToolWindow::scheduleUpdateTree);
                     return;
                 }
-                if (OpenSourceUtil.canNavigate(psiElement)) {
-                    ApplicationManager.getApplication().invokeLater(() -> OpenSourceUtil.navigate((Navigatable) psiElement));
-                }
+                PsiNavigateUtil.navigate(psiElement);
+//                if (OpenSourceUtil.canNavigate(psiElement)) {
+//                    ApplicationManager.getApplication().invokeLater(() -> OpenSourceUtil.navigate((Navigatable) psiElement));
+//                }
             }
         }
 

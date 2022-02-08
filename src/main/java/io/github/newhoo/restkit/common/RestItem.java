@@ -41,7 +41,7 @@ public class RestItem {
     private String framework;
 
     /** id, reserve */
-    private long id = 0;
+    private long id = -1;
 
     /** timestamp */
     private long ts = System.currentTimeMillis();

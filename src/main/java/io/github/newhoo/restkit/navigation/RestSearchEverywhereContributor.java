@@ -28,6 +28,7 @@ import com.intellij.ui.ColoredListCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
 import com.intellij.util.Processor;
+import com.intellij.util.PsiNavigateUtil;
 import com.intellij.util.TextWithIcon;
 import com.intellij.util.ui.UIUtil;
 import io.github.newhoo.restkit.common.HttpMethod;
@@ -112,7 +113,7 @@ public class RestSearchEverywhereContributor implements WeightedSearchEverywhere
     @Override
     public boolean processSelectedItem(@NotNull RestItem selected, int modifiers, @NotNull String searchText) {
         if (selected instanceof PsiRestItem) {
-            ((PsiRestItem) selected).navigate(true);
+            PsiNavigateUtil.navigate(((PsiRestItem) selected).getPsiElement());
         } else {
             RestToolWindowFactory.getRestServiceToolWindow(myProject, restServiceToolWindow -> {
                 restServiceToolWindow.navigateToTree(selected.getUrl(), ObjectUtils.defaultIfNull(selected.getMethod(), HttpMethod.GET).name(), selected.getModuleName());

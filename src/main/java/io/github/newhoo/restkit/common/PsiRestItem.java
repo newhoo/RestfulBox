@@ -1,6 +1,5 @@
 package io.github.newhoo.restkit.common;
 
-import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import io.github.newhoo.restkit.restful.ParamResolver;
 import lombok.Getter;
@@ -16,7 +15,7 @@ import java.util.List;
  * @author huzunrong
  */
 @Getter
-public class PsiRestItem extends RestItem implements Navigatable {
+public class PsiRestItem extends RestItem {
 
     /**
      * Java: PsiMethod
@@ -64,22 +63,5 @@ public class PsiRestItem extends RestItem implements Navigatable {
     @Override
     public boolean canDelete() {
         return false;
-    }
-
-    @Override
-    public void navigate(boolean requestFocus) {
-        if (canNavigate()) {
-            ((Navigatable) psiElement).navigate(requestFocus);
-        }
-    }
-
-    @Override
-    public boolean canNavigate() {
-        return psiElement instanceof Navigatable && ((Navigatable) psiElement).canNavigate();
-    }
-
-    @Override
-    public boolean canNavigateToSource() {
-        return psiElement instanceof Navigatable && ((Navigatable) psiElement).canNavigateToSource();
     }
 }

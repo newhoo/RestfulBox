@@ -79,7 +79,7 @@ public class HttpUtils {
         if (httpInfo.getResponse() != null) {
             String body = httpInfo.getResponse().getBody();
             try {
-                handlePostRequestScript(httpInfo.getResponse(), project);
+                handlePostRequestScript(req, httpInfo.getResponse(), project);
             } catch (Exception e) {
                 e.printStackTrace();
                 httpInfo.setErrMsg("Post-request Script Error: \n\n" + e.toString());
@@ -103,13 +103,14 @@ public class HttpUtils {
         }
     }
 
-    private static void handlePostRequestScript(Response response, Project project) throws Exception {
+    private static void handlePostRequestScript(Request request, Response response, Project project) throws Exception {
         String scriptPath = CommonSettingComponent.getInstance(project).getState().getPostRequestScriptPath();
         if (StringUtils.isNotEmpty(scriptPath) && Files.exists(Paths.get(scriptPath))) {
             Map<String, String> environmentMap = Environment.getInstance(project).getCurrentEnabledEnvMap();
 
             ScriptEngine se = new ScriptEngineManager().getEngineByName("javascript");
             Bindings bindings = se.createBindings();
+            bindings.put("request", request);
             bindings.put("response", response);
             bindings.put("environment", environmentMap);
             se.eval(new FileReader(scriptPath), bindings);
@@ -160,6 +161,8 @@ public class HttpUtils {
             String hostAddress = (String) context.getAttribute(HTTP_HOSTADDRESS);
 
             String result = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+            // unicode 转码
+            result = org.apache.commons.lang.StringEscapeUtils.unescapeJava(result);
 
             long cost = System.currentTimeMillis() - startTs;
             HttpInfo httpInfo = new HttpInfo(req, new Response(response, result), hostAddress, cost);

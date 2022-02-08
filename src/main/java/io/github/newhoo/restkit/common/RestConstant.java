@@ -18,6 +18,7 @@ public class RestConstant {
 
     public static final String PRE_REQUEST_SCRIPT =
             "// You can use custom preset object request and environment, attributes are:\n" +
+            "// \n" +
             "// request attributes\n" +
             "// url:         java.lang.String,               request url, can be modified by pre-request script.\n" +
             "// method:      java.lang.String,               request method, can be modified by pre-request script.\n" +
@@ -52,7 +53,10 @@ public class RestConstant {
             "req.body = JSON.stringify({ reqBody: 'Hello world!' });\n";
 
     public static final String POST_REQUEST_SCRIPT =
-            "// You can use custom preset object response and environment, attributes are:\n" +
+            "// You can use custom preset object request、response and environment, attributes are:\n" +
+            "//\n" +
+            "// request: see pre-request script comment\n" +
+            "//\n" +
             "// response attributes\n" +
             "// original:    org.apache.http.HttpResponse,   original http response, from http-client 4.4.\n" +
             "// body:        java.lang.String,               response body can be modified by post-request script.\n" +
@@ -65,6 +69,7 @@ public class RestConstant {
             "var baseUrl = env.baseUrl;\n" +
             "var username = env['username'];\n" +
             "\n" +
+            "var req = request;\n" +
             "var resp = response;\n" +
             "var statusCode = resp.original.getStatusLine().getStatusCode();\n" +
             "\n" +

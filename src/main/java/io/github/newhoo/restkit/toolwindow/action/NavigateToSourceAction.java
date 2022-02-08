@@ -3,6 +3,7 @@ package io.github.newhoo.restkit.toolwindow.action;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.DumbAware;
+import com.intellij.util.PsiNavigateUtil;
 import io.github.newhoo.restkit.common.PsiRestItem;
 import io.github.newhoo.restkit.common.RestDataKey;
 import io.github.newhoo.restkit.common.RestItem;
@@ -27,8 +28,7 @@ public class NavigateToSourceAction extends AnAction implements DumbAware {
             items.stream()
                  .filter(restItem -> restItem instanceof PsiRestItem)
                  .forEach(restItem -> {
-                     // PsiNavigateUtil.navigate(((PsiRestItem) restItem).getPsiElement());
-                     ((PsiRestItem) restItem).navigate(true);
+                     PsiNavigateUtil.navigate(((PsiRestItem) restItem).getPsiElement());
                  });
         }
     }
