@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.0.2
+
+- more powerful api local store, support synchronization in different IDE.
+- fix bugs.
+
+
+- API本地存储升级，支持跨IDE同步
+
+
 ## 2.0.1
 
 - support more jetbrains ides.
