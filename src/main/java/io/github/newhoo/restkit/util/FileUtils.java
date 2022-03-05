@@ -70,6 +70,16 @@ public class FileUtils {
         }
     }
 
+    public static String removeFileSuffix(String fileName) {
+        if (StringUtils.isNotEmpty(fileName)) {
+            int index = fileName.lastIndexOf(".");
+            if (index > 0) {
+                return fileName.substring(0, index);
+            }
+        }
+        return fileName;
+    }
+
     private static void log(String content, Project project) {
         String basePath = getRestDirectory(project) + "logs/";
         IdeaUtils.invokeLater(() -> {

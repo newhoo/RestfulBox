@@ -1,6 +1,6 @@
 # RESTKit
 
-[简体中文](./README.zh_CN.md)
+[简体中文](./README.zh_CN.md) | [Gitee](https://gitee.com/newhoo/RESTKit)
 
 [RESTKit](https://plugins.jetbrains.com/plugin/14723-restkit) is a powerful toolkit for restful services development.
 
@@ -100,16 +100,21 @@ Provide some common settings for the plugin.
 #### Supported Web Framework
 support Spring MVC and enabled by default. If you need support other framework restful apis, please see [RESTKit Extension](#Plugin Extension)
 
-#### Request Config
-- Timeout: set request timeout. Never timeout when the value less than or equal 0.
-- Enable request log: default disabled. Log path `$PROJECT_DIR$/.idea/restkit/logs/*.log`.
+#### UI Config
 - Show module name in search everywhere
+- Display api group using file name(using module by default)
+- Display api list using description(using url by default)
 - Enable parameter library: default enabled. Need reopen current project after setting.
 
-#### Request Script
-Set pre-request and post-request script path. If path is empty, you can double click `Label` before the input box to generate script like `$PROJECT_DIR$/.idea/restkit/xxx-request Script.js`.
+#### Request Config
+- Enable request log: default disabled. Log path `$PROJECT_DIR$/.idea/restkit/logs/*.log`.
+- Timeout: set request timeout. Never timeout when the value less than or equal 0.
+- Script config: set pre-request and post-request script path. If path is empty, you can double click `Label` before the input box to generate script like `$PROJECT_DIR$/.idea/restkit/xxx-request Script.js`.
 
 ![](images/script_setting.png)
+
+#### Other Config
+- Local store path: api local storage file path.
 
 ### Environment Variable
 - Environment variables indicate multi-set variables in advance, including `Literal Variable`, `Direct reference variable`, `Built-in function variable` and `Script variable`.
@@ -178,6 +183,7 @@ Configure request headers that add to the HTTP request by default in current pro
 - API Local Store used for manually saving API, an interface independently scanned. It's displayed as a Local module in Service Tree.
 - Every api should have unique key composed of url and method.
 - Enable by default. Disable in the setting.
+- Support synchronization in different IDE/project when setting same file path.
 
 #### Display
 ![](images/local_show.png)
@@ -251,6 +257,7 @@ Refer to this article: `Common Setting` > `Request Script`
 - Instruction:
 ```js
 // You can use custom preset object request and environment, attributes are:
+//
 // request attributes
 // url:         java.lang.String,               request url, can be modified by pre-request script.
 // method:      java.lang.String,               request method, can be modified by pre-request script.
@@ -293,7 +300,10 @@ req.body = JSON.stringify({ reqBody: 'Hello world!' });
 
 - Instruction:
 ```js
-// You can use custom preset object response and environment, attributes are:
+// You can use custom preset object request、response and environment, attributes are:
+//
+// request: see pre-request script comment
+//
 // response attributes
 // original:    org.apache.http.HttpResponse,   original http response, from http-client 4.4.
 // body:        java.lang.String,               response body can be modified by post-request script.
@@ -309,6 +319,7 @@ var env = environment;
 var baseUrl = env.baseUrl;
 var username = env['username'];
 
+var req = request;
 var resp = response;
 var statusCode = resp.original.getStatusLine().getStatusCode();
 
@@ -406,6 +417,11 @@ After right-click on the java class name, select `Convert to JSON` in the contex
 Click【Copy as Curl】at any editor's right menu in the http client.
 
 ![](images/copy_as_curl.png)
+
+#### Quick Tools
+Path: <kbd>Tools</kbd> > <kbd>RESTKit</kbd>
+
+![](images/tools.png)
 
 ## Contact & Feedback
 [Issues](https://github.com/newhoo/RESTKit/issues) | [Email](mailto:huzunrong@foxmail.com) | [Ratings & Previews](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)

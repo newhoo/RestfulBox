@@ -1,5 +1,7 @@
 # RESTKit
 
+[英文](./README.md) | [Gitee](https://gitee.com/newhoo/RESTKit)
+
 [RESTKit](https://plugins.jetbrains.com/plugin/14723-restkit) 是一套功能强大的 Restful 服务开发辅助工具集。
 
 本插件致力于提升开发效率之作，只有实用常用的功能。源于最初版本的RestfulToolkit，同时加入Postman的常用功能，丰富且完善的功能能极大地提高Idea开发的效率。免费分享给大家使用，不用于商业用途。个人之力，难免有疏忽，如有使用问题，请反馈于我。
@@ -94,16 +96,21 @@
 #### 支持扫描的Web框架
 默认支持Spring MVC，勾选即启用。若需要支持其他web框架的restful接口扫描，请参考：[插件扩展](#插件扩展)
 
+#### UI配置
+- 在search everywhere中展示URL的module名称
+- 使用接口所在文件名作为分组名，默认使用模块名
+- 使用接口描述作为接口名称，默认使用URI
+- 启用参数库：默认启用。设置后需重新打开当前项目
+
 #### 请求配置
 - 请求超时：设置请求超时时长，设置时长小于等于0时不超时
 - 启用保存请求日志：默认不启用，保存路径为 `$PROJECT_DIR$/.idea/restkit/logs/*.log`
-- 在search everywhere中展示URL的module名称
-- 启用参数库：默认启用。设置后需重新打开当前项目
-
-#### 请求脚本
-设置前置/后置请求脚本路径。当输入框为空时，可双击`Label`自动生成脚本，默认生成路径为：`$PROJECT_DIR$/.idea/restkit/xxx-request Script.js`
+- 请求脚本：设置前置/后置请求脚本路径。当输入框为空时，可双击`Label`自动生成脚本，默认生成路径为：`$PROJECT_DIR$/.idea/restkit/xxx-request Script.js`
 
 ![](images/script_setting.png)
+
+#### 其他配置
+- 本地API存储路径
 
 ### 环境变量
 - 环境变量表示提前配置的一组或多组变量，包括`字面量变量`、`直接引用变量`、`内置函数变量`和`脚本变量`。
@@ -167,9 +174,10 @@ public class RestKitScript {
 
 
 ### 本地API库
-- 本地API库适用于手动保存API，独立于源码扫描出的接口，在service tree中展示为Local分组。
+- 本地API库适用于手动保存API，独立于源码扫描出的接口，在service tree中默认展示为Local分组。
 - 根据url和method组合值作为唯一性判断
-- 默认启用，可在设置中关闭。
+- 默认启用，可在设置中关闭
+- 支持跨IDE/项目同步（不同IDE/项目设置为本地同一文件）
 
 #### 展示
 ![](images/local_show.png)
@@ -243,6 +251,7 @@ public class RestKitScript {
 - 使用说明：
 ```js
 // You can use custom preset object request and environment, attributes are:
+//
 // request attributes
 // url:         java.lang.String,               request url, can be modified by pre-request script.
 // method:      java.lang.String,               request method, can be modified by pre-request script.
@@ -285,7 +294,10 @@ req.body = JSON.stringify({ reqBody: 'Hello world!' });
 
 - 使用说明：
 ```js
-// You can use custom preset object response and environment, attributes are:
+// You can use custom preset object request、response and environment, attributes are:
+//
+// request: see pre-request script comment
+//
 // response attributes
 // original:    org.apache.http.HttpResponse,   original http response, from http-client 4.4.
 // body:        java.lang.String,               response body can be modified by post-request script.
@@ -301,6 +313,7 @@ var env = environment;
 var baseUrl = env.baseUrl;
 var username = env['username'];
 
+var req = request;
 var resp = response;
 var statusCode = resp.original.getStatusLine().getStatusCode();
 
@@ -397,6 +410,11 @@ Url navigate to service tree.
 在http client任意编辑区右键菜单中点击【Copy as Curl】
 
 ![](images/copy_as_curl.png)
+
+#### 快捷工具
+路径：<kbd>Tools</kbd> > <kbd>RESTKit</kbd>
+
+![](images/tools.png)
 
 
 ## 联系 & 反馈

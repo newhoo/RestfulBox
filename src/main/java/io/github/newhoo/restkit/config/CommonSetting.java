@@ -28,6 +28,7 @@ public class CommonSetting {
 
     private boolean saveRequestLog = false;
     private boolean showModuleInSearchEvery = false;
+    private boolean displayApiGroupUsingFileName = false;
     private boolean displayTreeListUsingApiDesc = false;
     private boolean enableParameterLibrary = true;
     private String preRequestScriptPath = "";
@@ -38,6 +39,7 @@ public class CommonSetting {
         return requestTimeout != modifiedSetting.getRequestTimeout()
                 || saveRequestLog != modifiedSetting.isSaveRequestLog()
                 || showModuleInSearchEvery != modifiedSetting.isShowModuleInSearchEvery()
+                || displayApiGroupUsingFileName != modifiedSetting.isDisplayApiGroupUsingFileName()
                 || displayTreeListUsingApiDesc != modifiedSetting.isDisplayTreeListUsingApiDesc()
                 || enableParameterLibrary != modifiedSetting.isEnableParameterLibrary()
                 || !StringUtils.equals(preRequestScriptPath, modifiedSetting.getPreRequestScriptPath())

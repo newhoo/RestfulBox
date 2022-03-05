@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2.0.3
+
+- support api group by file name.
+
+
+- 扫描的API支持按文件名显示分组
+
 ## 2.0.2
 
 - more powerful api local store, support synchronization in different IDE.

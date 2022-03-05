@@ -22,6 +22,14 @@
     ]]></description>
 
     <change-notes><![CDATA[
+        2.0.3
+        <ul>
+            <li>support api group by file name.</li>
+            <li>fix bugs.</li>
+            <br/>
+            <li>扫描的API支持按文件名显示分组.</li>
+        </ul>
+
         2.0.2
         <ul>
             <li>more powerful api local store, support synchronization in different IDE.</li>

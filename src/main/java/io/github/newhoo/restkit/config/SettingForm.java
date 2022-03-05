@@ -48,6 +48,7 @@ public class SettingForm {
 
     private JPanel uiConfigPanel;
     private JCheckBox showModuleCheckBox;
+    private JCheckBox displayApiGroupUsingFileNameCheckBox;
     private JCheckBox displayTreeListUsingApiDescCheckBox;
     private JCheckBox enableParameterLibraryCheckBox;
 
@@ -180,6 +181,7 @@ public class SettingForm {
 
         commonSetting.setDisplayTreeListUsingApiDesc(displayTreeListUsingApiDescCheckBox.isSelected());
         commonSetting.setShowModuleInSearchEvery(showModuleCheckBox.isSelected());
+        commonSetting.setDisplayApiGroupUsingFileName(displayApiGroupUsingFileNameCheckBox.isSelected());
         commonSetting.setEnableParameterLibrary(enableParameterLibraryCheckBox.isSelected());
 
         commonSetting.setSaveRequestLog(saveRequestLogCheckBox.isSelected());
@@ -201,6 +203,7 @@ public class SettingForm {
 
         displayTreeListUsingApiDescCheckBox.setSelected(commonSetting.isDisplayTreeListUsingApiDesc());
         showModuleCheckBox.setSelected(commonSetting.isShowModuleInSearchEvery());
+        displayApiGroupUsingFileNameCheckBox.setSelected(commonSetting.isDisplayApiGroupUsingFileName());
         enableParameterLibraryCheckBox.setSelected(commonSetting.isEnableParameterLibrary());
         enableParameterLibraryCheckBox.setText("Enable parameter library");
 

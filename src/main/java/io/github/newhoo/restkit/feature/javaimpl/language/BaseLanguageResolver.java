@@ -189,8 +189,7 @@ public abstract class BaseLanguageResolver extends BaseRequestResolver implement
                     || "javax.servlet.http.HttpServletRequest".equals(paramTypeName)
                     || "javax.servlet.http.HttpServletResponse".equals(paramTypeName)
                     || "org.springframework.web.context.request.ServletWebRequest".equals(paramTypeName)
-                    // TODO huzunrong，2021/11/25 11:38 下午 [自定义忽略类型解析]
-                    || psiParameter.hasAnnotation("com.example.parking.common.annotation.CurrentUser")
+                    // TODO [自定义忽略类型解析]
             ) {
                 continue;
             }

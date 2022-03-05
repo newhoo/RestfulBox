@@ -223,29 +223,6 @@ public class RestServiceTree extends JPanel implements DataProvider {
                     if (consumer != null) {
                         consumer.consume(null);
                     }
-                    // 自动展开指定的路径
-                    /*else if (currentModulePath != null) {
-                        System.out.println("updateTree: " + currentModulePath);
-                        TreeUtil.expand(myTree, new TreeVisitor() {
-                            @Override
-                            @NotNull
-                            public Action visit(@NotNull TreePath path) {
-                                if (path.getParentPath() == null) {
-                                    return Action.CONTINUE;
-                                }
-                                if (path.getLastPathComponent().toString().equals(currentModulePath.getLastPathComponent().toString())) {
-                                    return Action.INTERRUPT;
-                                }
-                                if (path.getPathCount() == 2) {
-                                    return Action.SKIP_CHILDREN;
-                                }
-                                return Action.SKIP_SIBLINGS;
-                            }
-                        }, path -> {
-                            System.out.println("expand path: " + path);
-                            myTree.setSelectionPath(path);
-                        });
-                    }*/
                 });
             }
         });
@@ -346,7 +323,8 @@ public class RestServiceTree extends JPanel implements DataProvider {
     }
 
     public class RootNode extends BaseSimpleNode {
-        List<ModuleNode> moduleNodes = new ArrayList<>();
+        private final List<ModuleNode> moduleNodes = new ArrayList<>();
+        private int serviceCount = 0;
 
         protected RootNode() {
             super(null);
@@ -361,8 +339,6 @@ public class RestServiceTree extends JPanel implements DataProvider {
 
         @Override
         public String getName() {
-            List<Integer> list = moduleNodes.stream().map(moduleNode -> moduleNode.requestNodes.size()).collect(Collectors.toList());
-            int serviceCount = list.stream().mapToInt(i -> i).sum();
             return serviceCount > 0 ? String.format("Found %d services", serviceCount) : "No service found";
         }
 
@@ -373,6 +349,7 @@ public class RestServiceTree extends JPanel implements DataProvider {
                 ModuleNode moduleNode = new ModuleNode(this, restModule);
                 moduleNodes.add(moduleNode);
             }
+            serviceCount = restModules.stream().map(restModule -> restModule.getRestItems().size()).mapToInt(i -> i).sum();
 
             updateFrom(getParent());
             childrenChanged();
