@@ -10,12 +10,12 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.messages.MessagesService;
 import io.github.newhoo.restkit.common.RestItem;
-import io.github.newhoo.restkit.config.CommonSetting;
-import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.SettingConfigurable;
 import io.github.newhoo.restkit.i18n.RestBundle;
-import io.github.newhoo.restkit.restful.local.LocalStoreHelper;
+import io.github.newhoo.restkit.restful.RequestHelper;
+import io.github.newhoo.restkit.restful.RequestResolver;
 import io.github.newhoo.restkit.toolwindow.RestServiceToolWindow;
 import io.github.newhoo.restkit.toolwindow.RestToolWindowFactory;
 import io.github.newhoo.restkit.util.HtmlUtil;
@@ -27,9 +27,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.event.HyperlinkEvent;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.util.ArrayList;
 import java.util.List;
-
-import static io.github.newhoo.restkit.common.RestConstant.WEB_FRAMEWORK_LOCAL;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * ImportApiAction
@@ -45,9 +46,17 @@ public class ImportApiAction extends AnAction {
         if (project == null) {
             return;
         }
-        CommonSetting commonSetting = CommonSettingComponent.getInstance(project).getState();
-        if (!commonSetting.getEnabledWebFrameworks().contains(WEB_FRAMEWORK_LOCAL)) {
-            NotifierUtils.infoBalloon("", "Local api store disabled. " + HtmlUtil.link("Edit", "Edit"), new NotificationListener.Adapter() {
+        Transferable contents = CopyPasteManager.getInstance().getContents();
+        if (contents == null) {
+            return;
+        }
+
+        Map<String, RequestResolver> resolverMap = RequestHelper.getEnabledRequestResolvers(project)
+                                                                .stream()
+                                                                .filter(o -> o.getScanType() == RequestResolver.ScanType.STORAGE)
+                                                                .collect(Collectors.toMap(RequestResolver::getFrameworkName, o -> o, (o1, o2) -> o1));
+        if (resolverMap.isEmpty()) {
+            NotifierUtils.infoBalloon("", "Supported store frameworks disabled. " + HtmlUtil.link("Edit", "Edit"), new NotificationListener.Adapter() {
                 @Override
                 protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent e) {
                     ShowSettingsUtil.getInstance().showSettingsDialog(project, SettingConfigurable.class);
@@ -55,11 +64,13 @@ public class ImportApiAction extends AnAction {
             }, project);
             return;
         }
-
-        Transferable contents = CopyPasteManager.getInstance().getContents();
-        if (contents == null) {
+        String[] frameworks = new ArrayList<>(resolverMap.keySet()).toArray(new String[0]);
+        int index = MessagesService.getInstance().showChooseDialog(project, null, "Select enabled store framework", "Api Importing Destination", frameworks, frameworks[0], null);
+        if (index < 0) {
             return;
         }
+        RequestResolver requestResolver = resolverMap.get(frameworks[index]);
+
         try {
             String data = contents.getTransferData(DataFlavor.stringFlavor).toString();
             List<RestItem> restItems = JsonUtils.fromJsonArr(data, RestItem.class);
@@ -71,11 +82,11 @@ public class ImportApiAction extends AnAction {
                             o.setUrl(StringUtils.defaultString(o.getUrl()));
                             o.setBodyJson(StringUtils.defaultString(o.getBodyJson()));
                             o.setDescription(StringUtils.defaultString(o.getDescription()));
-                            o.setFramework(WEB_FRAMEWORK_LOCAL);
+                            o.setFramework(requestResolver.getFrameworkName());
                             o.setModuleName(o.getModuleName() + "(import)");
                             o.setTs(System.currentTimeMillis());
                         });
-                        new LocalStoreHelper(project).asyncAdd(restItems);
+                        requestResolver.add(restItems);
                         RestToolWindowFactory.getRestServiceToolWindow(project, RestServiceToolWindow::scheduleUpdateTree);
                     }
                 });

@@ -11,6 +11,7 @@ import io.github.newhoo.restkit.util.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -23,22 +24,35 @@ import java.util.stream.Collectors;
  */
 public class RequestHelper {
 
-    public static List<RequestResolver> getRequestResolvers(@NotNull Project project) {
+    public static List<RequestResolver> getAllRequestResolvers(@NotNull Project project) {
         return RestfulResolverProvider.EP_NAME.getExtensionList()
                                               .stream()
                                               .filter(Objects::nonNull)
                                               .map(restfulResolverProvider -> restfulResolverProvider.createRequestResolver(project))
                                               .filter(Objects::nonNull)
+                                              .sorted(Comparator.comparing(RequestResolver::getScanType))
+                                              .collect(Collectors.toList());
+    }
+
+    public static List<RequestResolver> getEnabledRequestResolvers(@NotNull Project project) {
+        CommonSetting commonSetting = CommonSettingComponent.getInstance(project).getState();
+        Set<String> enabledWebFrameworks = commonSetting.getEnabledWebFrameworks();
+        return RestfulResolverProvider.EP_NAME.getExtensionList()
+                                              .stream()
+                                              .filter(Objects::nonNull)
+                                              .map(restfulResolverProvider -> restfulResolverProvider.createRequestResolver(project))
+                                              .filter(Objects::nonNull)
+                                              .filter(o -> enabledWebFrameworks.contains(o.getFrameworkName()))
+                                              .filter(RequestResolver::checkConfig)
+                                              .sorted(Comparator.comparing(RequestResolver::getScanType))
                                               .collect(Collectors.toList());
     }
 
     public static List<RestItem> buildRequestItemList(@NotNull Project project) {
-        CommonSetting commonSetting = CommonSettingComponent.getInstance(project).getState();
-        Set<String> enabledWebFrameworks = commonSetting.getEnabledWebFrameworks();
-        boolean displayApiGroupUsingFileName = commonSetting.isDisplayApiGroupUsingFileName();
-        List<RequestResolver> requestResolvers = getRequestResolvers(project);
+        boolean displayApiGroupUsingFileName = CommonSettingComponent.getInstance(project).getState()
+                                                                     .isDisplayApiGroupUsingFileName();
+        List<RequestResolver> requestResolvers = getEnabledRequestResolvers(project);
         return requestResolvers.stream()
-                               .filter(requestResolver -> enabledWebFrameworks.contains(requestResolver.getFrameworkName()))
                                .map(resolver -> resolver.findRestItemInProject(project))
                                .filter(Objects::nonNull)
                                .flatMap(Collection::stream)

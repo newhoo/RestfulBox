@@ -44,7 +44,7 @@ public class DeleteApiAction extends AnAction {
             if (Messages.YES != yesNoDialog) {
                 return;
             }
-            Map<String, RequestResolver> resolverMap = RequestHelper.getRequestResolvers(project)
+            Map<String, RequestResolver> resolverMap = RequestHelper.getAllRequestResolvers(project)
                                                                     .stream()
                                                                     .collect(Collectors.toMap(RequestResolver::getFrameworkName, o -> o));
             items.stream()

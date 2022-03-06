@@ -83,7 +83,7 @@ public class SettingForm {
         requestPanel.setBorder(IdeBorderFactory.createTitledBorder("Request Config", false));
         otherPanel.setBorder(IdeBorderFactory.createTitledBorder("Other", false));
 
-        List<RequestResolver> requestResolvers = RequestHelper.getRequestResolvers(project);
+        List<RequestResolver> requestResolvers = RequestHelper.getAllRequestResolvers(project);
         for (RequestResolver requestResolver : requestResolvers) {
             JCheckBox checkBox = new JCheckBox(requestResolver.getFrameworkName(), true);
             webFrameworkPanel.add(checkBox);

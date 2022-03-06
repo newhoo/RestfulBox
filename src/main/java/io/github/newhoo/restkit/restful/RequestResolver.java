@@ -21,6 +21,22 @@ public interface RequestResolver {
     String getFrameworkName();
 
     /**
+     * scan type
+     * SCANNER - spring mvc/structs
+     * STORAGE - Local Store/Redis Store
+     */
+    default ScanType getScanType() {
+        return ScanType.SCANNER;
+    }
+
+    /**
+     * check relative config
+     */
+    default boolean checkConfig() {
+        return true;
+    }
+
+    /**
      * find items in project
      */
     List<RestItem> findRestItemInProject(@NotNull Project project);
@@ -47,5 +63,9 @@ public interface RequestResolver {
      * @param itemList not null
      */
     default void delete(List<RestItem> itemList) {
+    }
+
+    enum ScanType {
+        SCANNER, STORAGE
     }
 }

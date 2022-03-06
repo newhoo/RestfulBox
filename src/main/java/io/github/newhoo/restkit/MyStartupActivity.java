@@ -10,7 +10,7 @@ import io.github.newhoo.restkit.config.CommonSetting;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.Environment;
 import io.github.newhoo.restkit.config.LocalApiLibrary;
-import io.github.newhoo.restkit.restful.local.LocalStoreHelper;
+import io.github.newhoo.restkit.restful.local.LocalRequestResolver;
 import io.github.newhoo.restkit.util.EnvironmentUtils;
 import io.github.newhoo.restkit.util.FileUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -85,7 +85,7 @@ public class MyStartupActivity implements StartupActivity {
                 apiFile = FileUtils.getApiFilePath(project);
                 setting.setApiFilePath(apiFile);
             }
-            new LocalStoreHelper(project).asyncAdd(itemList);
+            new LocalRequestResolver(project).add(itemList);
             itemList.clear();
         }
     }

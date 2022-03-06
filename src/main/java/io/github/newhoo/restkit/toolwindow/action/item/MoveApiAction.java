@@ -64,7 +64,7 @@ public class MoveApiAction extends AnAction {
         }
 
         serviceItems.forEach(o -> o.setModuleName(moduleName));
-        Map<String, RequestResolver> resolverMap = RequestHelper.getRequestResolvers(project)
+        Map<String, RequestResolver> resolverMap = RequestHelper.getAllRequestResolvers(project)
                                                                 .stream()
                                                                 .collect(Collectors.toMap(RequestResolver::getFrameworkName, o -> o));
         serviceItems.stream()
