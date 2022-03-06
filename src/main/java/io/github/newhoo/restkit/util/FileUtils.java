@@ -2,6 +2,7 @@ package io.github.newhoo.restkit.util;
 
 import com.intellij.openapi.project.Project;
 import io.github.newhoo.restkit.common.HttpInfo;
+import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static com.intellij.openapi.project.Project.DIRECTORY_STORE_FOLDER;
 import static java.nio.file.StandardOpenOption.APPEND;
@@ -78,6 +80,18 @@ public class FileUtils {
             }
         }
         return fileName;
+    }
+
+    public static void bakDeletedApi(List<RestItem> itemList, Project project) {
+        String basePath = getRestDirectory(project) + "bak/";
+        IdeaUtils.invokeLater(() -> {
+            try {
+                Files.createDirectories(Paths.get(basePath));
+                Files.write(Paths.get(basePath + "bak-" + System.currentTimeMillis() + ".log"), JsonUtils.toJson(itemList).getBytes(), CREATE, APPEND);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private static void log(String content, Project project) {

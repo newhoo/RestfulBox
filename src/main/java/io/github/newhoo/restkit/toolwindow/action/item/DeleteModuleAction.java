@@ -11,6 +11,7 @@ import io.github.newhoo.restkit.restful.RequestHelper;
 import io.github.newhoo.restkit.restful.RequestResolver;
 import io.github.newhoo.restkit.toolwindow.RestServiceToolWindow;
 import io.github.newhoo.restkit.toolwindow.RestToolWindowFactory;
+import io.github.newhoo.restkit.util.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -60,6 +61,9 @@ public class DeleteModuleAction extends AnAction {
                      resolverMap.get(entry.getKey()).delete(entry.getValue());
                  });
             RestToolWindowFactory.getRestServiceToolWindow(project, RestServiceToolWindow::scheduleUpdateTree);
+
+            // 备份删除的API
+            FileUtils.bakDeletedApi(items, project);
         }
     }
 }
