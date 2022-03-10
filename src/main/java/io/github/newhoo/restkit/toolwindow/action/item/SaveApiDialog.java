@@ -1,6 +1,13 @@
 package io.github.newhoo.restkit.toolwindow.action.item;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBPanel;
+import com.intellij.ui.components.JBTextField;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.util.ui.JBUI;
 import io.github.newhoo.restkit.common.HttpMethod;
 import io.github.newhoo.restkit.common.KV;
 import io.github.newhoo.restkit.common.RestClientApiInfo;
@@ -12,22 +19,22 @@ import io.github.newhoo.restkit.util.ToolkitUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SaveApiDialog extends JDialog {
+/**
+ * SaveApiDialog
+ *
+ * @author huzunrong
+ * @since 2.0.3
+ */
+public class SaveApiDialog extends DialogWrapper {
 
-    private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
-    private JTextField urlTextField;
     private JComboBox<String> saveTypeComboBox;
     private JComboBox<String> moduleComboBox;
     private JTextArea descTextArea;
@@ -41,15 +48,40 @@ public class SaveApiDialog extends JDialog {
     private List<RestItem> existedItemList;
 
     public SaveApiDialog(Project project, Map<String, RequestResolver> resolverMap, RestClientApiInfo apiInfo) {
-        setSize(380, 300);
-        setLocationRelativeTo(null);
+        super(project, true);
 
-        setContentPane(contentPane);
-        setModal(true);
-        setAlwaysOnTop(true);
+        this.project = project;
+        this.apiInfo = apiInfo;
+        this.resolverMap = resolverMap;
+
         setTitle("Save Api");
-        getRootPane().setDefaultButton(buttonOK);
+        setSize(380, 300);
 
+        init();
+    }
+
+    @Override
+    protected JComponent createCenterPanel() {
+        JPanel contentPanel = new JBPanel<>();
+        contentPanel.setLayout(new GridLayoutManager(5, 2, JBUI.insets(0, 0, 0, 0), 4, 4));
+
+        contentPanel.add(new JBLabel("Key: "),
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED,
+                        null, null, null));
+        JBTextField keyTextField = new JBTextField(apiInfo.getMethod() + " " + apiInfo.getUrl());
+        keyTextField.setEnabled(false);
+        contentPanel.add(keyTextField,
+                new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_GROW | GridConstraints.SIZEPOLICY_WANT_GROW,
+                        GridConstraints.SIZEPOLICY_FIXED,
+                        null, null, null));
+
+        contentPanel.add(new JBLabel("SaveType: "),
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED,
+                        null, null, null));
+        saveTypeComboBox = new JComboBox<>(new DefaultComboBoxModel<>(resolverMap.keySet().toArray(new String[0])));
         saveTypeComboBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -59,59 +91,60 @@ public class SaveApiDialog extends JDialog {
                 }
             }
         });
+        contentPanel.add(saveTypeComboBox,
+                new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED,
+                        null, null, null));
 
-        buttonOK.addActionListener(e -> onOK());
-        buttonCancel.addActionListener(e -> dispose());
+        contentPanel.add(new JBLabel("Module: "),
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED,
+                        null, null, null));
+        moduleComboBox = new JComboBox<>();
+        moduleComboBox.setEditable(true);
+        contentPanel.add(moduleComboBox,
+                new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED,
+                        null, null, null));
 
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                dispose();
-            }
-        });
+        contentPanel.add(new JBLabel("Description: "),
+                new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED,
+                        null, null, null));
+        descTextArea = new JTextArea();
+        descTextArea.setRows(0);
+        descTextArea.setMargin(new Insets(4, 4, 4, 4));
+        contentPanel.add(descTextArea,
+                new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_GROW | GridConstraints.SIZEPOLICY_CAN_SHRINK, GridConstraints.SIZEPOLICY_CAN_GROW | GridConstraints.SIZEPOLICY_CAN_SHRINK,
+                        null, null, null));
 
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(e -> dispose(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        existedLabel = new JLabel("Existed: ");
+        contentPanel.add(existedLabel,
+                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED,
+                        null, null, null));
+        updateRadioButton = new JRadioButton("update");
+        saveAsRadioButton = new JRadioButton("save as");
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(updateRadioButton);
+        buttonGroup.add(saveAsRadioButton);
 
-        this.project = project;
-        this.apiInfo = apiInfo;
-        this.resolverMap = resolverMap;
-        urlTextField.setText(apiInfo.getMethod() + " " + apiInfo.getUrl());
-        for (String s : resolverMap.keySet().toArray(new String[0])) {
-            saveTypeComboBox.addItem(s);
-        }
+        JPanel radioPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        radioPanel.add(updateRadioButton);
+        radioPanel.add(saveAsRadioButton);
+        contentPanel.add(radioPanel,
+                new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                        GridConstraints.ALIGN_LEFT, GridConstraints.ALIGN_CENTER,
+                        null, null, null));
+
         selectResolver(saveTypeComboBox.getSelectedItem().toString());
+
+        return contentPanel;
     }
 
-    private void selectResolver(String selectedItem) {
-        RequestResolver requestResolver = resolverMap.get(selectedItem);
-        String url = apiInfo.getUrl();
-        HttpMethod method = apiInfo.getMethod();
-
-        List<RestItem> restItemInProject = requestResolver.findRestItemInProject(project);
-        moduleComboBox.removeAllItems();
-        restItemInProject.stream().map(RestItem::getModuleName).distinct().forEach(s -> moduleComboBox.addItem(s));
-
-        existedItemList = restItemInProject.stream()
-                                           .filter(item -> url.equals(item.getUrl()) && item.getMethod() == method)
-                                           .collect(Collectors.toList());
-        existedLabel.setText("Existed " + existedItemList.size() + ": ");
-        if (!existedItemList.isEmpty()) {
-            updateRadioButton.setSelected(true);
-            updateRadioButton.setEnabled(true);
-            saveAsRadioButton.setEnabled(true);
-            if (StringUtils.isEmpty(descTextArea.getText())) {
-                descTextArea.setText(existedItemList.get(0).getDescription());
-            }
-        } else {
-            saveAsRadioButton.setSelected(true);
-            saveAsRadioButton.setEnabled(false);
-            updateRadioButton.setEnabled(false);
-        }
-    }
-
-    private void onOK() {
+    @Override
+    protected void doOKAction() {
         String module = (String) moduleComboBox.getSelectedItem();
         if (StringUtils.isEmpty(module)) {
             moduleComboBox.requestFocus();
@@ -144,6 +177,33 @@ public class SaveApiDialog extends JDialog {
         }
         RestToolWindowFactory.getRestServiceToolWindow(project, RestServiceToolWindow::scheduleUpdateTree);
 
-        dispose();
+        close(OK_EXIT_CODE);
+    }
+
+    private void selectResolver(String selectedItem) {
+        RequestResolver requestResolver = resolverMap.get(selectedItem);
+        String url = apiInfo.getUrl();
+        HttpMethod method = apiInfo.getMethod();
+
+        List<RestItem> restItemInProject = requestResolver.findRestItemInProject(project);
+        moduleComboBox.removeAllItems();
+        restItemInProject.stream().map(RestItem::getModuleName).distinct().forEach(s -> moduleComboBox.addItem(s));
+
+        existedItemList = restItemInProject.stream()
+                                           .filter(item -> url.equals(item.getUrl()) && item.getMethod() == method)
+                                           .collect(Collectors.toList());
+        existedLabel.setText("Existed " + existedItemList.size() + ": ");
+        if (!existedItemList.isEmpty()) {
+            updateRadioButton.setSelected(true);
+            updateRadioButton.setEnabled(true);
+            saveAsRadioButton.setEnabled(true);
+            if (StringUtils.isEmpty(descTextArea.getText())) {
+                descTextArea.setText(existedItemList.get(0).getDescription());
+            }
+        } else {
+            saveAsRadioButton.setSelected(true);
+            saveAsRadioButton.setEnabled(false);
+            updateRadioButton.setEnabled(false);
+        }
     }
 }

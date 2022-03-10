@@ -58,6 +58,6 @@ public class SaveApiAction extends AnAction {
             return;
         }
 
-        new SaveApiDialog(project, resolverMap, apiInfo).setVisible(true);
+        new SaveApiDialog(project, resolverMap, apiInfo).show();
     }
 }

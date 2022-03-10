@@ -114,7 +114,7 @@ public class EnvironmentForm {
         scriptBtn.addActionListener(e -> {
             new ScriptEditDialog(project, script, s -> {
                 this.script = s;
-            }).setVisible(true);
+            }).show();
         });
         exportEnvBtn.addActionListener((e -> {
             Environment setting = Environment.getInstance(project);
