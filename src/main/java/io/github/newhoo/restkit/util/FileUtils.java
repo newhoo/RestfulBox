@@ -1,7 +1,7 @@
 package io.github.newhoo.restkit.util;
 
 import com.intellij.openapi.project.Project;
-import io.github.newhoo.restkit.common.HttpInfo;
+import io.github.newhoo.restkit.common.RequestInfo;
 import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
 import org.apache.commons.lang3.StringUtils;
@@ -66,9 +66,11 @@ public class FileUtils {
         });
     }
 
-    public static void logHttpInfo(HttpInfo httpInfo, Project project) {
-        if (CommonSettingComponent.getInstance(project).getState().isSaveRequestLog()) {
-            log(httpInfo.formatLogInfo(), project);
+    public static void logRequestInfo(RequestInfo requestInfo, Project project) {
+        if (CommonSettingComponent.getInstance(project).getState().isSaveRequestLog()
+                && requestInfo.getRequest().getClient() != null) {
+            String log = requestInfo.getRequest().getClient().formatLogInfo(requestInfo);
+            log(log, project);
         }
     }
 

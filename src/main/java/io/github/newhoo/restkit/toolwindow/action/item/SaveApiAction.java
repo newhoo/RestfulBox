@@ -11,12 +11,14 @@ import io.github.newhoo.restkit.common.RestDataKey;
 import io.github.newhoo.restkit.config.SettingConfigurable;
 import io.github.newhoo.restkit.restful.RequestHelper;
 import io.github.newhoo.restkit.restful.RequestResolver;
+import io.github.newhoo.restkit.restful.RestClient;
 import io.github.newhoo.restkit.util.HtmlUtil;
 import io.github.newhoo.restkit.util.NotifierUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.event.HyperlinkEvent;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -58,6 +60,11 @@ public class SaveApiAction extends AnAction {
             return;
         }
 
-        new SaveApiDialog(project, resolverMap, apiInfo).show();
+        List<String> protocols = RequestHelper.getRestClient()
+                                              .stream()
+                                              .map(RestClient::getProtocol)
+                                              .collect(Collectors.toList());
+
+        new SaveApiDialog(project, apiInfo, resolverMap, protocols).show();
     }
 }

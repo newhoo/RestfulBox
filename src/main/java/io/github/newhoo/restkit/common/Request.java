@@ -1,7 +1,7 @@
 package io.github.newhoo.restkit.common;
 
+import io.github.newhoo.restkit.restful.RestClient;
 import lombok.Data;
-import org.apache.http.HttpRequest;
 
 import java.util.Map;
 
@@ -14,12 +14,11 @@ import java.util.Map;
 @Data
 public class Request {
 
-    /** 原始http request */
-    private HttpRequest original;
-
     private String url;
     private String method;
     private Map<String, String> headers;
     private Map<String, String> params;
     private String body;
+
+    private RestClient client;
 }

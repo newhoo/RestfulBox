@@ -25,9 +25,11 @@
         2.0.3
         <ul>
             <li>support api group by file name.</li>
+            <li>support rest client ep.</li>
             <li>fix bugs.</li>
             <br/>
             <li>扫描的API支持按文件名显示分组.</li>
+            <li>发送请求提供扩展点，即将提供Dubbo请求支持.</li>
         </ul>
 
         2.0.2
@@ -107,10 +109,12 @@
     <extensionPoints>
         <extensionPoint name="restfulResolver" interface="io.github.newhoo.restkit.restful.ep.RestfulResolverProvider" dynamic="true"/>
         <extensionPoint name="languageResolver" interface="io.github.newhoo.restkit.restful.ep.LanguageResolverProvider" dynamic="true"/>
+        <extensionPoint name="restClient" interface="io.github.newhoo.restkit.restful.ep.RestClientProvider" dynamic="true"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="io.github.newhoo.restkit">
         <restfulResolver implementation="io.github.newhoo.restkit.restful.local.LocalRequestResolver$FileResolverProvider"/>
+        <restClient implementation="io.github.newhoo.restkit.restful.http.HttpClient$HttpClientProvider"/>
     </extensions>
 
     <actions>

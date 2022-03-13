@@ -40,6 +40,9 @@ public class RestItem {
     /** name that the api item from. e.g. Local for Local api store */
     private String framework;
 
+    /** protocol */
+    private String protocol = "http";
+
     /** id, reserve */
     private String id = "";
 
@@ -69,6 +72,12 @@ public class RestItem {
         this.headers = headers;
         this.params = params;
         this.bodyJson = bodyJson;
+    }
+
+    public RestItem(@NotNull String url, String requestMethod, @NotNull List<KV> headers, @NotNull List<KV> params, @NotNull String bodyJson, @NotNull String description, @NotNull String moduleName, @NotNull String framework, @NotNull String protocol) {
+        this(url, requestMethod, headers, params, bodyJson, description, moduleName, framework);
+
+        this.protocol = protocol;
     }
 
     public boolean isValid() {

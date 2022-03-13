@@ -57,6 +57,7 @@ public class ExportApiAction extends AnAction {
                         restItem.setModuleName(o.getModuleName());
                         restItem.setFramework(o.getFramework());
                         restItem.setId(o.getId());
+                        restItem.setProtocol(o.getProtocol());
                         return restItem;
                     }).collect(Collectors.toList());
                 });

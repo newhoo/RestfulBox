@@ -186,7 +186,7 @@ public class RestServiceTree extends JPanel implements DataProvider {
     private Predicate<RequestNode> getNavigateFilter(String url, HttpMethod httpMethod) {
         return requestNode -> {
             RestItem item = requestNode.myRestItem;
-            if (item.getMethod() != httpMethod) {
+            if (item.getMethod() != null && item.getMethod() != httpMethod) {
                 return false;
             }
             String itemUrl = item.getUrl();
@@ -423,9 +423,10 @@ public class RestServiceTree extends JPanel implements DataProvider {
                     description = split[2];
                 }
             }
-            String tooltip = "url: " + myRestItem.getUrl() + "<br/>"
-                    + "desc: " + description + "<br/>" +
-                    "from: " + myRestItem.getFramework();
+            String tooltip = "protocol: " + myRestItem.getProtocol() + "<br/>"
+                    + "url: " + myRestItem.getUrl() + "<br/>"
+                    + "desc: " + description + "<br/>"
+                    + "from: " + myRestItem.getFramework();
             getTemplatePresentation().setTooltip(tooltip);
         }
 

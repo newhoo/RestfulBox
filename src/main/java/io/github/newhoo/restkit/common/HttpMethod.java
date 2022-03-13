@@ -8,23 +8,23 @@ import java.util.Map;
  * HTTP method
  */
 public enum HttpMethod {
-    GET, POST, PUT, DELETE, PATCH, HEAD;
+    GET, POST, PUT, DELETE, PATCH, HEAD, UNDEFINED;
 
     private static final Map<String, HttpMethod> methodMap = new HashMap<>(8);
 
     public static HttpMethod getByRequestMethod(String method) {
         if (method == null || method.isEmpty()) {
-            return null;
+            return UNDEFINED;
         }
 
         String[] split = method.split("\\.");
 
         if (split.length > 1) {
             method = split[split.length - 1].toUpperCase();
-            return methodMap.get(method.toUpperCase());
+            return methodMap.getOrDefault(method.toUpperCase(), UNDEFINED);
         }
 
-        return methodMap.get(method.toUpperCase());
+        return methodMap.getOrDefault(method.toUpperCase(), UNDEFINED);
     }
 
     public static HttpMethod nameOf(String method) {

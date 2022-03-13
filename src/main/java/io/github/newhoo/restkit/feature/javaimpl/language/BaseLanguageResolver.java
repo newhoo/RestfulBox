@@ -7,6 +7,7 @@ import com.intellij.psi.PsiArrayInitializerMemberValue;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
@@ -14,6 +15,7 @@ import com.intellij.psi.PsiParameterList;
 import io.github.newhoo.restkit.common.KV;
 import io.github.newhoo.restkit.common.PsiRestItem;
 import io.github.newhoo.restkit.common.RestItem;
+import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.feature.javaimpl.MethodPath;
 import io.github.newhoo.restkit.feature.javaimpl.helper.PsiAnnotationHelper;
 import io.github.newhoo.restkit.feature.javaimpl.helper.PsiClassHelper;
@@ -22,6 +24,7 @@ import io.github.newhoo.restkit.restful.BaseRequestResolver;
 import io.github.newhoo.restkit.restful.LanguageResolver;
 import io.github.newhoo.restkit.restful.ParamResolver;
 import io.github.newhoo.restkit.restful.RequestHelper;
+import io.github.newhoo.restkit.util.FileUtils;
 import io.github.newhoo.restkit.util.TypeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,12 +60,31 @@ public abstract class BaseLanguageResolver extends BaseRequestResolver implement
     @NotNull
     public RestItem createRestServiceItem(@NotNull Module module, PsiElement psiElement, @NotNull String typePath, @NotNull String methodPath, String method) {
         String requestPath = RequestHelper.getCombinedPath(typePath, methodPath);
-        return new PsiRestItem(requestPath, method, module.getName(), getFrameworkName(), psiElement, this);
+        return new PsiRestItem(requestPath, method, getModuleName(module, psiElement), getFrameworkName(), psiElement, this);
     }
 
     @NotNull
     public RestItem createRestServiceItem(@NotNull Module module, PsiElement psiElement, @NotNull String path, String method) {
-        return new PsiRestItem(path, method, module.getName(), getFrameworkName(), psiElement, this);
+        return new PsiRestItem(path, method, getModuleName(module, psiElement), getFrameworkName(), psiElement, this);
+    }
+
+    /**
+     * 根据 psiElement 构造自定义module name
+     *
+     * @param psiElement
+     */
+    @NotNull
+    public String getModuleName(@NotNull Module module, @NotNull PsiElement psiElement) {
+        boolean displayApiGroupUsingFileName = CommonSettingComponent.getInstance(module.getProject()).getState()
+                                                                     .isDisplayApiGroupUsingFileName();
+        if (!displayApiGroupUsingFileName) {
+            return module.getName();
+        }
+        PsiFile containingFile = psiElement.getContainingFile();
+        if (containingFile != null) {
+            return FileUtils.removeFileSuffix(containingFile.getName());
+        }
+        return psiElement.toString();
     }
 
     public List<RestItem> combineTypeAndMethod(List<MethodPath> typeMethodPaths, List<MethodPath> methodMethodPaths, PsiElement psiElement, Module module) {

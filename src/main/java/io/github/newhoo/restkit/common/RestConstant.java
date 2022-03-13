@@ -14,6 +14,8 @@ public class RestConstant {
     public static final String PLACEHOLDER_BASE_URL = "{{baseUrl}}";
     public static final String PLACEHOLDER_URL = "URL";
 
+    public static final String PROTOCOL_HTTP = "http";
+
     public static final String DOC_URL = "https://github.com/newhoo/RESTKit";
 
     public static final String PRE_REQUEST_SCRIPT =

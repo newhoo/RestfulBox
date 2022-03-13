@@ -1,13 +1,12 @@
 package io.github.newhoo.restkit.restful;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiFile;
-import io.github.newhoo.restkit.common.PsiRestItem;
 import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.config.CommonSetting;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
+import io.github.newhoo.restkit.restful.ep.RestClientProvider;
 import io.github.newhoo.restkit.restful.ep.RestfulResolverProvider;
-import io.github.newhoo.restkit.util.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -15,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -48,23 +48,36 @@ public class RequestHelper {
                                               .collect(Collectors.toList());
     }
 
+    public static RestClient getRestClient(@NotNull String protocol, @NotNull Supplier<RestClient> defaultClient) {
+        return RestClientProvider.EP_NAME.getExtensionList()
+                                         .stream()
+                                         .filter(Objects::nonNull)
+                                         .map(RestClientProvider::createClient)
+                                         .filter(Objects::nonNull)
+                                         .filter(client -> client.getProtocol().equalsIgnoreCase(protocol)
+                                                 || client.getProtocol().equalsIgnoreCase(protocol + "s")
+                                                 || (client.getProtocol() + "s").equalsIgnoreCase(protocol))
+                                         .findFirst()
+                                         .orElseGet(defaultClient);
+    }
+
+    public static List<RestClient> getRestClient() {
+        return RestClientProvider.EP_NAME.getExtensionList()
+                                         .stream()
+                                         .filter(Objects::nonNull)
+                                         .map(RestClientProvider::createClient)
+                                         .filter(Objects::nonNull)
+                                         .filter(restClient -> StringUtils.isNotEmpty(restClient.getProtocol()))
+                                         .collect(Collectors.toList());
+    }
+
     public static List<RestItem> buildRequestItemList(@NotNull Project project) {
-        boolean displayApiGroupUsingFileName = CommonSettingComponent.getInstance(project).getState()
-                                                                     .isDisplayApiGroupUsingFileName();
         List<RequestResolver> requestResolvers = getEnabledRequestResolvers(project);
         return requestResolvers.stream()
                                .map(resolver -> resolver.findRestItemInProject(project))
                                .filter(Objects::nonNull)
                                .flatMap(Collection::stream)
                                .filter(Objects::nonNull)
-                               .peek(item -> {
-                                   if (displayApiGroupUsingFileName && item instanceof PsiRestItem) {
-                                       PsiFile containingFile = ((PsiRestItem) item).getPsiElement().getContainingFile();
-                                       if (containingFile != null) {
-                                           item.setModuleName(FileUtils.removeFileSuffix(containingFile.getName()));
-                                       }
-                                   }
-                               })
                                .filter(item -> item.getModuleName() != null && item.getUrl() != null)
                                .collect(Collectors.toList());
     }

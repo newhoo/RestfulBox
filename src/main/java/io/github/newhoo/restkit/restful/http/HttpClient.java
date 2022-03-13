@@ -1,49 +1,57 @@
-package io.github.newhoo.restkit.common;
+package io.github.newhoo.restkit.restful.http;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.intellij.openapi.project.Project;
+import io.github.newhoo.restkit.common.Request;
+import io.github.newhoo.restkit.common.RequestInfo;
+import io.github.newhoo.restkit.restful.RestClient;
+import io.github.newhoo.restkit.restful.ep.RestClientProvider;
+import io.github.newhoo.restkit.util.HttpUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.StatusLine;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
+
 /**
- * HttpInfo
+ * http client
+ *
+ * @author huzunrong
+ * @date 2022/3/12 2:12 PM
+ * @since 2.0.3
  */
-public class HttpInfo {
+public class HttpClient implements RestClient {
 
-    private Request request;
-    @Getter
-    private Response response;
-
-    private String remoteAddress;
-    private long cost;
-    @Getter
-    @Setter
-    private String errMsg;
-
-    public HttpInfo(Request request, String errMsg) {
-        this.request = request;
-        this.errMsg = errMsg;
+    @NotNull
+    @Override
+    public String getProtocol() {
+        return PROTOCOL_HTTP;
     }
 
-    public HttpInfo(Request request, Response response, String remoteAddress, Long cost) {
-        this.request = request;
-        this.response = response;
-        this.remoteAddress = remoteAddress;
-        this.cost = cost;
+    @NotNull
+    @Override
+    public RequestInfo sendRequest(Request request, Project project) {
+        HttpRequest req = new HttpRequest();
+        req.setUrl(request.getUrl());
+        req.setMethod(request.getMethod());
+        req.setHeaders(request.getHeaders());
+        req.setParams(request.getParams());
+        req.setBody(request.getBody());
+        req.setClient(request.getClient());
+
+        return HttpUtils.request(req, project);
     }
 
-    public String getResponseBody() {
-        return StringUtils.isNotEmpty(errMsg)
-                ? errMsg
-                : response != null ? StringUtils.defaultString(response.getBody()) : "";
-    }
+    @NotNull
+    @Override
+    public String formatResponseInfo(RequestInfo requestInfo) {
+        HttpRequest request = (HttpRequest) requestInfo.getRequest();
+        HttpResponse response = (HttpResponse) requestInfo.getResponse();
 
-    public String formatResponseInfo() {
         StringBuilder sb = new StringBuilder();
 
         String status = "ERROR";
@@ -51,8 +59,8 @@ public class HttpInfo {
             StatusLine statusLine = response.getOriginal().getStatusLine();
             status = statusLine.getStatusCode() + " " + StringUtils.defaultString(statusLine.getReasonPhrase());
         }
-        sb.append("Status: ").append(status).append("    ").append("Time: ").append(cost).append("ms").append("\n")
-          .append("Remote Address: ").append(remoteAddress).append("\n")
+        sb.append("Status: ").append(status).append("    ").append("Time: ").append(requestInfo.getCost()).append("ms").append("\n")
+          .append("Remote Address: ").append(requestInfo.getRemoteAddress()).append("\n")
           .append("------------------------------------\n");
 
         if (request.getOriginal() != null) {
@@ -81,7 +89,12 @@ public class HttpInfo {
         return sb.toString();
     }
 
-    public String formatLogInfo() {
+    @NotNull
+    @Override
+    public String formatLogInfo(RequestInfo requestInfo) {
+        HttpRequest request = (HttpRequest) requestInfo.getRequest();
+        HttpResponse response = (HttpResponse) requestInfo.getResponse();
+
         StringBuilder sb = new StringBuilder();
         sb.append("############################# ").append(LocalDateTime.now()).append(" #############################").append("\n");
         String status = "ERROR";
@@ -90,8 +103,8 @@ public class HttpInfo {
             status = statusLine.getStatusCode() + " " + StringUtils.defaultString(statusLine.getReasonPhrase());
         }
         sb.append("Status: ").append(status).append("    ")
-          .append("Time: ").append(cost).append("ms").append("    ")
-          .append("Remote Address: ").append(remoteAddress).append("\n\n");
+          .append("Time: ").append(requestInfo.getCost()).append("ms").append("    ")
+          .append("Remote Address: ").append(requestInfo.getRemoteAddress()).append("\n\n");
 
         if (request.getOriginal() != null) {
             sb.append(">>> ").append(request.getOriginal().getRequestLine()).append("\n");
@@ -114,10 +127,10 @@ public class HttpInfo {
                 sb.append("\n").append(response.getBody()).append("\n");
             }
         }
-        if (StringUtils.isNotEmpty(errMsg)) {
+        if (StringUtils.isNotEmpty(requestInfo.getErrMsg())) {
             sb.append("\n");
             sb.append("<<< ERROR").append("\n");
-            sb.append(errMsg).append("\n");
+            sb.append(requestInfo.getErrMsg()).append("\n");
         }
         sb.append("\n\n");
         return sb.toString();
@@ -125,5 +138,12 @@ public class HttpInfo {
 
     private String formatHeader(Header[] headers) {
         return Arrays.stream(headers).map(Object::toString).collect(Collectors.joining("\n"));
+    }
+
+    public static class HttpClientProvider implements RestClientProvider {
+        @Override
+        public RestClient createClient() {
+            return new HttpClient();
+        }
     }
 }

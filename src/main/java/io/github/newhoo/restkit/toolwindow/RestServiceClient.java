@@ -22,9 +22,10 @@ import com.intellij.ui.components.JBTextField;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.util.ui.JBUI;
-import io.github.newhoo.restkit.common.HttpInfo;
 import io.github.newhoo.restkit.common.HttpMethod;
 import io.github.newhoo.restkit.common.KV;
+import io.github.newhoo.restkit.common.Request;
+import io.github.newhoo.restkit.common.RequestInfo;
 import io.github.newhoo.restkit.common.RestClientApiInfo;
 import io.github.newhoo.restkit.common.RestClientEditorInfo;
 import io.github.newhoo.restkit.common.RestDataKey;
@@ -32,8 +33,10 @@ import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.config.Environment;
 import io.github.newhoo.restkit.config.EnvironmentConfigurable;
 import io.github.newhoo.restkit.parameter.library.RestParameterListener;
+import io.github.newhoo.restkit.restful.RequestHelper;
+import io.github.newhoo.restkit.restful.RestClient;
+import io.github.newhoo.restkit.restful.http.HttpClient;
 import io.github.newhoo.restkit.util.EnvironmentUtils;
-import io.github.newhoo.restkit.util.HttpUtils;
 import io.github.newhoo.restkit.util.JsonUtils;
 import io.github.newhoo.restkit.util.ToolkitUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -54,6 +57,7 @@ import java.util.stream.Collectors;
 
 import static io.github.newhoo.restkit.common.RestConstant.PLACEHOLDER_BASE_URL;
 import static io.github.newhoo.restkit.common.RestConstant.PLACEHOLDER_URL;
+import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
 import static io.github.newhoo.restkit.config.SettingListener.ENV_UPDATE;
 import static io.github.newhoo.restkit.parameter.library.RestParameterListener.REST_PARAMETER_UPDATE;
 import static io.github.newhoo.restkit.toolwindow.RestServiceListener.REST_SERVICE_SELECT;
@@ -228,24 +232,39 @@ public class RestServiceClient extends JPanel implements DataProvider {
                     sendButton.setEnabled(false);
                     setResponse("Loading...");
                     try {
+                        // url
                         String url = EnvironmentUtils.handlePlaceholderVariable(requestUrl.getText(), project);
                         // 环境变量未设置【baseUrl】时强行替换为localhost:8080
                         url = url.replaceFirst("\\{\\{baseUrl}}", "http://localhost:8080");
+                        // protocol
+                        String protocol = url.contains("://") ? url.substring(0, url.indexOf("://")) : PROTOCOL_HTTP;
                         // http method
                         HttpMethod method = (HttpMethod) Objects.requireNonNull(requestMethod.getSelectedItem());
                         // header
                         Map<String, String> headerMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(getEditorText(requestHeaderEditor), project));
                         // param
                         Map<String, String> paramMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(getEditorText(requestParamEditor), project));
+                        // body
+                        String reqBody = getEditorText(requestBodyEditor);
+
+                        RestClient restClient = RequestHelper.getRestClient(protocol, HttpClient::new);
+
+                        Request req = new Request();
+                        req.setUrl(url);
+                        req.setMethod(method.name());
+                        req.setHeaders(headerMap);
+                        req.setParams(paramMap);
+                        req.setBody(reqBody);
+                        req.setClient(restClient);
 
                         // send request
-                        HttpInfo response = HttpUtils.request(url, method, paramMap, getEditorText(requestBodyEditor), headerMap, project);
+                        RequestInfo response = restClient.sendRequest(req, project);
 
                         // response
                         setResponse(response.getResponseBody());
 
                         // info
-                        setHttpInfo(response.formatResponseInfo());
+                        setHttpInfo(restClient.formatResponseInfo(response));
 
                         AppUIUtil.invokeOnEdt(() -> tabbedPane.setSelectedIndex(3));
                     } finally {
@@ -275,7 +294,15 @@ public class RestServiceClient extends JPanel implements DataProvider {
 
         ApplicationManager.getApplication().executeOnPooledThread(() -> {
             String url = StringUtils.defaultString(restItem.getUrl());
-            String method = ObjectUtils.defaultIfNull(restItem.getMethod(), HttpMethod.GET).name();
+            if (!url.contains("://")) {
+                if (PROTOCOL_HTTP.equalsIgnoreCase(restItem.getProtocol())) {
+                    url = PLACEHOLDER_BASE_URL + url;
+                } else {
+                    url = restItem.getProtocol() + "://" + url;
+                }
+            }
+            String finalUrl = url;
+            HttpMethod method = ObjectUtils.defaultIfNull(restItem.getMethod(), HttpMethod.UNDEFINED);
             ApplicationManager.getApplication().runReadAction(() -> {
                 List<KV> requestHeaders = restItem.getHeaders();
                 List<KV> requestParams = restItem.getParams();
@@ -283,25 +310,23 @@ public class RestServiceClient extends JPanel implements DataProvider {
 
                 // 在UI展示
                 AppUIUtil.invokeOnEdt(() -> {
-                    showRequest(url, method, requestHeaders, requestParams, requestBodyJson);
+                    showRequest(finalUrl, method, requestHeaders, requestParams, requestBodyJson);
                 });
             });
         });
     }
 
-    private void showRequest(String url, String method, List<KV> headers, List<KV> params, String body) {
-        if (CollectionUtils.isEmpty(params) && StringUtils.isNotEmpty(body)) {
+    private void showRequest(String url, HttpMethod method, List<KV> headers, List<KV> params, String body) {
+        if (method == HttpMethod.UNDEFINED
+                || (CollectionUtils.isEmpty(params) && StringUtils.isNotEmpty(body))) {
             tabbedPane.setSelectedIndex(2);
         } else {
             tabbedPane.setSelectedIndex(1);
         }
 
-        if (!url.contains("://")) {
-            url = PLACEHOLDER_BASE_URL + url;
-        }
         requestUrl.setText(url);
         requestUrl.setToolTipText(url);
-        requestMethod.setSelectedItem(HttpMethod.valueOf(method));
+        requestMethod.setSelectedItem(method);
         setHeader(headers);
         setParams(params);
         setReqBody(body);
