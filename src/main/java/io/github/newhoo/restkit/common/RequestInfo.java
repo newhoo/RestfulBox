@@ -11,15 +11,18 @@ import org.apache.commons.lang3.StringUtils;
 public class RequestInfo {
 
     private final Request request;
-    private Response response;
+    private final Response response;
 
+    @Setter
     private String remoteAddress;
+    @Setter
     private long cost;
     @Setter
     private String errMsg;
 
     public RequestInfo(Request request, String errMsg) {
         this.request = request;
+        this.response = null;
         this.errMsg = errMsg;
     }
 

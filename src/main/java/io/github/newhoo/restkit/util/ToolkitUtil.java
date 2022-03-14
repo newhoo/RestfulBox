@@ -39,7 +39,7 @@ public class ToolkitUtil {
         String[] lines = text.split("\n");
 
         for (String line : lines) {
-            String[] prop = line.split(":");
+            String[] prop = line.split(":", 2);
             if (prop.length == 0) {
                 continue;
             }
@@ -68,7 +68,7 @@ public class ToolkitUtil {
         String[] lines = text.split("\n");
 
         for (String line : lines) {
-            String[] prop = line.split(":");
+            String[] prop = line.split(":", 2);
             if (prop.length == 0) {
                 continue;
             }

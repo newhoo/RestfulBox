@@ -26,10 +26,13 @@ import io.github.newhoo.restkit.common.HttpMethod;
 import io.github.newhoo.restkit.common.KV;
 import io.github.newhoo.restkit.common.Request;
 import io.github.newhoo.restkit.common.RequestInfo;
+import io.github.newhoo.restkit.common.Response;
 import io.github.newhoo.restkit.common.RestClientApiInfo;
+import io.github.newhoo.restkit.common.RestClientData;
 import io.github.newhoo.restkit.common.RestClientEditorInfo;
 import io.github.newhoo.restkit.common.RestDataKey;
 import io.github.newhoo.restkit.common.RestItem;
+import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.Environment;
 import io.github.newhoo.restkit.config.EnvironmentConfigurable;
 import io.github.newhoo.restkit.parameter.library.RestParameterListener;
@@ -37,6 +40,7 @@ import io.github.newhoo.restkit.restful.RequestHelper;
 import io.github.newhoo.restkit.restful.RestClient;
 import io.github.newhoo.restkit.restful.http.HttpClient;
 import io.github.newhoo.restkit.util.EnvironmentUtils;
+import io.github.newhoo.restkit.util.FileUtils;
 import io.github.newhoo.restkit.util.JsonUtils;
 import io.github.newhoo.restkit.util.ToolkitUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -46,8 +50,14 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.script.Bindings;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
+import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -249,16 +259,15 @@ public class RestServiceClient extends JPanel implements DataProvider {
 
                         RestClient restClient = RequestHelper.getRestClient(protocol, HttpClient::new);
 
-                        Request req = new Request();
-                        req.setUrl(url);
-                        req.setMethod(method.name());
-                        req.setHeaders(headerMap);
-                        req.setParams(paramMap);
-                        req.setBody(reqBody);
-                        req.setClient(restClient);
+                        RestClientData clientData = new RestClientData();
+                        clientData.setUrl(url);
+                        clientData.setMethod(method.name());
+                        clientData.setHeaders(headerMap);
+                        clientData.setParams(paramMap);
+                        clientData.setBody(reqBody);
 
                         // send request
-                        RequestInfo response = restClient.sendRequest(req, project);
+                        RequestInfo response = sendRequest(clientData, restClient);
 
                         // response
                         setResponse(response.getResponseBody());
@@ -279,6 +288,64 @@ public class RestServiceClient extends JPanel implements DataProvider {
                 }
             });
         });
+    }
+
+    private RequestInfo sendRequest(RestClientData restClientData, RestClient restClient) {
+        // 不同的请求端参数是不一样的
+        Request request = restClient.createRequest(restClientData, project);
+        request.setClient(restClient);
+
+        // Pre-request Script
+        try {
+            handlePreRequestScript(request, project);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new RequestInfo(request, "Pre-request Script Error: \n\n" + e.toString());
+        }
+
+        RequestInfo requestInfo = restClient.sendRequest(request, project);
+
+        // log request
+        FileUtils.logRequestInfo(requestInfo, project);
+
+        // Post-request Script
+        if (requestInfo.getResponse() != null) {
+            try {
+                handlePostRequestScript(request, requestInfo.getResponse(), project);
+            } catch (Exception e) {
+                e.printStackTrace();
+                requestInfo.setErrMsg("Post-request Script Error: \n\n" + e.toString());
+            }
+        }
+        return requestInfo;
+    }
+
+
+    private static void handlePreRequestScript(Request request, Project project) throws Exception {
+        String scriptPath = CommonSettingComponent.getInstance(project).getState().getPreRequestScriptPath();
+        if (StringUtils.isNotEmpty(scriptPath) && Files.exists(Paths.get(scriptPath))) {
+            Map<String, String> environmentMap = Environment.getInstance(project).getCurrentEnabledEnvMap();
+
+            ScriptEngine se = new ScriptEngineManager().getEngineByName("javascript");
+            Bindings bindings = se.createBindings();
+            bindings.put("request", request);
+            bindings.put("environment", environmentMap);
+            se.eval(new FileReader(scriptPath), bindings);
+        }
+    }
+
+    private static void handlePostRequestScript(Request request, Response response, Project project) throws Exception {
+        String scriptPath = CommonSettingComponent.getInstance(project).getState().getPostRequestScriptPath();
+        if (StringUtils.isNotEmpty(scriptPath) && Files.exists(Paths.get(scriptPath))) {
+            Map<String, String> environmentMap = Environment.getInstance(project).getCurrentEnabledEnvMap();
+
+            ScriptEngine se = new ScriptEngineManager().getEngineByName("javascript");
+            Bindings bindings = se.createBindings();
+            bindings.put("request", request);
+            bindings.put("response", response);
+            bindings.put("environment", environmentMap);
+            se.eval(new FileReader(scriptPath), bindings);
+        }
     }
 
     /**

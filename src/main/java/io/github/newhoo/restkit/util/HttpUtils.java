@@ -2,11 +2,8 @@ package io.github.newhoo.restkit.util;
 
 import com.intellij.openapi.project.Project;
 import io.github.newhoo.restkit.common.HttpMethod;
-import io.github.newhoo.restkit.common.Request;
 import io.github.newhoo.restkit.common.RequestInfo;
-import io.github.newhoo.restkit.common.Response;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
-import io.github.newhoo.restkit.config.Environment;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpClientConnection;
 import org.apache.http.HttpEntity;
@@ -40,16 +37,10 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext;
-import javax.script.Bindings;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Map;
 
@@ -57,60 +48,7 @@ public class HttpUtils {
 
     private static final String HTTP_HOSTADDRESS = "http.hostAddress";
 
-    public static RequestInfo request(io.github.newhoo.restkit.restful.http.HttpRequest request, Project project) {
-        // Pre-request Script
-        try {
-            handlePreRequestScript(request, project);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new RequestInfo(request, "Pre-request Script Error: \n\n" + e.toString());
-        }
-
-        RequestInfo requestInfo = request0(request, project);
-
-        // Post-request Script
-        if (requestInfo.getResponse() != null) {
-            String body = requestInfo.getResponse().getBody();
-            try {
-                handlePostRequestScript(request, requestInfo.getResponse(), project);
-            } catch (Exception e) {
-                e.printStackTrace();
-                requestInfo.setErrMsg("Post-request Script Error: \n\n" + e.toString());
-            }
-            ((io.github.newhoo.restkit.restful.http.HttpResponse) requestInfo.getResponse()).setBody0(body);
-        }
-
-        return requestInfo;
-    }
-
-    private static void handlePreRequestScript(Request request, Project project) throws Exception {
-        String scriptPath = CommonSettingComponent.getInstance(project).getState().getPreRequestScriptPath();
-        if (StringUtils.isNotEmpty(scriptPath) && Files.exists(Paths.get(scriptPath))) {
-            Map<String, String> environmentMap = Environment.getInstance(project).getCurrentEnabledEnvMap();
-
-            ScriptEngine se = new ScriptEngineManager().getEngineByName("javascript");
-            Bindings bindings = se.createBindings();
-            bindings.put("request", request);
-            bindings.put("environment", environmentMap);
-            se.eval(new FileReader(scriptPath), bindings);
-        }
-    }
-
-    private static void handlePostRequestScript(Request request, Response response, Project project) throws Exception {
-        String scriptPath = CommonSettingComponent.getInstance(project).getState().getPostRequestScriptPath();
-        if (StringUtils.isNotEmpty(scriptPath) && Files.exists(Paths.get(scriptPath))) {
-            Map<String, String> environmentMap = Environment.getInstance(project).getCurrentEnabledEnvMap();
-
-            ScriptEngine se = new ScriptEngineManager().getEngineByName("javascript");
-            Bindings bindings = se.createBindings();
-            bindings.put("request", request);
-            bindings.put("response", response);
-            bindings.put("environment", environmentMap);
-            se.eval(new FileReader(scriptPath), bindings);
-        }
-    }
-
-    private static RequestInfo request0(io.github.newhoo.restkit.restful.http.HttpRequest req, Project project) {
+    public static RequestInfo request(io.github.newhoo.restkit.restful.http.HttpRequest req, Project project) {
         if (req.getMethod() == null || HttpMethod.getByRequestMethod(req.getMethod()) == HttpMethod.UNDEFINED) {
             return new RequestInfo(req, "method is null");
         }
@@ -158,15 +96,10 @@ public class HttpUtils {
             result = org.apache.commons.lang.StringEscapeUtils.unescapeJava(result);
 
             long cost = System.currentTimeMillis() - startTs;
-            RequestInfo requestInfo = new RequestInfo(req, new io.github.newhoo.restkit.restful.http.HttpResponse(response, result), hostAddress, cost);
-            FileUtils.logRequestInfo(requestInfo, project);
-
-            return requestInfo;
+            return new RequestInfo(req, new io.github.newhoo.restkit.restful.http.HttpResponse(response, result), hostAddress, cost);
         } catch (Exception e) {
             final String errMsg = "There was an error accessing to URL: " + req.getUrl() + "\n\n" + e.toString();
-            RequestInfo requestInfo = new RequestInfo(req, errMsg);
-            FileUtils.logRequestInfo(requestInfo, project);
-            return requestInfo;
+            return new RequestInfo(req, errMsg);
         }
     }
 

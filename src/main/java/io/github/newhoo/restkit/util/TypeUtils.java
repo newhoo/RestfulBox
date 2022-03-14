@@ -125,7 +125,7 @@ public final class TypeUtils {
             case "Byte":
                 return Byte.valueOf("1");
             case "char":
-                return isRandom ? "a" : "";
+                return 'a';
             case "String":
                 return isRandom ? "str" : "";
             case "Date":

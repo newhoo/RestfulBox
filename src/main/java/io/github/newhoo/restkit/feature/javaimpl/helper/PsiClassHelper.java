@@ -22,32 +22,37 @@ import java.util.Map;
  */
 public class PsiClassHelper {
 
-    private static final int MAX_CORRELATION_COUNT = 5;
+    private static final int MAX_CORRELATION_COUNT = 6;
 
     public static String convertClassToJSON(String className, Project project) {
-        Object o = assemblePsiClass(className, project, 0);
+        Object o = assemblePsiClass(className, project, 0, false);
         return JsonUtils.toJson(o);
     }
 
-    private static Object assemblePsiClass(String typeCanonicalText, Project project, int autoCorrelationCount) {
-        PsiClass psiClass = findPsiClass(typeCanonicalText, project);
+    public static Object assemblePsiClass(String typeCanonicalText, Project project, int autoCorrelationCount, boolean putClass) {
+        boolean containsGeneric = typeCanonicalText.contains("<");
+        // 数组|集合
+        if (TypeUtils.isArray(typeCanonicalText) || TypeUtils.isList(typeCanonicalText)) {
+            String elementType = TypeUtils.isArray(typeCanonicalText)
+                    ? typeCanonicalText.replace("[]", "")
+                    : containsGeneric
+                    ? typeCanonicalText.substring(typeCanonicalText.indexOf("<") + 1, typeCanonicalText.lastIndexOf(">"))
+                    : Object.class.getCanonicalName();
+            return Collections.singletonList(assemblePsiClass(elementType, project, autoCorrelationCount, putClass));
+        }
+
+        PsiClass psiClass = PsiClassHelper.findPsiClass(typeCanonicalText, project);
         if (psiClass == null) {
+            //简单常用类型
+            if (TypeUtils.isPrimitiveOrSimpleType(typeCanonicalText)) {
+                return TypeUtils.getExampleValue(typeCanonicalText, false);
+            }
             return Collections.emptyMap();
         }
 
         //简单常用类型
         if (TypeUtils.isPrimitiveOrSimpleType(typeCanonicalText)) {
             return TypeUtils.getExampleValue(typeCanonicalText, false);
-        }
-
-        // 数组|集合
-        if (TypeUtils.isArray(typeCanonicalText) || TypeUtils.isList(typeCanonicalText)) {
-            String elementType = TypeUtils.isArray(typeCanonicalText)
-                    ? typeCanonicalText.replace("[]", "")
-                    : typeCanonicalText.contains("<")
-                    ? typeCanonicalText.substring(typeCanonicalText.indexOf("<") + 1, typeCanonicalText.lastIndexOf(">"))
-                    : Object.class.getCanonicalName();
-            return Collections.singletonList(assemblePsiClass(elementType, project, autoCorrelationCount));
         }
 
         // 枚举
@@ -70,12 +75,33 @@ public class PsiClassHelper {
             return Collections.emptyMap();
         }
         autoCorrelationCount++;
+
         Map<String, Object> map = new LinkedHashMap<>();
+        if (putClass) {
+            if (containsGeneric) {
+                map.put("class", typeCanonicalText.substring(0, typeCanonicalText.indexOf("<")));
+            } else {
+                map.put("class", typeCanonicalText);
+            }
+        }
         for (PsiField field : psiClass.getAllFields()) {
             if (field.hasModifierProperty(PsiModifier.STATIC) || field.hasModifierProperty(PsiModifier.FINAL) || field.hasModifierProperty(PsiModifier.TRANSIENT)) {
                 continue;
             }
-            map.put(field.getName(), assemblePsiClass(field.getType().getCanonicalText(), project, autoCorrelationCount));
+            String fieldType = field.getType().getCanonicalText();
+            // 不存在泛型
+            if (!containsGeneric) {
+                map.put(field.getName(), assemblePsiClass(fieldType, project, autoCorrelationCount, putClass));
+                continue;
+            }
+            // 存在泛型
+            if (TypeUtils.isPrimitiveOrSimpleType(fieldType.replaceAll("\\[]", ""))) {
+                map.put(field.getName(), assemblePsiClass(fieldType, project, autoCorrelationCount, putClass));
+            } else if (PsiClassHelper.findPsiClass(fieldType, project) == null) {
+                map.put(field.getName(), assemblePsiClass(typeCanonicalText.substring(typeCanonicalText.indexOf("<") + 1, typeCanonicalText.lastIndexOf(">")), project, autoCorrelationCount, putClass));
+            } else {
+                map.put(field.getName(), assemblePsiClass(fieldType, project, autoCorrelationCount, putClass));
+            }
         }
         return map;
     }

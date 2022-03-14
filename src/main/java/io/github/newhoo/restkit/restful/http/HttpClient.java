@@ -3,6 +3,7 @@ package io.github.newhoo.restkit.restful.http;
 import com.intellij.openapi.project.Project;
 import io.github.newhoo.restkit.common.Request;
 import io.github.newhoo.restkit.common.RequestInfo;
+import io.github.newhoo.restkit.common.RestClientData;
 import io.github.newhoo.restkit.restful.RestClient;
 import io.github.newhoo.restkit.restful.ep.RestClientProvider;
 import io.github.newhoo.restkit.util.HttpUtils;
@@ -34,16 +35,20 @@ public class HttpClient implements RestClient {
 
     @NotNull
     @Override
-    public RequestInfo sendRequest(Request request, Project project) {
-        HttpRequest req = new HttpRequest();
-        req.setUrl(request.getUrl());
-        req.setMethod(request.getMethod());
-        req.setHeaders(request.getHeaders());
-        req.setParams(request.getParams());
-        req.setBody(request.getBody());
-        req.setClient(request.getClient());
+    public Request createRequest(RestClientData restClientData, Project project) {
+        HttpRequest request = new HttpRequest();
+        request.setUrl(restClientData.getUrl());
+        request.setMethod(restClientData.getMethod());
+        request.setHeaders(restClientData.getHeaders());
+        request.setParams(restClientData.getParams());
+        request.setBody(restClientData.getBody());
+        return request;
+    }
 
-        return HttpUtils.request(req, project);
+    @NotNull
+    @Override
+    public RequestInfo sendRequest(Request request, Project project) {
+        return HttpUtils.request((HttpRequest) request, project);
     }
 
     @NotNull

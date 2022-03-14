@@ -23,6 +23,7 @@ public class HttpResponse extends Response {
 
     public HttpResponse(org.apache.http.HttpResponse original, String body) {
         this.original = original;
+        this.body0 = body;
         setBody(body);
     }
 }
