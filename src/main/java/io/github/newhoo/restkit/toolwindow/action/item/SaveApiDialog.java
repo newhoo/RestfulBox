@@ -4,7 +4,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
-import com.intellij.ui.components.JBTextField;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.util.ui.JBUI;
@@ -66,32 +65,22 @@ public class SaveApiDialog extends DialogWrapper {
     @Override
     protected JComponent createCenterPanel() {
         JPanel contentPanel = new JBPanel<>();
-        contentPanel.setLayout(new GridLayoutManager(6, 2, JBUI.insets(0, 0, 0, 0), 4, 4));
-
-        contentPanel.add(new JBLabel("Key: "),
-                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED,
-                        null, null, null));
-        JBTextField keyTextField = new JBTextField(apiInfo.getMethod() + " " + apiInfo.getUrl());
-        keyTextField.setEnabled(false);
-        contentPanel.add(keyTextField,
-                new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_CAN_GROW | GridConstraints.SIZEPOLICY_WANT_GROW,
-                        GridConstraints.SIZEPOLICY_FIXED,
-                        null, null, null));
+        contentPanel.setLayout(new GridLayoutManager(5, 2, JBUI.insets(0, 0, 0, 0), 4, 4));
 
         contentPanel.add(new JBLabel("Protocol: "),
-                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED,
                         null, null, null));
         protocolComboBox = new JComboBox<>(new DefaultComboBoxModel<>(protocols.toArray(new String[0])));
         contentPanel.add(protocolComboBox,
-                new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED,
                         null, null, null));
 
-        contentPanel.add(new JBLabel("SaveType: "),
-                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+        JBLabel storage = new JBLabel("Storage: ");
+        storage.setToolTipText("where to store the api");
+        contentPanel.add(storage,
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED,
                         null, null, null));
         saveTypeComboBox = new JComboBox<>(new DefaultComboBoxModel<>(resolverMap.keySet().toArray(new String[0])));
@@ -105,36 +94,36 @@ public class SaveApiDialog extends DialogWrapper {
             }
         });
         contentPanel.add(saveTypeComboBox,
-                new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED,
                         null, null, null));
 
-        contentPanel.add(new JBLabel("Module: "),
-                new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+        contentPanel.add(new JBLabel("Group: "),
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED,
                         null, null, null));
         moduleComboBox = new JComboBox<>();
         moduleComboBox.setEditable(true);
         contentPanel.add(moduleComboBox,
-                new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED,
                         null, null, null));
 
         contentPanel.add(new JBLabel("Description: "),
-                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED,
                         null, null, null));
         descTextArea = new JTextArea();
         descTextArea.setRows(0);
         descTextArea.setMargin(new Insets(4, 4, 4, 4));
         contentPanel.add(descTextArea,
-                new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_GROW | GridConstraints.SIZEPOLICY_CAN_SHRINK, GridConstraints.SIZEPOLICY_CAN_GROW | GridConstraints.SIZEPOLICY_CAN_SHRINK,
                         null, null, null));
 
         existedLabel = new JLabel("Existed: ");
         contentPanel.add(existedLabel,
-                new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED,
                         null, null, null));
         updateRadioButton = new JRadioButton("update");
@@ -147,7 +136,7 @@ public class SaveApiDialog extends DialogWrapper {
         radioPanel.add(updateRadioButton);
         radioPanel.add(saveAsRadioButton);
         contentPanel.add(radioPanel,
-                new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
+                new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
                         GridConstraints.ALIGN_LEFT, GridConstraints.ALIGN_CENTER,
                         null, null, null));
 

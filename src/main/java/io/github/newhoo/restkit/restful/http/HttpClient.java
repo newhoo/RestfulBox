@@ -1,9 +1,12 @@
 package io.github.newhoo.restkit.restful.http;
 
 import com.intellij.openapi.project.Project;
+import io.github.newhoo.restkit.common.KV;
 import io.github.newhoo.restkit.common.Request;
 import io.github.newhoo.restkit.common.RequestInfo;
 import io.github.newhoo.restkit.common.RestClientData;
+import io.github.newhoo.restkit.common.RestItem;
+import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.restful.RestClient;
 import io.github.newhoo.restkit.restful.ep.RestClientProvider;
 import io.github.newhoo.restkit.util.HttpUtils;
@@ -14,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
@@ -33,12 +37,21 @@ public class HttpClient implements RestClient {
         return PROTOCOL_HTTP;
     }
 
+    @Override
+    public List<KV> getConfig(@NotNull RestItem restItem, @NotNull Project project) {
+        int timeout = CommonSettingComponent.getInstance(project).getState().getRequestTimeout();
+        return Arrays.asList(
+                new KV("timeout", String.valueOf(timeout))
+        );
+    }
+
     @NotNull
     @Override
     public Request createRequest(RestClientData restClientData, Project project) {
         HttpRequest request = new HttpRequest();
         request.setUrl(restClientData.getUrl());
         request.setMethod(restClientData.getMethod());
+        request.setConfig(restClientData.getConfig());
         request.setHeaders(restClientData.getHeaders());
         request.setParams(restClientData.getParams());
         request.setBody(restClientData.getBody());
@@ -48,7 +61,7 @@ public class HttpClient implements RestClient {
     @NotNull
     @Override
     public RequestInfo sendRequest(Request request, Project project) {
-        return HttpUtils.request((HttpRequest) request, project);
+        return HttpUtils.request((HttpRequest) request);
     }
 
     @NotNull

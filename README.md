@@ -69,6 +69,7 @@ Open project, find and open RESTKit at right window. RESTKit is composed of four
 - Method: http method, needn't select manually.
 - URL: http uri, needn't input manually. support placeholder, e.g. `{{baseUrl}}`.
 - Send: send http request one time after clicking.
+- Config: request config, provided by request client.
 - Headers tab: request header, needn't input manually. support placeholder and parameter library.
 - Params tab: include query/path/form parameter, needn't input manually. support placeholder and parameter library.
 - Body tab: body for POST/PUT/PATCH/DELETE, needn't input manually.
@@ -195,6 +196,12 @@ Click【Save Api】at any editor's right menu in the http client. There will be 
 
 ![](images/local_save2.png)
 
+- Protocol: supported request protocol, such as http, dubbo.
+- Storage: where to store the api, can be extensible.
+- Group: group name.
+- Description: just brevity.
+- Existed: the api existed or not base on the method and url.
+
 #### Delete
 Click in the right menu of local api item. 
 
@@ -261,6 +268,7 @@ Refer to this article: `Common Setting` > `Request Script`
 // request attributes
 // url:         java.lang.String,               request url, can be modified by pre-request script.
 // method:      java.lang.String,               request method, can be modified by pre-request script.
+// config:      java.util.Map<String, String>,  request config, can be modified by pre-request script.
 // headers:     java.util.Map<String, String>,  request headers, can be modified by pre-request script.
 // params:      java.util.Map<String, String>,  request params, can be modified by pre-request script.
 // body:        java.lang.String,               request body, can be modified by pre-request script.
@@ -340,6 +348,7 @@ RESTKit provided extension points from version `2.0.1`. It's very useful.
 
 - `io.github.newhoo.restkit.restful.ep.RestfulResolverProvider` you can scan restful apis for other framework.
 - `io.github.newhoo.restkit.restful.ep.LanguageResolverProvider` operation for special language
+- `io.github.newhoo.restkit.restful.ep.RestClientProvider` support custom request protocol from `2.0.3`.
 
 For example: 
 

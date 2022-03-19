@@ -90,9 +90,9 @@ public class PsiAnnotationHelper {
         return values;
     }
 
-    public static String getAnnotationValue(PsiAnnotation annotation) {
+    public static String getAnnotationValue(PsiAnnotation annotation, String attributeName) {
         String paramName = null;
-        PsiAnnotationMemberValue attributeValue = annotation.findDeclaredAttributeValue("value");
+        PsiAnnotationMemberValue attributeValue = annotation.findDeclaredAttributeValue(attributeName);
 
         if (attributeValue instanceof PsiLiteralExpression) {
             paramName = (String) ((PsiLiteralExpression) attributeValue).getValue();

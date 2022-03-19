@@ -1,6 +1,7 @@
 package io.github.newhoo.restkit.feature.javaimpl.language;
 
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiArrayInitializerMemberValue;
@@ -10,13 +11,14 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiParameterList;
 import io.github.newhoo.restkit.common.KV;
 import io.github.newhoo.restkit.common.PsiRestItem;
 import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.feature.javaimpl.MethodPath;
+import io.github.newhoo.restkit.feature.javaimpl.config.FilterParamComponent;
 import io.github.newhoo.restkit.feature.javaimpl.helper.PsiAnnotationHelper;
 import io.github.newhoo.restkit.feature.javaimpl.helper.PsiClassHelper;
 import io.github.newhoo.restkit.feature.javaimpl.spring.SpringRequestMethodAnnotation;
@@ -28,6 +30,8 @@ import io.github.newhoo.restkit.util.FileUtils;
 import io.github.newhoo.restkit.util.TypeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static io.github.newhoo.restkit.common.RestConstant.WEB_FRAMEWORK_SPRING_MVC;
 import static io.github.newhoo.restkit.feature.javaimpl.spring.SpringRequestMethodAnnotation.REQUEST_MAPPING;
@@ -126,6 +132,24 @@ public abstract class BaseLanguageResolver extends BaseRequestResolver implement
                 break;
             }
         }
+        PsiParameter[] psiParameters = psiMethod.getParameterList().getParameters();
+        for (PsiParameter psiParameter : psiParameters) {
+            // @PathVariable
+            PsiAnnotation requestHeaderAnno = psiParameter.getAnnotation(REQUEST_HEADER.getQualifiedName());
+            if (requestHeaderAnno != null) {
+                String headerName = ObjectUtils.defaultIfNull(PsiAnnotationHelper.getAnnotationValue(requestHeaderAnno, "value"),
+                        ObjectUtils.defaultIfNull(PsiAnnotationHelper.getAnnotationValue(requestHeaderAnno, "name"), psiParameter.getName()
+                        ));
+                PsiClass fieldClass = PsiClassHelper.findPsiClass(psiParameter.getType().getCanonicalText(), psiMethod.getProject());
+                if (fieldClass != null && fieldClass.isEnum()) {
+                    PsiField[] enumFields = fieldClass.getAllFields();
+                    list.add(new KV(headerName, enumFields.length > 1 ? enumFields[0].getName() : ""));
+                } else {
+                    Object fieldDefaultValue = TypeUtils.getExampleValue(psiParameter.getType().getPresentableText(), true);
+                    list.add(new KV(headerName, String.valueOf(fieldDefaultValue)));
+                }
+            }
+        }
         return list;
     }
 
@@ -161,8 +185,15 @@ public abstract class BaseLanguageResolver extends BaseRequestResolver implement
                     continue;
                 }
                 for (PsiField field : fields) {
-                    Object fieldDefaultValue = TypeUtils.getExampleValue(field.getType().getPresentableText(), true);
-                    if (fieldDefaultValue != null) {
+                    if (field.hasModifierProperty(PsiModifier.STATIC) || field.hasModifierProperty(PsiModifier.TRANSIENT)) {
+                        continue;
+                    }
+                    PsiClass fieldClass = PsiClassHelper.findPsiClass(field.getType().getCanonicalText(), psiMethod.getProject());
+                    if (fieldClass != null && fieldClass.isEnum()) {
+                        PsiField[] enumFields = fieldClass.getAllFields();
+                        list.add(new KV(field.getName(), enumFields.length > 1 ? enumFields[0].getName() : ""));
+                    } else {
+                        Object fieldDefaultValue = TypeUtils.getExampleValue(field.getType().getPresentableText(), true);
                         list.add(new KV(field.getName(), String.valueOf(fieldDefaultValue)));
                     }
                 }
@@ -202,25 +233,22 @@ public abstract class BaseLanguageResolver extends BaseRequestResolver implement
     private List<Parameter> getParameterList(PsiMethod psiMethod) {
         List<Parameter> parameterList = new ArrayList<>();
 
-        PsiParameterList psiParameterList = psiMethod.getParameterList();
-        PsiParameter[] psiParameters = psiParameterList.getParameters();
+        Set<String> paramFilterTypes = getParamFilterTypes(psiMethod.getProject());
+
+        PsiParameter[] psiParameters = psiMethod.getParameterList().getParameters();
         for (PsiParameter psiParameter : psiParameters) {
             String paramTypeName = psiParameter.getType().getCanonicalText();
-            if (psiParameter.hasAnnotation(REQUEST_HEADER.getQualifiedName())
-                    || psiParameter.hasAnnotation(REQUEST_BODY.getQualifiedName())
-                    || "javax.servlet.http.HttpServletRequest".equals(paramTypeName)
-                    || "javax.servlet.http.HttpServletResponse".equals(paramTypeName)
-                    || "org.springframework.web.context.request.ServletWebRequest".equals(paramTypeName)
-                    // TODO [自定义忽略类型解析]
-            ) {
+            if (paramFilterTypes.contains(paramTypeName)
+                    || CollectionUtils.containsAny(paramFilterTypes, Arrays.stream(psiParameter.getAnnotations()).map(PsiAnnotation::getQualifiedName).collect(Collectors.toSet()))) {
                 continue;
             }
 
             // @PathVariable
             PsiAnnotation pathVariableAnno = psiParameter.getAnnotation(PATH_VARIABLE.getQualifiedName());
             if (pathVariableAnno != null) {
-                String requestName = PsiAnnotationHelper.getAnnotationValue(pathVariableAnno);
-                String paramName = requestName != null ? requestName : psiParameter.getName();
+                String paramName = ObjectUtils.defaultIfNull(PsiAnnotationHelper.getAnnotationValue(pathVariableAnno, "value"),
+                        ObjectUtils.defaultIfNull(PsiAnnotationHelper.getAnnotationValue(pathVariableAnno, "name"), psiParameter.getName()
+                        ));
                 Parameter parameter = new Parameter(paramTypeName, paramName);
                 parameterList.add(parameter);
                 continue;
@@ -229,8 +257,9 @@ public abstract class BaseLanguageResolver extends BaseRequestResolver implement
             // @RequestParam
             PsiAnnotation requestParamAnno = psiParameter.getAnnotation(REQUEST_PARAM.getQualifiedName());
             if (requestParamAnno != null) {
-                String requestName = PsiAnnotationHelper.getAnnotationValue(requestParamAnno);
-                String paramName = requestName != null ? requestName : psiParameter.getName();
+                String paramName = ObjectUtils.defaultIfNull(PsiAnnotationHelper.getAnnotationValue(requestParamAnno, "value"),
+                        ObjectUtils.defaultIfNull(PsiAnnotationHelper.getAnnotationValue(requestParamAnno, "name"), psiParameter.getName()
+                        ));
                 Parameter parameter = new Parameter(paramTypeName, paramName);
                 parameterList.add(parameter);
                 continue;
@@ -241,6 +270,12 @@ public abstract class BaseLanguageResolver extends BaseRequestResolver implement
             parameterList.add(parameter);
         }
         return parameterList;
+    }
+
+    @NotNull
+    @Override
+    public Set<String> getParamFilterTypes(@NotNull Project project) {
+        return FilterParamComponent.getInstance(project).getQualifiedNames();
     }
 
     @Getter

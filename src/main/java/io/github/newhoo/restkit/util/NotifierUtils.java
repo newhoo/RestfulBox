@@ -21,6 +21,10 @@ public final class NotifierUtils {
         return notify(RESTFUL_TOOLKIT_BALLOON_GROUP, title, message, NotificationType.INFORMATION, listener, project);
     }
 
+    public static Notification warnBalloon(@NotNull String title, @NotNull String msg, @NotNull Project project) {
+        return notify(RESTFUL_TOOLKIT_BALLOON_GROUP, title, msg, NotificationType.WARNING, null, project);
+    }
+
     public static Notification errorBalloon(@NotNull String title, @NotNull String msg, @NotNull Project project) {
         return notify(RESTFUL_TOOLKIT_BALLOON_GROUP, title, msg, NotificationType.ERROR, null, project);
     }

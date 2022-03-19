@@ -3,9 +3,13 @@
 ## 2.0.3
 
 - support api group by file name.
+- support rest client ep.
+- support param filter for springmvc
 
 
 - 扫描的API支持按文件名显示分组
+- 发送请求提供扩展点，即将提供Dubbo服务支持.
+- springmvc接口扫描支持param参数过滤
 
 ## 2.0.2
 

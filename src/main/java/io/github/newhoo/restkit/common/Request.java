@@ -16,6 +16,7 @@ public class Request {
 
     private String url;
     private String method;
+    private Map<String, String> config;
     private Map<String, String> headers;
     private Map<String, String> params;
     private String body;

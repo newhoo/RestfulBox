@@ -2,6 +2,12 @@
     <!-- 无效，要放plugin.xml  -->
     <!--    <depends optional="true" config-file="restkit-withKotlin.xml">org.jetbrains.kotlin</depends>-->
 
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <projectService serviceImplementation="io.github.newhoo.restkit.feature.javaimpl.config.FilterParamComponent"/>
+        <projectConfigurable instance="io.github.newhoo.restkit.feature.javaimpl.config.FilterParamConfigurable" parentId="RESTKit.SettingConfigurable"/>
+    </extensions>
+
     <extensions defaultExtensionNs="io.github.newhoo.restkit">
         <restfulResolver implementation="io.github.newhoo.restkit.feature.javaimpl.spring.SpringRequestResolver$SpringRequestResolverProvider"/>
         <languageResolver implementation="io.github.newhoo.restkit.feature.javaimpl.language.JavaLanguageResolver$JavaLanguageResolverProvider"/>

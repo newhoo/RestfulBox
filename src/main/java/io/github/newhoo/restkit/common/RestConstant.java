@@ -24,6 +24,7 @@ public class RestConstant {
             "// request attributes\n" +
             "// url:         java.lang.String,               request url, can be modified by pre-request script.\n" +
             "// method:      java.lang.String,               request method, can be modified by pre-request script.\n" +
+            "// config:      java.util.Map<String, String>,  request config, can be modified by pre-request script.\n" +
             "// headers:     java.util.Map<String, String>,  request headers, can be modified by pre-request script.\n" +
             "// params:      java.util.Map<String, String>,  request params, can be modified by pre-request script.\n" +
             "// body:        java.lang.String,               request body, can be modified by pre-request script.\n" +

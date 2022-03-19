@@ -42,6 +42,7 @@ import io.github.newhoo.restkit.restful.http.HttpClient;
 import io.github.newhoo.restkit.util.EnvironmentUtils;
 import io.github.newhoo.restkit.util.FileUtils;
 import io.github.newhoo.restkit.util.JsonUtils;
+import io.github.newhoo.restkit.util.NotifierUtils;
 import io.github.newhoo.restkit.util.ToolkitUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -92,6 +93,7 @@ public class RestServiceClient extends JPanel implements DataProvider {
     private JButton sendButton;
 
     private JTabbedPane tabbedPane;
+    private FileEditor requestConfigEditor;
     private FileEditor requestHeaderEditor;
     private FileEditor requestParamEditor;
     private FileEditor requestBodyEditor;
@@ -170,6 +172,11 @@ public class RestServiceClient extends JPanel implements DataProvider {
 
         tabbedPane = new JBTabbedPane();
 
+        AppUIUtil.invokeOnEdt(() -> {
+            requestConfigEditor = createEditor("Config", PlainTextLanguage.INSTANCE, null, project);
+            tabbedPane.addTab("Config", requestConfigEditor.getComponent());
+            requestConfigEditor.getComponent().setBorder(BorderFactory.createEmptyBorder());
+        });
         AppUIUtil.invokeOnEdt(() -> {
             requestHeaderEditor = createEditor("Headers", PlainTextLanguage.INSTANCE, null, project);
             tabbedPane.addTab("Headers", requestHeaderEditor.getComponent());
@@ -250,6 +257,8 @@ public class RestServiceClient extends JPanel implements DataProvider {
                         String protocol = url.contains("://") ? url.substring(0, url.indexOf("://")) : PROTOCOL_HTTP;
                         // http method
                         HttpMethod method = (HttpMethod) Objects.requireNonNull(requestMethod.getSelectedItem());
+                        // config
+                        Map<String, String> configMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(getEditorText(requestConfigEditor), project));
                         // header
                         Map<String, String> headerMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(getEditorText(requestHeaderEditor), project));
                         // param
@@ -257,11 +266,16 @@ public class RestServiceClient extends JPanel implements DataProvider {
                         // body
                         String reqBody = getEditorText(requestBodyEditor);
 
-                        RestClient restClient = RequestHelper.getRestClient(protocol, HttpClient::new);
+                        RestClient restClient = RequestHelper.getRestClient(protocol, () -> {
+                            List<String> collect = RequestHelper.getRestClient().stream().map(RestClient::getProtocol).collect(Collectors.toList());
+                            NotifierUtils.warnBalloon("Not supported " + protocol + " protocol", "support " + collect + ", and use http protocol for now. You should try find supported extensions of RESTKit.", project);
+                            return new HttpClient();
+                        });
 
                         RestClientData clientData = new RestClientData();
                         clientData.setUrl(url);
                         clientData.setMethod(method.name());
+                        clientData.setConfig(configMap);
                         clientData.setHeaders(headerMap);
                         clientData.setParams(paramMap);
                         clientData.setBody(reqBody);
@@ -275,7 +289,9 @@ public class RestServiceClient extends JPanel implements DataProvider {
                         // info
                         setHttpInfo(restClient.formatResponseInfo(response));
 
-                        AppUIUtil.invokeOnEdt(() -> tabbedPane.setSelectedIndex(3));
+                        AppUIUtil.invokeOnEdt(() -> tabbedPane.setSelectedIndex(4));
+                    } catch (Throwable t) {
+                        LOG.error("send request error: " + t);
                     } finally {
                         sendButton.setEnabled(true);
                     }
@@ -283,7 +299,6 @@ public class RestServiceClient extends JPanel implements DataProvider {
 
                 @Override
                 public void onCancel() {
-                    super.onCancel();
                     sendButton.setEnabled(true);
                 }
             });
@@ -371,29 +386,32 @@ public class RestServiceClient extends JPanel implements DataProvider {
             String finalUrl = url;
             HttpMethod method = ObjectUtils.defaultIfNull(restItem.getMethod(), HttpMethod.UNDEFINED);
             ApplicationManager.getApplication().runReadAction(() -> {
+                RestClient restClient = RequestHelper.getRestClient(restItem.getProtocol(), HttpClient::new);
+                List<KV> requestConfig = restClient.getConfig(restItem, project);
                 List<KV> requestHeaders = restItem.getHeaders();
                 List<KV> requestParams = restItem.getParams();
                 String requestBodyJson = restItem.getBodyJson();
 
                 // 在UI展示
                 AppUIUtil.invokeOnEdt(() -> {
-                    showRequest(finalUrl, method, requestHeaders, requestParams, requestBodyJson);
+                    showRequest(finalUrl, method, requestConfig, requestHeaders, requestParams, requestBodyJson);
                 });
             });
         });
     }
 
-    private void showRequest(String url, HttpMethod method, List<KV> headers, List<KV> params, String body) {
+    private void showRequest(String url, HttpMethod method, List<KV> config, List<KV> headers, List<KV> params, String body) {
         if (method == HttpMethod.UNDEFINED
                 || (CollectionUtils.isEmpty(params) && StringUtils.isNotEmpty(body))) {
-            tabbedPane.setSelectedIndex(2);
+            tabbedPane.setSelectedIndex(3);
         } else {
-            tabbedPane.setSelectedIndex(1);
+            tabbedPane.setSelectedIndex(2);
         }
 
         requestUrl.setText(url);
         requestUrl.setToolTipText(url);
         requestMethod.setSelectedItem(method);
+        setConfig(config);
         setHeader(headers);
         setParams(params);
         setReqBody(body);
@@ -417,6 +435,13 @@ public class RestServiceClient extends JPanel implements DataProvider {
                                   .collect(Collectors.joining("\n"));
 
         setEditorText(requestHeaderEditor, headerStr, project);
+    }
+
+    private void setConfig(List<KV> requestConfig) {
+        String paramStr = requestConfig.stream()
+                                       .map(kv -> kv.getKey() + ": " + kv.getValue())
+                                       .collect(Collectors.joining("\n"));
+        setEditorText(requestConfigEditor, paramStr, project);
     }
 
     private void setParams(List<KV> requestParams) {

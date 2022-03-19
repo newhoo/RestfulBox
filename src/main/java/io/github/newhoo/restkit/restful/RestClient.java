@@ -1,10 +1,14 @@
 package io.github.newhoo.restkit.restful;
 
 import com.intellij.openapi.project.Project;
+import io.github.newhoo.restkit.common.KV;
 import io.github.newhoo.restkit.common.Request;
 import io.github.newhoo.restkit.common.RequestInfo;
 import io.github.newhoo.restkit.common.RestClientData;
+import io.github.newhoo.restkit.common.RestItem;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * rest client extension point
@@ -19,6 +23,12 @@ public interface RestClient {
      */
     @NotNull
     String getProtocol();
+
+    /**
+     * get config param for Config tab
+     * can use Environment variable placeholder
+     */
+    List<KV> getConfig(@NotNull RestItem restItem, @NotNull Project project);
 
     /**
      * 创建请求

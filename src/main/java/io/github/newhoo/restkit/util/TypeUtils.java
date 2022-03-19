@@ -1,5 +1,7 @@
 package io.github.newhoo.restkit.util;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * TypeUtils
  *
@@ -112,6 +114,7 @@ public final class TypeUtils {
         return classType;
     }
 
+    @NotNull
     public static Object getExampleValue(String parameterType, boolean isRandom) {
         if (parameterType.isEmpty()) {
             return "";

@@ -39,6 +39,13 @@ public class MyStartupActivity implements StartupActivity {
         if (project.isDefault()) {
             return;
         }
+        // 默认创建项目级别
+        CommonSetting setting = CommonSettingComponent.getInstance(project).getState();
+        String apiFile = setting.getApiFilePath();
+        if (StringUtils.isEmpty(apiFile)) {
+            apiFile = FileUtils.getApiFilePath(project);
+            setting.setApiFilePath(apiFile);
+        }
 
         PropertiesComponent fromSetting = PropertiesComponent.getInstance(project);
         if (!fromSetting.getBoolean(KEY_REQUEST_SYNC)) {
@@ -78,13 +85,6 @@ public class MyStartupActivity implements StartupActivity {
         // 同步api
         List<RestItem> itemList = LocalApiLibrary.getInstance(project).getItemList();
         if (!itemList.isEmpty()) {
-            // 默认创建项目级别
-            CommonSetting setting = CommonSettingComponent.getInstance(project).getState();
-            String apiFile = setting.getApiFilePath();
-            if (StringUtils.isEmpty(apiFile)) {
-                apiFile = FileUtils.getApiFilePath(project);
-                setting.setApiFilePath(apiFile);
-            }
             new LocalRequestResolver(project).add(itemList);
             itemList.clear();
         }

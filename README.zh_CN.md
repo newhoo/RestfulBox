@@ -65,6 +65,7 @@
 - Method：http method，一般不需要手动选择
 - URL：http请求的uri，一般不需要手动输入。支持占位符，默认生成`{{baseUrl}}`
 - Send：点击发送一次http请求
+- Config: 请求的配置，由发送请求的client提供，默认是http
 - Headers tab: 请求头参数，一般不需要手动输入。支持占位符和参数库操作。
 - Params tab: 包括uri路径参数、查询参数和form参数，一般不需要手动输入。支持占位符和参数库操作。
 - Body tab: POST/PUT/PATCH/DELETE对应的body参数，一般不需要手动输入。
@@ -189,6 +190,12 @@ public class RestKitScript {
 
 ![](images/local_save2.png)
 
+- Protocol: 支持的协议，默认提供http，可扩展，如dubbo
+- Storage: 存储API的方式（目的地），可扩展
+- Group: 分组名
+- Description: 描述，建议简短明了
+- Existed: 是否已存在，根据method+url一起判断
+
 #### 删除
 在列表api上右键，删除
 
@@ -255,6 +262,7 @@ public class RestKitScript {
 // request attributes
 // url:         java.lang.String,               request url, can be modified by pre-request script.
 // method:      java.lang.String,               request method, can be modified by pre-request script.
+// config:      java.util.Map<String, String>,  request config, can be modified by pre-request script.
 // headers:     java.util.Map<String, String>,  request headers, can be modified by pre-request script.
 // params:      java.util.Map<String, String>,  request params, can be modified by pre-request script.
 // body:        java.lang.String,               request body, can be modified by pre-request script.
@@ -333,6 +341,7 @@ if (statusCode != 200) {
 RESTKit从`2.0.1`版本开始提供了扩展点:
 - `io.github.newhoo.restkit.restful.ep.RestfulResolverProvider` 自定义扫描restful接口。
 - `io.github.newhoo.restkit.restful.ep.LanguageResolverProvider` 自定义语言相关的操作，具体参考源码说明。
+- `io.github.newhoo.restkit.restful.ep.RestClientProvider` 自定义请求协议，从`2.0.3`开始支持。
 
 使用示例：
 

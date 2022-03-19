@@ -1,11 +1,14 @@
 package io.github.newhoo.restkit.restful;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import io.github.newhoo.restkit.common.KV;
 import io.github.newhoo.restkit.common.PsiRestItem;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * resolver params from psiElement
@@ -60,4 +63,16 @@ public interface ParamResolver {
      */
     @NotNull
     String buildDescription(@NotNull PsiElement psiElement);
+
+    /**
+     * 根据参数类型或注解来忽略参数解析
+     * <p>
+     * 作用于 #buildParams()
+     *
+     * @return 参数类型
+     */
+    @NotNull
+    default Set<String> getParamFilterTypes(@NotNull Project project) {
+        return Collections.emptySet();
+    }
 }

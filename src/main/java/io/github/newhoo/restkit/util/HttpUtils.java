@@ -1,9 +1,7 @@
 package io.github.newhoo.restkit.util;
 
-import com.intellij.openapi.project.Project;
 import io.github.newhoo.restkit.common.HttpMethod;
 import io.github.newhoo.restkit.common.RequestInfo;
-import io.github.newhoo.restkit.config.CommonSettingComponent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpClientConnection;
 import org.apache.http.HttpEntity;
@@ -48,9 +46,9 @@ public class HttpUtils {
 
     private static final String HTTP_HOSTADDRESS = "http.hostAddress";
 
-    public static RequestInfo request(io.github.newhoo.restkit.restful.http.HttpRequest req, Project project) {
+    public static RequestInfo request(io.github.newhoo.restkit.restful.http.HttpRequest req) {
         if (req.getMethod() == null || HttpMethod.getByRequestMethod(req.getMethod()) == HttpMethod.UNDEFINED) {
-            return new RequestInfo(req, "method is null");
+            return new RequestInfo(req, "http method is null");
         }
 
         String url = req.getUrl();
@@ -70,13 +68,13 @@ public class HttpUtils {
 
         req.setUrl(url);
 
-        return doRequest(req, project);
+        return doRequest(req);
     }
 
-    private static RequestInfo doRequest(io.github.newhoo.restkit.restful.http.HttpRequest req, Project project) {
+    private static RequestInfo doRequest(io.github.newhoo.restkit.restful.http.HttpRequest req) {
         HttpUriRequest request;
         try {
-            request = getRequest(req, project);
+            request = getRequest(req);
             if (request == null) {
                 return new RequestInfo(req, String.format("not supported request [%s %s]", req.getMethod(), req.getUrl()));
             }
@@ -103,7 +101,7 @@ public class HttpUtils {
         }
     }
 
-    private static HttpRequestBase getRequest(io.github.newhoo.restkit.restful.http.HttpRequest req, Project project) {
+    private static HttpRequestBase getRequest(io.github.newhoo.restkit.restful.http.HttpRequest req) {
         HttpRequestBase request;
         HttpMethod httpMethod = HttpMethod.nameOf(req.getMethod());
         String url = req.getUrl();
@@ -138,7 +136,8 @@ public class HttpUtils {
             ((HttpEntityEnclosingRequest) request).setEntity(httpEntity);
         }
 
-        int requestTimeout = CommonSettingComponent.getInstance(project).getState().getRequestTimeout();
+        String timeout = StringUtils.defaultIfEmpty(req.getConfig().get("timeout"), "5000");
+        int requestTimeout = (int) Double.parseDouble(timeout);
         if (requestTimeout > 0) {
             RequestConfig requestConfig = RequestConfig.custom()
                                                        // 从连接池中获取连接的超时时间

@@ -29,7 +29,7 @@
             <li>fix bugs.</li>
             <br/>
             <li>扫描的API支持按文件名显示分组.</li>
-            <li>发送请求提供扩展点，即将提供Dubbo请求支持.</li>
+            <li>发送请求提供扩展点，即将提供Dubbo服务支持.</li>
         </ul>
 
         2.0.2
@@ -93,7 +93,7 @@
         <projectService serviceImplementation="io.github.newhoo.restkit.config.ParameterLibrary"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.LocalApiLibrary"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.HttpMethodFilterConfiguration"/>
-        <projectConfigurable instance="io.github.newhoo.restkit.config.SettingConfigurable">
+        <projectConfigurable id="RESTKit.SettingConfigurable" instance="io.github.newhoo.restkit.config.SettingConfigurable">
             <configurable instance="io.github.newhoo.restkit.config.EnvironmentConfigurable" displayName="Environment"/>
         </projectConfigurable>
         <searchEverywhereContributor implementation="io.github.newhoo.restkit.navigation.RestSearchEverywhereContributor$Factory"/>
