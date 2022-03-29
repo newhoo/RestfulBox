@@ -66,8 +66,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static io.github.newhoo.restkit.common.RestConstant.PLACEHOLDER_BASE_URL;
 import static io.github.newhoo.restkit.common.RestConstant.PLACEHOLDER_URL;
+import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL;
 import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
 import static io.github.newhoo.restkit.config.SettingListener.ENV_UPDATE;
 import static io.github.newhoo.restkit.parameter.library.RestParameterListener.REST_PARAMETER_UPDATE;
@@ -251,10 +251,6 @@ public class RestServiceClient extends JPanel implements DataProvider {
                     try {
                         // url
                         String url = EnvironmentUtils.handlePlaceholderVariable(requestUrl.getText(), project);
-                        // 环境变量未设置【baseUrl】时强行替换为localhost:8080
-                        url = url.replaceFirst("\\{\\{baseUrl}}", "http://localhost:8080");
-                        // protocol
-                        String protocol = url.contains("://") ? url.substring(0, url.indexOf("://")) : PROTOCOL_HTTP;
                         // http method
                         HttpMethod method = (HttpMethod) Objects.requireNonNull(requestMethod.getSelectedItem());
                         // config
@@ -265,6 +261,8 @@ public class RestServiceClient extends JPanel implements DataProvider {
                         Map<String, String> paramMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(getEditorText(requestParamEditor), project));
                         // body
                         String reqBody = getEditorText(requestBodyEditor);
+                        // protocol
+                        String protocol = StringUtils.defaultIfEmpty(configMap.get(PROTOCOL), PROTOCOL_HTTP);
 
                         RestClient restClient = RequestHelper.getRestClient(protocol, () -> {
                             List<String> collect = RequestHelper.getRestClient().stream().map(RestClient::getProtocol).collect(Collectors.toList());
@@ -376,25 +374,19 @@ public class RestServiceClient extends JPanel implements DataProvider {
 
         ApplicationManager.getApplication().executeOnPooledThread(() -> {
             String url = StringUtils.defaultString(restItem.getUrl());
-            if (!url.contains("://")) {
-                if (PROTOCOL_HTTP.equalsIgnoreCase(restItem.getProtocol())) {
-                    url = PLACEHOLDER_BASE_URL + url;
-                } else {
-                    url = restItem.getProtocol() + "://" + url;
-                }
-            }
-            String finalUrl = url;
             HttpMethod method = ObjectUtils.defaultIfNull(restItem.getMethod(), HttpMethod.UNDEFINED);
             ApplicationManager.getApplication().runReadAction(() -> {
                 RestClient restClient = RequestHelper.getRestClient(restItem.getProtocol(), HttpClient::new);
-                List<KV> requestConfig = restClient.getConfig(restItem, project);
+                List<KV> requestConfig = new ArrayList<>();
+                requestConfig.add(new KV(PROTOCOL, restClient.getProtocol()));
+                requestConfig.addAll(restClient.getConfig(restItem, project));
                 List<KV> requestHeaders = restItem.getHeaders();
                 List<KV> requestParams = restItem.getParams();
                 String requestBodyJson = restItem.getBodyJson();
 
                 // 在UI展示
                 AppUIUtil.invokeOnEdt(() -> {
-                    showRequest(finalUrl, method, requestConfig, requestHeaders, requestParams, requestBodyJson);
+                    showRequest(url, method, requestConfig, requestHeaders, requestParams, requestBodyJson);
                 });
             });
         });
@@ -473,13 +465,13 @@ public class RestServiceClient extends JPanel implements DataProvider {
             }
             RestClientEditorInfo restClientEditorInfo = new RestClientEditorInfo();
             restClientEditorInfo.setMethod(String.valueOf(requestMethod.getSelectedItem()));
-            restClientEditorInfo.setUrl(requestUrl.replace(PLACEHOLDER_BASE_URL, ""));
+            restClientEditorInfo.setUrl(requestUrl);
             restClientEditorInfo.setEditor(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()));
             return restClientEditorInfo;
         }
         if (RestDataKey.CLIENT_API_INFO.is(dataId)) {
             RestClientApiInfo restClientApiInfo = new RestClientApiInfo();
-            restClientApiInfo.setUrl(StringUtils.replace(requestUrl.getText(), PLACEHOLDER_BASE_URL, ""));
+            restClientApiInfo.setUrl(StringUtils.defaultString(requestUrl.getText()));
             restClientApiInfo.setMethod((HttpMethod) Objects.requireNonNull(requestMethod.getSelectedItem()));
             restClientApiInfo.setHeaders(getEditorText(requestHeaderEditor));
             restClientApiInfo.setParams(getEditorText(requestParamEditor));

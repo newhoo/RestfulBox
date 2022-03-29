@@ -1,6 +1,6 @@
 # RESTKit
 
-[简体中文](./README.zh_CN.md) | [Gitee](https://gitee.com/newhoo/RESTKit)
+[简体中文](./README.zh_CN.md) | [Gitee](https://gitee.com/newhoo/RESTKit) | [Yuque(语雀)](https://www.yuque.com/newhoo/restkit)
 
 [RESTKit](https://plugins.jetbrains.com/plugin/14723-restkit) is a powerful toolkit for restful services development.
 
@@ -15,20 +15,30 @@ If this plugin helps, please **🌟 Star** and [Rating](https://plugins.jetbrain
   - Support searching service in native Search Everywhere. ( use: <kbd>Ctrl \\</kbd> or <kbd>Ctrl Alt N</kbd> )
   - Show restful service structure in tool window.
   - Service and Method jump to each other.
-- Powerful HTTP client：
+- Powerful request client：
   - Custom parameter format, support placeholder variable, formatted JSON.
   - Environment variable：define/manage/use/export/import, support preset function and script function.
   - Global header：can use with Environment, also support preset function and script function.
   - Parameter library：support display/save/delete in Headers/Params/Body tab.
+  - Multi-protocol: supported multiple protocol.
   - Request script：support pre-request and post-script script.
-  - HTTP packet display.
-- Request log：save request log with HTTP packet format.
+  - Request info display: such as HTTP packet.
+- Request log：save multi-protocol request log such as HTTP packet format.
 - Plugin extension：through this, you can scan restful service in other framework.
 - Language & Framework：
   - Support api local store by default.
   - Support Spring MVC / SpringBoot with java and kotlin in idea by default.
-  
- 
+
+
+## Ecology
+- Local Store: supported by default. Support store api to local file.
+- Spring MVC: supported by default. Support Java and Kotlin implement.
+- Jax-Rs: supported by plugin. See [RESTKit-JAX-RS](https://github.com/newhoo/RESTKit-JAX-RS)
+- Dubbo: supported by plugin. See [RESTKit-Dubbo](https://github.com/newhoo/RESTKit-Dubbo). Support scanning and sending request.
+- Redis: supported by plugin. See [RESTKit-Redis](https://github.com/newhoo/RESTKit-Redis). Support store api to redis and sending simple redis command.
+- grpc: todo. Plan to realize by plugin.
+
+
 ## Install
 - **Using IDE plugin system**
 
@@ -41,7 +51,7 @@ Download plugin form <kbd>distributions/RESTKit-x.x.x.zip</kbd>, then <kbd>Prefe
 ## Usage
 
 ### RESTKit Tool Window
-Open project, find and open RESTKit at right window. RESTKit is composed of four parts: **toolbar**、**service tree**、**http client**.
+Open project, find and open RESTKit at right window. RESTKit is composed of four parts: **toolbar**、**service tree**、**request client**.
 
 ![tool window](images/tool_window.png)
 
@@ -67,16 +77,16 @@ Open project, find and open RESTKit at right window. RESTKit is composed of four
 #### HTTP Client
 - Environment: select the environment variable that has been added. preview current environment when hovering.
 - Method: http method, needn't select manually.
-- URL: http uri, needn't input manually. support placeholder, e.g. `{{baseUrl}}`.
-- Send: send http request one time after clicking.
-- Config: request config, provided by request client.
+- URL: http uri, needn't input manually. support placeholder.
+- Send: send request one time after clicking.
+- Config: request config, provided by request client. The first one is `protocol: specific protocol`, and do not delete it!
 - Headers tab: request header, needn't input manually. support placeholder and parameter library.
 - Params tab: include query/path/form parameter, needn't input manually. support placeholder and parameter library.
 - Body tab: body for POST/PUT/PATCH/DELETE, needn't input manually.
 - Response tab: display response result. The content may be normal return, exception, or script return by the request script.
 - Info tab: display request with http packet format.
 
-![](images/http_client.png)
+![](images/request_client.png)
 
 
 ### Search URL
@@ -119,7 +129,7 @@ support Spring MVC and enabled by default. If you need support other framework r
 
 ### Environment Variable
 - Environment variables indicate multi-set variables in advance, including `Literal Variable`, `Direct reference variable`, `Built-in function variable` and `Script variable`.
-- Can be used for URL, Headers, Params, Body, request script and etc.
+- Can be used for Config, URL, Headers, Params, request script and etc.
 - Using placeholder to reference environment variables.
 - Each project has isolated config(project level).
 - Support import and export.
@@ -133,7 +143,7 @@ support Spring MVC and enabled by default. If you need support other framework r
 #### Add
 1. Click <kbd>Add</kbd> button, input unique and brief name such as `DEV`, `FAT`, `UAT`, `PRE`, `PRO`.
 2. Add/delete/move key-values in current env group, be enabled when selected checkbox.
-3. When create a env group, it will create a default key-value `baseUrl: http://localhost:8080` used for replacing `{{baseUrl}}` in URL input box.
+3. When create a env group, it will create a default key-value `baseUrl: http://localhost:8080` used for replacing `{{baseUrl}}` in Config tab for http api.
 4. **VALUE** is string type, can use `Built-in function variable` and `Script variable`. See below for more.
 
 ![env_add.png](images/env_add.png)
@@ -175,13 +185,13 @@ public class RestKitScript {
 
 #### Global Request Header
 
-Configure request headers that add to the HTTP request by default in current project.
+Configure request headers that add to the request by default in current project.
 
 ![](images/global_header.png)
 
 
 ### API Local Store
-- API Local Store used for manually saving API, an interface independently scanned. It's displayed as a Local module in Service Tree.
+- API Local Store used for manually saving API, an interface independently scanned. It's displayed as custom modules in Service Tree.
 - Every api should have unique key composed of url and method.
 - Enable by default. Disable in the setting.
 - Support synchronization in different IDE/project when setting same file path.
@@ -190,7 +200,7 @@ Configure request headers that add to the HTTP request by default in current pro
 ![](images/local_show.png)
 
 #### Add/Update
-Click【Save Api】at any editor's right menu in the http client. There will be a tip when api existed.
+Click【Save Api】at any editor's right menu in the request client. There will be a tip when api existed.
 
 ![](images/local_save.png)
 
@@ -247,7 +257,7 @@ Delete file at `$PROJECT_DIR$/.idea/restkit/RESTKit_ParameterLibrary.xml`.
 
 
 ### Request Script
-Before and after sending an HTTP request, you can control the request content by using script conveniently. Such as replacing token, encrypt request, etc.
+Before and after sending a request, you can control the request content by using script conveniently. Such as replacing token, encrypt request, etc.
 
 > Note  
 > This feature relies on the Java Nashorn script engine, which is scheduled to be removed after JDK11, no replacement temporarily.
@@ -338,7 +348,7 @@ if (statusCode != 200) {
 }
 ```
 
-#### HTTP Request Process
+#### Request Process
 
 ![](images/request_flow.png)
 
@@ -402,7 +412,7 @@ public class JavaLanguageResolver implements LanguageResolver {
 }
 ```
 
-For complete examples, please see source code and [RESTKit-JAX-RS](https://github.com/newhoo/RESTKit-JAX-RS)
+For complete examples, please see source code and [RESTKit-Dubbo](https://github.com/newhoo/RESTKit-Dubbo)
 
 
 ### Other Usages

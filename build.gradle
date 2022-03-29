@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.newhoo.restkit'
-version '2.0.3'
+version '2.0.4'
 
 sourceCompatibility = 1.8
 
@@ -21,7 +21,7 @@ dependencies {
 intellij {
     version '2021.2'
     type 'IU'
-//    localPath '/Applications/IntelliJ IDEA 2.app/Contents'
+//    localPath '/Applications/IntelliJ IDEA.app/Contents'
 
     pluginName 'RESTKit'
     updateSinceUntilBuild false

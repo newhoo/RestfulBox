@@ -9,6 +9,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,10 +53,10 @@ public class FilterParamConfigurable implements Configurable {
 
     @Override
     public void apply() {
-        Set<String> typeSet = Arrays.stream(filterParamForm.getTypeModel().toArray())
-                                    .map(String::valueOf)
-                                    .collect(Collectors.toSet());
-        filterParamComponent.setQualifiedNames(typeSet);
+        List<String> typeList = Arrays.stream(filterParamForm.getTypeModel().toArray())
+                                      .map(String::valueOf)
+                                      .collect(Collectors.toList());
+        filterParamComponent.setQualifiedNames(new LinkedHashSet<>(typeList));
     }
 
     @Override

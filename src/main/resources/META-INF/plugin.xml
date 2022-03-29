@@ -2,26 +2,45 @@
     <id>io.github.newhoo.restkit</id>
     <name>RESTKit</name>
     <!--  <version>2.0.5</version>-->
-    <vendor email="huzunrong@foxmail.com">RESTKit</vendor>
+    <vendor email="huzunrong@foxmail.com" url="https://github.com/newhoo/RESTKit">RESTKit</vendor>
 
     <description><![CDATA[
     <p>Another powerful toolkit for restful service development.</p>
 
     <ul>
         <li>Restful service automatic scanning, display, searching and navigation.</li>
-        <li>Powerful HTTP client supported environment variable, parameter library and request script.</li>
+        <li>Powerful request client supported multiple protocol, environment variable, parameter library and request script.</li>
         <li>Plugin extension point helps scanning custom restful services from other frameworks.</li>
         <li>Support Spring MVC / SpringBoot with java and kotlin for idea by default.</li>
         <li>Support more jetbrains ides, and provide api local storage by default.</li>
     </ul>
 
-    <a href="https://github.com/newhoo/RESTKit">Github</a> | <a href="https://gitee.com/newhoo/RESTKit">Gitee</a>
     <br/>
 
-    <img src="https://raw.githubusercontent.com/newhoo/RESTKit/main/images/plugin.png" />
+    <p>一套功能强大的 Restful 服务开发辅助工具集</p>
+
+    <ul>
+        <li>Restful服务自动扫描、展示和跳转；</li>
+        <li>强大好用的请求工具，支持多协议、环境变量、参数库和请求脚本；</li>
+        <li>提供多个扩展点，用户可实现其他框架和协议的接口扫描及请求发送；</li>
+        <li>idea默认支持Spring MVC(Java or Kotlin)；</li>
+        <li>支持更多的jetbrains产品，不仅仅是idea，且默认支持保存接口；</li>
+    </ul>
+
+    <a href="https://github.com/newhoo/RESTKit">Github</a> | <a href="https://gitee.com/newhoo/RESTKit">Gitee</a> | <a href="https://www.yuque.com/newhoo/restkit">Yuque(语雀)</a>
+    <br/>
+
+    <img src="https://s3.bmp.ovh/imgs/2022/03/29/8b2aa43c50d0db03.png" />
     ]]></description>
 
     <change-notes><![CDATA[
+        2.0.4
+        <ul>
+            <li>Optimize details.</li>
+            <br/>
+            <li>优化细节.</li>
+        </ul>
+
         2.0.3
         <ul>
             <li>support api group by file name.</li>

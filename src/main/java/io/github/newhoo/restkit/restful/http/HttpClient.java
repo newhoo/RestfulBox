@@ -41,6 +41,7 @@ public class HttpClient implements RestClient {
     public List<KV> getConfig(@NotNull RestItem restItem, @NotNull Project project) {
         int timeout = CommonSettingComponent.getInstance(project).getState().getRequestTimeout();
         return Arrays.asList(
+                new KV("baseUrl", "{{baseUrl}}"),
                 new KV("timeout", String.valueOf(timeout))
         );
     }
@@ -48,8 +49,18 @@ public class HttpClient implements RestClient {
     @NotNull
     @Override
     public Request createRequest(RestClientData restClientData, Project project) {
+        String url = StringUtils.defaultString(restClientData.getUrl());
+        if (!url.contains("://")) {
+            if (!url.startsWith("/")) {
+                url = "/" + url;
+            }
+            url = StringUtils.defaultIfEmpty(restClientData.getConfig().get("baseUrl"), "http://localhost:8080") + url;
+            // 环境变量未设置【baseUrl】时强行替换为localhost:8080
+            url = url.replace("{{baseUrl}}", "http://localhost:8080");
+        }
+
         HttpRequest request = new HttpRequest();
-        request.setUrl(restClientData.getUrl());
+        request.setUrl(url);
         request.setMethod(restClientData.getMethod());
         request.setConfig(restClientData.getConfig());
         request.setHeaders(restClientData.getHeaders());
