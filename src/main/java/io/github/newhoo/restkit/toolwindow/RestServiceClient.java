@@ -143,7 +143,7 @@ public class RestServiceClient extends JPanel implements DataProvider {
         JPanel urlPanel = new JBPanel<>();
         urlPanel.setLayout(new GridLayoutManager(1, 4, JBUI.insets(0, 4, 0, 4), 0, 0));
 
-        requestEnv = new ComboBox<>(new CollectionComboBoxModel<>(environment.getEnvKeys()), 100);
+        requestEnv = new ComboBox<>(new CollectionComboBoxModel<>(environment.getEnvKeys()), 86);
         requestEnv.setSelectedItem(environment.getCurrentEnv());
         setEnvToolTip();
         urlPanel.add(requestEnv,

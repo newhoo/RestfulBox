@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2.0.4
+
+- Optimize details.
+
+
+- 优化细节
+
 ## 2.0.3
 
 - support api group by file name.

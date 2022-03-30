@@ -1,8 +1,9 @@
-# RESTKit
+<a href="https://plugins.jetbrains.com/plugin/14723-restkit">![bg](images/bg.png)</a>
+
+## 一套功能强大的 Restful 服务开发辅助工具集
+
 
 [英文](./README.md) | [Gitee](https://gitee.com/newhoo/RESTKit) | [语雀](https://www.yuque.com/newhoo/restkit)
-
-[RESTKit](https://plugins.jetbrains.com/plugin/14723-restkit) 是一套功能强大的 Restful 服务开发辅助工具集。
 
 本插件致力于提升开发效率之作，只有实用常用的功能。源于最初版本的RestfulToolkit，同时加入Postman的常用功能，丰富且完善的功能能极大地提高Idea开发的效率。免费分享给大家使用，不用于商业用途。如有使用问题，请反馈于我。
 

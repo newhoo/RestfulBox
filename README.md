@@ -1,8 +1,8 @@
-# RESTKit
+<a href="https://plugins.jetbrains.com/plugin/14723-restkit">![bg](images/bg.png)</a>
+
+## a powerful toolkit for restful services development.
 
 [简体中文](./README.zh_CN.md) | [Gitee](https://gitee.com/newhoo/RESTKit) | [Yuque(语雀)](https://www.yuque.com/newhoo/restkit)
-
-[RESTKit](https://plugins.jetbrains.com/plugin/14723-restkit) is a powerful toolkit for restful services development.
 
 This plugin is committed to enhancing development efficiency with useful features. From the initial RestfulToolkit and joined common functions of Postman, rich and complete features can greatly improve the efficiency of IDEA development. Free to share with everyone, not for commercial purposes. If you find any problems, please give me feedback.
 
