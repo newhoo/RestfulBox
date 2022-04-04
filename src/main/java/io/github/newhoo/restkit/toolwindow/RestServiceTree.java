@@ -20,7 +20,6 @@ import com.intellij.ui.treeStructure.CachingSimpleNode;
 import com.intellij.ui.treeStructure.SimpleNode;
 import com.intellij.ui.treeStructure.SimpleTree;
 import com.intellij.ui.treeStructure.SimpleTreeStructure;
-import com.intellij.util.Consumer;
 import com.intellij.util.PsiNavigateUtil;
 import com.intellij.util.messages.MessageBus;
 import com.intellij.util.ui.tree.TreeUtil;
@@ -35,6 +34,7 @@ import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.HttpMethodFilterConfiguration;
 import io.github.newhoo.restkit.restful.RequestHelper;
 import io.github.newhoo.restkit.util.IdeaUtils;
+import io.github.newhoo.restkit.util.NotifierUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
@@ -52,7 +52,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -132,7 +134,7 @@ public class RestServiceTree extends JPanel implements DataProvider {
     /**
      * 跳转到节点
      */
-    public void navigateToTree(PsiElement psiElement) {
+    public void navigateToTree(PsiElement psiElement, Supplier<RestItem> geneWhenNotExistNode) {
         Optional<RestServiceTree.RequestNode> psiMethodNode = myRoot.moduleNodes.stream()
                                                                                 .flatMap(o -> o.requestNodes.stream())
                                                                                 .filter(o -> o.myRestItem instanceof PsiRestItem)
@@ -143,17 +145,28 @@ public class RestServiceTree extends JPanel implements DataProvider {
             });
             return;
         }
-        updateTree(aVoid -> {
-            IdeaUtils.runWhenProjectIsReady(myProject, () -> {
-                myRoot.moduleNodes.stream()
-                                  .flatMap(o -> o.requestNodes.stream())
-                                  .filter(o -> o.myRestItem instanceof PsiRestItem)
-                                  .filter(o -> ((PsiRestItem) o.myRestItem).getPsiElement() == psiElement)
-                                  .findFirst()
-                                  .ifPresent(node -> myTreeModel.select(node, myTree, treePath -> {
-                                  }));
+        if (geneWhenNotExistNode != null) {
+            // 生成请求
+            NotifierUtils.infoBalloon("", "Tree node not existed. Generate request for now.", null, myProject);
+            RestItem restItem = geneWhenNotExistNode.get();
+            if (restItem != null) {
+                MessageBus messageBus = RestServiceTree.this.myProject.getMessageBus();
+                messageBus.syncPublisher(RestServiceListener.REST_SERVICE_SELECT).select(restItem);
+            }
+        } else {
+            // 刷新树
+            updateTree(aVoid -> {
+                IdeaUtils.runWhenProjectIsReady(myProject, () -> {
+                    myRoot.moduleNodes.stream()
+                                      .flatMap(o -> o.requestNodes.stream())
+                                      .filter(o -> o.myRestItem instanceof PsiRestItem)
+                                      .filter(o -> ((PsiRestItem) o.myRestItem).getPsiElement() == psiElement)
+                                      .findFirst()
+                                      .ifPresent(node -> myTreeModel.select(node, myTree, treePath -> {
+                                      }));
+                });
             });
-        });
+        }
     }
 
     /**
@@ -222,7 +235,7 @@ public class RestServiceTree extends JPanel implements DataProvider {
                 AppUIUtil.invokeOnEdt(() -> {
                     myRoot.updateModuleNodes(restModules);
                     if (consumer != null) {
-                        consumer.consume(null);
+                        consumer.accept(null);
                     }
                 });
             }

@@ -51,6 +51,7 @@ public class SettingForm {
     private JCheckBox displayApiGroupUsingFileNameCheckBox;
     private JCheckBox displayTreeListUsingApiDescCheckBox;
     private JCheckBox enableParameterLibraryCheckBox;
+    private JCheckBox enableMethodLineMarkerCheckBox;
 
     private JPanel requestPanel;
     private JTextField requestTimeoutField;
@@ -183,6 +184,7 @@ public class SettingForm {
         commonSetting.setShowModuleInSearchEvery(showModuleCheckBox.isSelected());
         commonSetting.setDisplayApiGroupUsingFileName(displayApiGroupUsingFileNameCheckBox.isSelected());
         commonSetting.setEnableParameterLibrary(enableParameterLibraryCheckBox.isSelected());
+        commonSetting.setEnableMethodLineMarker(enableMethodLineMarkerCheckBox.isSelected());
 
         commonSetting.setSaveRequestLog(saveRequestLogCheckBox.isSelected());
         commonSetting.setRequestTimeout(parseIntOrZero(requestTimeoutField.getText()));
@@ -206,6 +208,7 @@ public class SettingForm {
         displayApiGroupUsingFileNameCheckBox.setSelected(commonSetting.isDisplayApiGroupUsingFileName());
         enableParameterLibraryCheckBox.setSelected(commonSetting.isEnableParameterLibrary());
         enableParameterLibraryCheckBox.setText("Enable parameter library");
+        enableMethodLineMarkerCheckBox.setSelected(commonSetting.isEnableMethodLineMarker());
 
         saveRequestLogCheckBox.setSelected(commonSetting.isSaveRequestLog());
         requestTimeoutField.setText(String.valueOf(commonSetting.getRequestTimeout()));

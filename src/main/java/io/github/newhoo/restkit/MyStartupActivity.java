@@ -5,12 +5,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 import io.github.newhoo.restkit.common.BKV;
 import io.github.newhoo.restkit.common.EnvList;
-import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.config.CommonSetting;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.Environment;
-import io.github.newhoo.restkit.config.LocalApiLibrary;
-import io.github.newhoo.restkit.restful.local.LocalRequestResolver;
 import io.github.newhoo.restkit.util.EnvironmentUtils;
 import io.github.newhoo.restkit.util.FileUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -80,13 +77,6 @@ public class MyStartupActivity implements StartupActivity {
 
             EnvironmentUtils.notifyEnvUpdate(project);
             fromSetting.setValue(KEY_REQUEST_SYNC, true);
-        }
-
-        // 同步api
-        List<RestItem> itemList = LocalApiLibrary.getInstance(project).getItemList();
-        if (!itemList.isEmpty()) {
-            new LocalRequestResolver(project).add(itemList);
-            itemList.clear();
         }
     }
 }

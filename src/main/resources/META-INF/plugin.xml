@@ -34,6 +34,15 @@
     ]]></description>
 
     <change-notes><![CDATA[
+        2.0.5
+        <ul>
+            <li>Add icon for springmvc mapping methods.</li>
+            <li>Remove jump to tree intention.</li>
+            <br/>
+            <li>添加图标，支持springmvc方法快速生成请求，在设置中启用【Enable method line marker】</li>
+            <li>移除上下文菜单中的跳转到树窗口</li>
+        </ul>
+
         2.0.4
         <ul>
             <li>Optimize details.</li>
@@ -110,15 +119,15 @@
         <projectService serviceImplementation="io.github.newhoo.restkit.config.EnvironmentComponent"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.CommonSettingComponent"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.ParameterLibrary"/>
-        <projectService serviceImplementation="io.github.newhoo.restkit.config.LocalApiLibrary"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.HttpMethodFilterConfiguration"/>
         <projectConfigurable id="RESTKit.SettingConfigurable" instance="io.github.newhoo.restkit.config.SettingConfigurable">
             <configurable instance="io.github.newhoo.restkit.config.EnvironmentConfigurable" displayName="Environment"/>
         </projectConfigurable>
         <searchEverywhereContributor implementation="io.github.newhoo.restkit.navigation.RestSearchEverywhereContributor$Factory"/>
-        <intentionAction>
-            <className>io.github.newhoo.restkit.intention.JumpToTreeIntention</className>
-        </intentionAction>
+        <!-- 有些多余了 -->
+        <!-- <intentionAction> -->
+        <!--     <className>io.github.newhoo.restkit.intention.JumpToTreeIntention</className> -->
+        <!-- </intentionAction> -->
         <iw.actionProvider implementation="io.github.newhoo.restkit.parameter.library.ParameterLibraryActionProvider"/>
         <!-- 在编辑器添加悬浮按钮 -->
         <!-- <editorFloatingToolbarProvider id="MyDefaultFloatingToolbarProvider" implementation="com.intellij.openapi.editor.toolbar.floating.DefaultFloatingToolbarProvider"/> -->

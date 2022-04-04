@@ -31,6 +31,7 @@ public class CommonSetting {
     private boolean displayApiGroupUsingFileName = false;
     private boolean displayTreeListUsingApiDesc = false;
     private boolean enableParameterLibrary = true;
+    private boolean enableMethodLineMarker = false;
     private String preRequestScriptPath = "";
     private String postRequestScriptPath = "";
     private String apiFilePath = "";
@@ -42,6 +43,7 @@ public class CommonSetting {
                 || displayApiGroupUsingFileName != modifiedSetting.isDisplayApiGroupUsingFileName()
                 || displayTreeListUsingApiDesc != modifiedSetting.isDisplayTreeListUsingApiDesc()
                 || enableParameterLibrary != modifiedSetting.isEnableParameterLibrary()
+                || enableMethodLineMarker != modifiedSetting.isEnableMethodLineMarker()
                 || !StringUtils.equals(preRequestScriptPath, modifiedSetting.getPreRequestScriptPath())
                 || !StringUtils.equals(postRequestScriptPath, modifiedSetting.getPostRequestScriptPath())
                 || !StringUtils.equals(apiFilePath, modifiedSetting.getApiFilePath())

@@ -14,7 +14,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import io.github.newhoo.restkit.common.KV;
 import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.feature.javaimpl.MethodPath;
-import io.github.newhoo.restkit.feature.javaimpl.helper.PsiAnnotationHelper;
 import io.github.newhoo.restkit.feature.javaimpl.helper.PsiClassHelper;
 import io.github.newhoo.restkit.feature.javaimpl.spring.SpringAnnotationHelper;
 import io.github.newhoo.restkit.feature.javaimpl.spring.SpringControllerAnnotation;
@@ -30,8 +29,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
-import static io.github.newhoo.restkit.feature.javaimpl.spring.SpringControllerAnnotation.CONTROLLER;
 
 /**
  * JavaLanguageResolver, will work when Java enabled
@@ -99,18 +96,10 @@ public class JavaLanguageResolver extends BaseLanguageResolver {
             return Collections.emptyList();
         }
 
-        boolean needRequestBody = psiClass.hasAnnotation(CONTROLLER.getQualifiedName())
-                && null == PsiAnnotationHelper.getInheritedAnnotation(psiClass, "org.springframework.web.bind.annotation.ResponseBody");
-
         List<RestItem> itemList = new ArrayList<>();
         List<MethodPath> typeMethodPaths = SpringAnnotationHelper.getTypeMethodPaths(psiClass);
 
         for (PsiMethod psiMethod : psiMethods) {
-            if (needRequestBody
-                    && PsiAnnotationHelper.getInheritedAnnotation(psiMethod, "org.springframework.web.bind.annotation.ResponseBody") == null) {
-                continue;
-            }
-
             List<MethodPath> methodMethodPaths = SpringAnnotationHelper.getMethodMethodPaths(psiMethod);
             itemList.addAll(combineTypeAndMethod(typeMethodPaths, methodMethodPaths, psiMethod, module));
         }

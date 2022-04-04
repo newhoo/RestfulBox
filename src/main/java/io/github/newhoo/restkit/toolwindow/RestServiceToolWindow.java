@@ -14,8 +14,11 @@ import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.content.ContentManager;
+import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.util.IdeaUtils;
 import lombok.Getter;
+
+import java.util.function.Supplier;
 
 /**
  * RestServiceToolWindow
@@ -71,12 +74,19 @@ public class RestServiceToolWindow extends SimpleToolWindowPanel {
      * 跳转到节点
      */
     public void navigateToTree(PsiElement psiElement) {
+        navigateToTree(psiElement, null);
+    }
+
+    /**
+     * 跳转到节点
+     */
+    public void navigateToTree(PsiElement psiElement, Supplier<RestItem> geneWhenNotExistNode) {
         if (myToolWindow.isDisposed() || !myToolWindow.isVisible()) {
             myToolWindow.show(() -> {
-                restServiceTree.navigateToTree(psiElement);
+                restServiceTree.navigateToTree(psiElement, geneWhenNotExistNode);
             });
         } else {
-            restServiceTree.navigateToTree(psiElement);
+            restServiceTree.navigateToTree(psiElement, geneWhenNotExistNode);
         }
     }
 

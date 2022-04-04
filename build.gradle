@@ -4,12 +4,13 @@ plugins {
 }
 
 group 'io.github.newhoo.restkit'
-version '2.0.4'
+version '2.0.5'
 
 sourceCompatibility = 1.8
 
 repositories {
-    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    maven { url 'https://maven.aliyun.com/repository/public/' }
+    mavenLocal()
     mavenCentral()
 }
 

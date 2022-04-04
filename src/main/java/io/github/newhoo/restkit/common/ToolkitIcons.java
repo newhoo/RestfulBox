@@ -10,6 +10,7 @@ public class ToolkitIcons {
     public static final Icon ROOT_MODULE = Nodes.ModuleGroup;
     public static final Icon PROJECT_MODULE = Nodes.Module;
     public static final Icon SERVICE = IconLoader.getIcon("/icons/service.png", ToolkitIcons.class);
+    public static final Icon REQUEST = IconLoader.getIcon("/icons/R.svg", ToolkitIcons.class);
 
     public static class METHOD {
         public static Icon get(HttpMethod method) {
