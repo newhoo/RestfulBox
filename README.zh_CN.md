@@ -423,9 +423,7 @@ Url navigate to service tree.
 ![](images/microservice_goto.png)
 
 #### Java Method跳转到service tree
-光标移到Java中的restful接口，点击💡或者按<kbd>⌥ ↩</kbd>
-
-![](images/intention.png)
+在方法名称上右键，在弹出的上下文菜单中选择 `Jump to restful service tree`
 
 #### Java类生成JSON
 在需要生成的Java类名称上右键，在弹出的上下文菜单中选择 `Convert to JSON`

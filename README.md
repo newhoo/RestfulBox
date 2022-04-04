@@ -423,9 +423,7 @@ Url navigate to service tree.
 ![](images/microservice_goto.png)
 
 #### Java Method Navigate to Service Tree
-Move mouse to restful method in java source, then click 💡 or press shortcut key <kbd>⌥ ↩</kbd>.
-
-![](images/intention.png)
+After right-click on the java method name, select `Jump to restful service tree` in the context menu.
 
 #### Java Class Convert to JSON
 After right-click on the java class name, select `Convert to JSON` in the context menu.
