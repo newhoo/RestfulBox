@@ -50,6 +50,8 @@ public interface LanguageResolver {
      * 能否生成line marker图标，图标跳转
      *
      * @param psiElement 每行循环的元素
+     *
+     * @since 2.0.5
      */
     boolean canGenerateLineMarker(@NotNull PsiElement psiElement);
 
@@ -61,6 +63,8 @@ public interface LanguageResolver {
      * 只要扫描写得好，一般用不到！！
      *
      * @param psiElement 每行循环的元素
+     *
+     * @since 2.0.5
      */
     RestItem tryGenerateRestItem(@NotNull PsiElement psiElement);
 }
