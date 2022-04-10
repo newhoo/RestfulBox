@@ -117,6 +117,27 @@ public abstract class BaseLanguageResolver extends BaseRequestResolver implement
         return itemList;
     }
 
+    public RestItem combineFirstRestItem(List<MethodPath> typeMethodPaths, List<MethodPath> methodMethodPaths, PsiElement psiElement, String moduleName) {
+        if (methodMethodPaths.isEmpty()) {
+            return null;
+        }
+        MethodPath methodPath = methodMethodPaths.get(0);
+        if (typeMethodPaths.isEmpty()) {
+            String requestPath = RequestHelper.getCombinedPath("", methodPath.getPath());
+            return new PsiRestItem(requestPath, methodPath.getMethod(), moduleName, getFrameworkName(), psiElement, this);
+        } else {
+            MethodPath typeMethodPath = typeMethodPaths.get(0);
+            String combinedPath = RequestHelper.getCombinedPath(typeMethodPath.getPath(), methodPath.getPath());
+            String typeMethod = typeMethodPath.getMethod();
+
+            if (typeMethod != null && !typeMethod.equals(methodPath.getMethod())) {
+                return new PsiRestItem(combinedPath, typeMethod, moduleName, getFrameworkName(), psiElement, this);
+            }
+
+            return new PsiRestItem(combinedPath, methodPath.getMethod(), moduleName, getFrameworkName(), psiElement, this);
+        }
+    }
+
     public List<KV> buildHeaderString(PsiMethod psiMethod) {
         List<KV> list = new ArrayList<>();
         final PsiAnnotation controllerAnno = PsiAnnotationHelper.getInheritedAnnotation(psiMethod.getContainingClass(), REQUEST_MAPPING.getQualifiedName());

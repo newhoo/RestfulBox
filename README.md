@@ -423,7 +423,9 @@ Url navigate to service tree.
 ![](images/microservice_goto.png)
 
 #### Java Method Navigate to Service Tree
-After right-click on the java method name, select `Jump to restful service tree` in the context menu.
+- After right-click on the java method name, select `Jump to restful service tree` in the popup menu.
+- Click the line marker icon after enabled in the setting from 2.0.5.
+![](images/line-marker.png)
 
 #### Java Class Convert to JSON
 After right-click on the java class name, select `Convert to JSON` in the context menu.

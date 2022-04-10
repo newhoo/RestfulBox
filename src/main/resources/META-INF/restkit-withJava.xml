@@ -6,11 +6,18 @@
         <!-- Add your extensions here -->
         <projectService serviceImplementation="io.github.newhoo.restkit.feature.javaimpl.config.FilterParamComponent"/>
         <projectConfigurable instance="io.github.newhoo.restkit.feature.javaimpl.config.FilterParamConfigurable" parentId="RESTKit.SettingConfigurable"/>
-        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="io.github.newhoo.restkit.feature.javaimpl.linemarker.MappingLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="" implementationClass="io.github.newhoo.restkit.feature.javaimpl.linemarker.MappingLineMarkerProvider"/>
     </extensions>
 
     <extensions defaultExtensionNs="io.github.newhoo.restkit">
         <restfulResolver implementation="io.github.newhoo.restkit.feature.javaimpl.spring.SpringRequestResolver$SpringRequestResolverProvider"/>
         <languageResolver implementation="io.github.newhoo.restkit.feature.javaimpl.language.JavaLanguageResolver$JavaLanguageResolverProvider"/>
     </extensions>
+
+    <actions>
+        <action id="RESTKit.JumpToServiceTreeAction" class="io.github.newhoo.restkit.feature.javaimpl.action.JumpToTreeAction"
+                text="Jump to Restful Service Tree" description="Jump to restful service tree" icon="/icons/R.svg">
+            <add-to-group group-id="RESTKit.EditorPopupMenu.Group"/>
+        </action>
+    </actions>
 </idea-plugin>

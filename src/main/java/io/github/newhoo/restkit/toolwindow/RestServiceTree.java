@@ -147,11 +147,13 @@ public class RestServiceTree extends JPanel implements DataProvider {
         }
         if (geneWhenNotExistNode != null) {
             // 生成请求
-            NotifierUtils.infoBalloon("", "Tree node not existed. Generate request for now.", null, myProject);
             RestItem restItem = geneWhenNotExistNode.get();
             if (restItem != null) {
+                NotifierUtils.infoBalloon("", "Tree node not existed. Generate request for now.", null, myProject);
                 MessageBus messageBus = RestServiceTree.this.myProject.getMessageBus();
                 messageBus.syncPublisher(RestServiceListener.REST_SERVICE_SELECT).select(restItem);
+            } else {
+                NotifierUtils.warnBalloon("", "Tree node not existed. Generate request failed.", myProject);
             }
         } else {
             // 刷新树

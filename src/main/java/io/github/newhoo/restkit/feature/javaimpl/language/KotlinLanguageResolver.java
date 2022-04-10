@@ -82,6 +82,27 @@ public class KotlinLanguageResolver extends BaseLanguageResolver {
     }
 
     @Override
+    public boolean canGenerateLineMarker(@NotNull PsiElement psiElement) {
+        return "fun".equals(psiElement.getText())
+                && canNavigateToTree(psiElement.getParent());
+    }
+
+    @Override
+    public RestItem tryGenerateRestItem(@NotNull PsiElement psiElement) {
+        KtNamedFunction function;
+        if (psiElement instanceof KtNamedFunction) {
+            function = (KtNamedFunction) psiElement;
+        } else if (psiElement.getParent() instanceof KtNamedFunction) {
+            function = (KtNamedFunction) psiElement.getParent();
+        } else {
+            return null;
+        }
+        List<MethodPath> typeMethodPaths = getTypeMethodPaths((KtClass) function.getParent().getParent());
+        List<MethodPath> methodMethodPaths = getMethodMethodPaths(function);
+        return combineFirstRestItem(typeMethodPaths, methodMethodPaths, function, "");
+    }
+
+    @Override
     public List<RestItem> findRestItemListInModule(Module module, GlobalSearchScope globalSearchScope) {
         List<RestItem> itemList = new ArrayList<>();
         SpringControllerAnnotation[] supportedAnnotations = SpringControllerAnnotation.values();

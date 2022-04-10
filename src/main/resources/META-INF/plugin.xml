@@ -20,7 +20,7 @@
     <p>一套功能强大的 Restful 服务开发辅助工具集</p>
 
     <ul>
-        <li>Restful服务自动扫描、展示和跳转；</li>
+        <li>Restful服务自动扫描、展示、跳转、导出和导入；</li>
         <li>强大好用的请求工具，支持多协议、环境变量、参数库和请求脚本；</li>
         <li>提供多个扩展点，用户可实现其他框架和协议的接口扫描及请求发送；</li>
         <li>idea默认支持Spring MVC(Java or Kotlin)；</li>
@@ -36,12 +36,14 @@
     <change-notes><![CDATA[
         2.0.5
         <ul>
-            <li>Add icon for springmvc mapping methods.</li>
+            <li>Add icon for springmvc mapping methods. Enable [Jump to tree using method line marker] in the setting.</li>
             <li>Remove jump to tree intention.</li>
             <br/>
-            <li>添加图标，支持springmvc方法快速生成请求，在设置中启用【Enable method line marker】</li>
+            <li>添加图标，支持springmvc方法快速生成请求，在设置中启用【Jump to tree using method line marker】</li>
             <li>移除上下文菜单中的跳转到树窗口</li>
         </ul>
+        <img src = 'https://s3.bmp.ovh/imgs/2022/04/10/3481cea48dae9d12.png' />
+        <br/>
 
         2.0.4
         <ul>
@@ -151,9 +153,6 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <action id="RESTKit.ConvertClassToJSONAction" class="io.github.newhoo.restkit.action.ConvertClassToJSONAction"
                     text="Convert to JSON" description="Convert to JSON">
-            </action>
-            <action id="RESTKit.JumpToServiceTreeAction" class="io.github.newhoo.restkit.action.JumpToTreeAction"
-                    text="Jump to Restful Service Tree" description="Jump to restful service tree">
             </action>
         </group>
 

@@ -423,10 +423,12 @@ Url navigate to service tree.
 ![](images/microservice_goto.png)
 
 #### Java Method跳转到service tree
-在方法名称上右键，在弹出的上下文菜单中选择 `Jump to restful service tree`
+- 在方法名称上右键，在弹出的菜单中选择 `Jump to restful service tree`
+- 通过line marker图标跳转。2.0.5开始支持，需在设置中启用。
+![](images/line-marker.png)
 
 #### Java类生成JSON
-在需要生成的Java类名称上右键，在弹出的上下文菜单中选择 `Convert to JSON`
+在需要生成的Java类名称上右键，在弹出的菜单中选择 `Convert to JSON`
 
 ![](images/convert2json.png)
 

@@ -78,7 +78,7 @@ public class RestServiceToolWindow extends SimpleToolWindowPanel {
     }
 
     /**
-     * 跳转到节点
+     * 跳转到节点，节点不存在时可生成请求
      */
     public void navigateToTree(PsiElement psiElement, Supplier<RestItem> geneWhenNotExistNode) {
         if (myToolWindow.isDisposed() || !myToolWindow.isVisible()) {

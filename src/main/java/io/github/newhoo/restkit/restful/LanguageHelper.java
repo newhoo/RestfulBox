@@ -2,6 +2,7 @@ package io.github.newhoo.restkit.restful;
 
 import com.intellij.lang.Language;
 import com.intellij.psi.PsiElement;
+import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.restful.ep.LanguageResolverProvider;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,5 +39,27 @@ public class LanguageHelper {
     public static boolean canNavigateToTree(@NotNull PsiElement psiElement) {
         return LANGUAGE_RESOLVER_MAP.containsKey(psiElement.getLanguage())
                 && LANGUAGE_RESOLVER_MAP.get(psiElement.getLanguage()).canNavigateToTree(psiElement);
+    }
+
+    /**
+     * 能否生成line marker图标，用于跳转
+     *
+     * @param psiElement 鼠标所在的元素
+     */
+    public static boolean canGenerateLineMarker(@NotNull PsiElement psiElement) {
+        return LANGUAGE_RESOLVER_MAP.containsKey(psiElement.getLanguage())
+                && LANGUAGE_RESOLVER_MAP.get(psiElement.getLanguage()).canGenerateLineMarker(psiElement);
+    }
+
+    /**
+     * 生成RestItem
+     *
+     * @param psiElement 鼠标所在的元素
+     */
+    public static RestItem generateRestItem(@NotNull PsiElement psiElement) {
+        if (LANGUAGE_RESOLVER_MAP.containsKey(psiElement.getLanguage())) {
+            return LANGUAGE_RESOLVER_MAP.get(psiElement.getLanguage()).tryGenerateRestItem(psiElement);
+        }
+        return null;
     }
 }

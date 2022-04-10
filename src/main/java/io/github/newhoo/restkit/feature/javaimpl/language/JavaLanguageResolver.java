@@ -6,6 +6,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
@@ -62,6 +63,27 @@ public class JavaLanguageResolver extends BaseLanguageResolver {
         return psiElement instanceof PsiMethod
                 && Arrays.stream(((PsiMethod) psiElement).getAnnotations())
                          .anyMatch(psiAnnotation -> SpringRequestMethodAnnotation.getByQualifiedName(psiAnnotation.getQualifiedName()) != null);
+    }
+
+    @Override
+    public boolean canGenerateLineMarker(@NotNull PsiElement psiElement) {
+        return psiElement instanceof PsiIdentifier
+                && canNavigateToTree(psiElement.getParent());
+    }
+
+    @Override
+    public RestItem tryGenerateRestItem(@NotNull PsiElement psiElement) {
+        PsiMethod psiMethod;
+        if (psiElement instanceof PsiMethod) {
+            psiMethod = (PsiMethod) psiElement;
+        } else if (psiElement.getParent() instanceof PsiMethod) {
+            psiMethod = (PsiMethod) psiElement.getParent();
+        } else {
+            return null;
+        }
+        List<MethodPath> typeMethodPaths = SpringAnnotationHelper.getTypeMethodPaths(psiMethod.getContainingClass());
+        List<MethodPath> methodMethodPaths = SpringAnnotationHelper.getMethodMethodPaths(psiMethod);
+        return combineFirstRestItem(typeMethodPaths, methodMethodPaths, psiMethod, "");
     }
 
     @Override
