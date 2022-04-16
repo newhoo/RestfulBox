@@ -97,6 +97,9 @@ public class KotlinLanguageResolver extends BaseLanguageResolver {
         } else {
             return null;
         }
+        if (function.getParent() == null || function.getParent().getParent() == null) {
+            return null;
+        }
         List<MethodPath> typeMethodPaths = getTypeMethodPaths((KtClass) function.getParent().getParent());
         List<MethodPath> methodMethodPaths = getMethodMethodPaths(function);
         return combineFirstRestItem(typeMethodPaths, methodMethodPaths, function, "");

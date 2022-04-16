@@ -184,19 +184,9 @@ public class RestServiceTree extends JPanel implements DataProvider {
         if (psiMethodNode.isPresent()) {
             myTreeModel.select(psiMethodNode.get(), myTree, treePath -> {
             });
-            return;
+        } else {
+            NotifierUtils.infoBalloon("", String.format("Tree node not found. [%s, %s, %s]", url, method, moduleName), null, myProject);
         }
-        updateTree(aVoid -> {
-            IdeaUtils.runWhenProjectIsReady(myProject, () -> {
-                myRoot.moduleNodes.stream()
-                                  .filter(moduleNode -> moduleName == null || moduleNode.getName().equals(moduleName))
-                                  .flatMap(o -> o.requestNodes.stream())
-                                  .filter(getNavigateFilter(url, httpMethod))
-                                  .findFirst()
-                                  .ifPresent(node -> myTreeModel.select(node, myTree, treePath -> {
-                                  }));
-            });
-        });
     }
 
     private Predicate<RequestNode> getNavigateFilter(String url, HttpMethod httpMethod) {

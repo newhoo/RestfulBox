@@ -60,6 +60,7 @@ import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -176,6 +177,8 @@ public class RestServiceClient extends JPanel implements DataProvider {
             requestConfigEditor = createEditor("Config", PlainTextLanguage.INSTANCE, null, project);
             tabbedPane.addTab("Config", requestConfigEditor.getComponent());
             requestConfigEditor.getComponent().setBorder(BorderFactory.createEmptyBorder());
+            // 默认显示
+            setConfig(Collections.singletonList(new KV(PROTOCOL, PROTOCOL_HTTP)));
         });
         AppUIUtil.invokeOnEdt(() -> {
             requestHeaderEditor = createEditor("Headers", PlainTextLanguage.INSTANCE, null, project);

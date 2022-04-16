@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2.0.5
+
+- Add icon for springmvc mapping methods. Enable [Jump to tree using method line marker] in the setting.
+- Remove jump to tree intention.
+
+
+- 添加图标，支持springmvc方法快速生成请求，在设置中启用【Jump to tree using method line marker】
+- 移除上下文菜单中的跳转到树窗口
+
+![](https://s3.bmp.ovh/imgs/2022/04/10/3481cea48dae9d12.png)
+
+
 ## 2.0.4
 
 - Optimize details.

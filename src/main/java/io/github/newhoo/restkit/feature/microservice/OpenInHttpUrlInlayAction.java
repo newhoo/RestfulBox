@@ -67,11 +67,6 @@ public class OpenInHttpUrlInlayAction implements UrlPathInlayAction {
 
     @Override
     public boolean isAvailable(@NotNull PsiFile psiFile, @NotNull UrlPathContext urlPathContext) {
-        for (UrlResolveRequest next : urlPathContext.getResolveRequests()) {
-            if (next.getMethod() != null) {
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
 }
