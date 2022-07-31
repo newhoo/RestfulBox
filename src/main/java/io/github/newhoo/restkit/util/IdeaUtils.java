@@ -162,6 +162,8 @@ public class IdeaUtils {
         if (editor == null) {
             return;
         }
+        // FIX: Wrong line separators: '... 2.0//EN\">\r\n<html>\r\n...'
+        text = StringUtils.replace(text, "\r\n", "\n");
         if (StringUtils.endsWith(text, "\n")) {
             text = text.substring(0, text.length() - 1);
         }

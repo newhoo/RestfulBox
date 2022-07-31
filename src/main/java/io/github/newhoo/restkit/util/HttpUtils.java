@@ -93,11 +93,12 @@ public class HttpUtils {
             // unicode 转码
             result = org.apache.commons.lang.StringEscapeUtils.unescapeJava(result);
 
-            long cost = System.currentTimeMillis() - startTs;
-            return new RequestInfo(req, new io.github.newhoo.restkit.restful.http.HttpResponse(response, result), hostAddress, cost);
+            return new RequestInfo(req, new io.github.newhoo.restkit.restful.http.HttpResponse(response, result), hostAddress, (System.currentTimeMillis() - startTs));
         } catch (Exception e) {
             final String errMsg = "There was an error accessing to URL: " + req.getUrl() + "\n\n" + e.toString();
-            return new RequestInfo(req, errMsg);
+            RequestInfo requestInfo = new RequestInfo(req, errMsg);
+            requestInfo.setCost(System.currentTimeMillis() - startTs);
+            return requestInfo;
         }
     }
 

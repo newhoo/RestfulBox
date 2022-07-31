@@ -40,6 +40,10 @@ public class HttpClient implements RestClient {
     @Override
     public List<KV> getConfig(@NotNull RestItem restItem, @NotNull Project project) {
         int timeout = CommonSettingComponent.getInstance(project).getState().getRequestTimeout();
+        // 默认最大设置60s
+        if (timeout <= 0) {
+            timeout = 60000;
+        }
         return Arrays.asList(
                 new KV("baseUrl", "{{baseUrl}}"),
                 new KV("timeout", String.valueOf(timeout))

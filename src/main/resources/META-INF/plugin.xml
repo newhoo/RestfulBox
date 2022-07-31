@@ -34,6 +34,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+        2.0.6
+        <ul>
+            <li>fix bugs with 2022.2.</li>
+        </ul>
+
         2.0.5
         <ul>
             <li>Add icon for springmvc mapping methods. Enable [Jump to tree using method line marker] in the setting.</li>

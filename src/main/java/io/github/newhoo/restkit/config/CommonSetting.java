@@ -31,7 +31,7 @@ public class CommonSetting {
     private boolean displayApiGroupUsingFileName = false;
     private boolean displayTreeListUsingApiDesc = false;
     private boolean enableParameterLibrary = true;
-    private boolean enableMethodLineMarker = false;
+    private boolean enableMethodLineMarker = true;
     private String preRequestScriptPath = "";
     private String postRequestScriptPath = "";
     private String apiFilePath = "";
