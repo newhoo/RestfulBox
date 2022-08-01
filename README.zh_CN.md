@@ -45,9 +45,13 @@
 
 - **本地安装**
 
-从仓库下载<kbd>distributions/RESTKit-x.x.x.zip</kbd>, 然后在本地Idea安装 <kbd>Preferences(Settings)</kbd> > <kbd>Plugins</kbd> > <kbd>Install Plugin from Disk...</kbd>
+从仓库下载<kbd>RESTKit-x.x.x.zip</kbd>, 然后在本地Idea安装 <kbd>Preferences(Settings)</kbd> > <kbd>Plugins</kbd> > <kbd>Install Plugin from Disk...</kbd>
 
 由于idea兼容性问题，强烈建议从插件市场选择合适的版本下载进行安装。
+
+- **源码编译安装**
+
+下载源码，在项目根目录下执行 `./gradlew buildPlugin`，完成后找到 `{project}/build/distributions/RESTKit-x.x.x.zip`
 
 ## 使用
 

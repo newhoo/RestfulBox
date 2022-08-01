@@ -46,7 +46,11 @@ Recommended <kbd>Preferences(Settings)</kbd> > <kbd>Plugins</kbd> > <kbd>Browse 
 
 - **Local Install**
 
-Download plugin form <kbd>distributions/RESTKit-x.x.x.zip</kbd>, then <kbd>Preferences(Settings)</kbd> > <kbd>Plugins</kbd> > <kbd>Install Plugin from Disk...</kbd>
+Download plugin form <kbd>RESTKit-x.x.x.zip</kbd>, then <kbd>Preferences(Settings)</kbd> > <kbd>Plugins</kbd> > <kbd>Install Plugin from Disk...</kbd>
+
+- **Source Compile**
+
+Download source, go to source dir, run `./gradlew buildPlugin`. After this, you can find `{project}/build/distributions/RESTKit-x.x.x.zip`
 
 ## Usage
 
