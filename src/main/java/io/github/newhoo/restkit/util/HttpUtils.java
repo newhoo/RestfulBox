@@ -1,5 +1,6 @@
 package io.github.newhoo.restkit.util;
 
+import com.intellij.openapi.diagnostic.Logger;
 import io.github.newhoo.restkit.common.HttpMethod;
 import io.github.newhoo.restkit.common.RequestInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,7 @@ import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.conn.ManagedHttpClientConnection;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -36,20 +38,21 @@ import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.security.*;
-import java.security.cert.CertificateException;
+import java.security.KeyStore;
+import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.Map;
 
 public class HttpUtils {
+    public static final Logger LOG = Logger.getInstance(HttpUtils.class);
 
     private static final String HTTP_HOSTADDRESS = "http.hostAddress";
 
@@ -148,13 +151,13 @@ public class HttpUtils {
         int requestTimeout = (int) Double.parseDouble(timeout);
         if (requestTimeout > 0) {
             RequestConfig requestConfig = RequestConfig.custom()
-                    // 从连接池中获取连接的超时时间
-                    .setConnectionRequestTimeout(requestTimeout)
-                    // 与服务器连接超时时间：httpclient会创建一个异步线程用以创建socket连接，此处设置该socket的连接超时时间
-                    .setConnectTimeout(requestTimeout)
-                    // 请求获取数据的超时时间(即响应时间)，单位毫秒。 如果访问一个接口，多少时间内无法返回数据，就直接放弃此次调用。
-                    .setSocketTimeout(requestTimeout)
-                    .build();
+                                                       // 从连接池中获取连接的超时时间
+                                                       .setConnectionRequestTimeout(requestTimeout)
+                                                       // 与服务器连接超时时间：httpclient会创建一个异步线程用以创建socket连接，此处设置该socket的连接超时时间
+                                                       .setConnectTimeout(requestTimeout)
+                                                       // 请求获取数据的超时时间(即响应时间)，单位毫秒。 如果访问一个接口，多少时间内无法返回数据，就直接放弃此次调用。
+                                                       .setSocketTimeout(requestTimeout)
+                                                       .build();
             request.setConfig(requestConfig);
         }
         req.setOriginal(request);
@@ -182,7 +185,7 @@ public class HttpUtils {
 
     private static CloseableHttpClient createHttpClient(io.github.newhoo.restkit.restful.http.HttpRequest req) {
         HttpClientBuilder builder = HttpClients.custom()
-                .setRequestExecutor(getHttpRequestExecutor());
+                                               .setRequestExecutor(getHttpRequestExecutor());
         SSLConnectionSocketFactory socketFactory = null;
         if (req.getUrl().startsWith("https://")) {
             String p12Path = StringUtils.defaultString(req.getConfig().get("p12Path"));
@@ -205,17 +208,18 @@ public class HttpUtils {
 
     private static SSLConnectionSocketFactory getOnewaySSLFactory() {
         try {
-            // https信任所有
-            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (chain, authType) -> true).build();
+            // 初始化 SSLContext, 信任所有
+            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build();
             return new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
         } catch (Exception e) {
+            LOG.error("单项认证配置异常: " + e);
             e.printStackTrace();
         }
         return null;
     }
 
     private static SSLConnectionSocketFactory getTwowaySSLFactory(String p12Path, String passwd) {
-        try (InputStream inputStream = HttpUtils.class.getResourceAsStream(p12Path)) {
+        try (InputStream inputStream = new FileInputStream(p12Path)) {
             // 加载 keyStore
             KeyStore keyStore = KeyStore.getInstance("PKCS12");
             keyStore.load(inputStream, passwd.toCharArray());
@@ -224,91 +228,33 @@ public class HttpUtils {
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             kmf.init(keyStore, passwd.toCharArray());
 
-            // 创建信任链管理器
-            String defaultAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(defaultAlgorithm);
-            tmf.init(keyStore);
+            // 创建信任链管理器, 信任所有
+            TrustManager tm = new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(X509Certificate[] chain, String authType) {
+                }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] chain, String authType) {
+                }
+
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+            };
 
             // 初始化 SSLContext
             SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+            sslContext.init(kmf.getKeyManagers(), new TrustManager[]{tm}, null);
 
             return new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
         } catch (Exception e) {
+            LOG.error("双向认证配置异常: " + e);
             e.printStackTrace();
         }
         return null;
     }
-
-//    /**
-//     * 创建SSLSocketFactory实例
-//     *
-//     * @return
-//     * @throws CertificateException
-//     * @throws NoSuchAlgorithmException
-//     * @throws KeyStoreException
-//     * @throws IOException
-//     * @throws KeyManagementException
-//     * @throws UnrecoverableKeyException
-//     */
-//    private static SSLConnectionSocketFactory getSocketFactory()
-//            throws CertificateException, NoSuchAlgorithmException, KeyStoreException,
-//            IOException, KeyManagementException, UnrecoverableKeyException {
-//        // 初始化密钥库
-//        KeyManagerFactory keyManagerFactory = KeyManagerFactory
-//                .getInstance("SunX509");
-//        KeyStore keyStore = getKeyStore(CLIENT_CERT_FILE, CLIENT_PWD, "PKCS12");
-//        keyManagerFactory.init(keyStore, CLIENT_PWD.toCharArray());
-//        // 初始化信任库
-//        KeyStore trustKeyStore = getKeyStore(TRUST_STRORE_FILE, TRUST_STORE_PWD, "JKS");
-//        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-//        trustManagerFactory.init(trustKeyStore);
-//        // 加载协议
-//        SSLContext sslContext = SSLContext.getInstance("SSL");
-//        sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);
-//        //return new SSLConnectionSocketFactory(sslContext);
-//        SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(
-//                sslContext,
-//                NoopHostnameVerifier.INSTANCE);
-//
-//        return sslConnectionSocketFactory;
-//    }
-//
-//    private static SSLSocketFactory sslSocketFactory() {
-//        try (InputStream inputStream = HttpUtils.class.getResourceAsStream("/certs/client.p12")) {
-//            // 加载 keyStore
-//            KeyStore keyStore = KeyStore.getInstance("PKCS12");
-//            keyStore.load(inputStream, "111111".toCharArray());
-//
-//            // 创建密钥管理器
-//            KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-//            kmf.init(keyStore, "111111".toCharArray());
-//
-//            // 创建信任链管理器
-//            String defaultAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-//            TrustManagerFactory tmf = TrustManagerFactory.getInstance(defaultAlgorithm);
-//            tmf.init(keyStore);
-//
-//            // 初始化 SSLContext
-//            SSLContext sslContext = SSLContext.getInstance("TLS");
-//            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
-//
-//            return sslContext.getSocketFactory();
-//        } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException | UnrecoverableKeyException | IOException | CertificateException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    private static KeyStore getKeyStore(String keyStorePath, String password, String type)
-//            throws KeyStoreException, CertificateException, IOException, NoSuchAlgorithmException {
-//        // 获取证书
-//        FileInputStream inputStream = new FileInputStream(keyStorePath);
-//        // 秘钥仓库
-//        KeyStore keyStore = KeyStore.getInstance(type);
-//        keyStore.load(inputStream, password.toCharArray());
-//        inputStream.close();
-//        return keyStore;
-//    }
 
     private static class MyHttpDelete extends HttpEntityEnclosingRequestBase {
 

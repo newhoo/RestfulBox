@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
 import io.github.newhoo.restkit.common.RestClientApiInfo;
 import io.github.newhoo.restkit.common.RestDataKey;
+import io.github.newhoo.restkit.config.Environment;
 import io.github.newhoo.restkit.util.EnvironmentUtils;
 import io.github.newhoo.restkit.util.IdeaUtils;
 import io.github.newhoo.restkit.util.NotifierUtils;
@@ -72,9 +73,17 @@ public class CopyCurlAction extends AnAction {
         }
         sb.append(url);
         if (url.startsWith("https://")) {
-            sb.append(" -k");
-        }
+            Environment environment = Environment.getInstance(project);
+            Map<String, String> env = environment.getCurrentEnabledEnvMap();
 
+            // TODO huzunrong, 2022/8/2 23:28 []
+//            EnvironmentUtils.handlePlaceholderVariable()
+            sb.append(" -k");
+            sb.append(" --cert-type P12 --cert ")
+              .append(env.getOrDefault("p12Path", "p12Path"))
+              .append(":")
+              .append(env.getOrDefault("p12Passwd", "p12Passwd"));
+        }
 
         IdeaUtils.copyToClipboard(sb.toString());
         NotifierUtils.infoBalloon("", "Curl copied to clipboard successfully.", null, e.getRequiredData(CommonDataKeys.PROJECT));

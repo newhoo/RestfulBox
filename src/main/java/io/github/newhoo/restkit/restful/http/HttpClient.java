@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
@@ -46,27 +47,37 @@ public class HttpClient implements RestClient {
         }
         return Arrays.asList(
                 new KV("baseUrl", "{{baseUrl}}"),
-                new KV("timeout", String.valueOf(timeout))
+                new KV("timeout", String.valueOf(timeout)),
+                new KV("p12Path", "{{p12Path}}"),
+                new KV("p12Passwd", "{{p12Passwd}}")
         );
     }
 
     @NotNull
     @Override
     public Request createRequest(RestClientData restClientData, Project project) {
+        Map<String, String> config = restClientData.getConfig();
         String url = StringUtils.defaultString(restClientData.getUrl());
         if (!url.contains("://")) {
             if (!url.startsWith("/")) {
                 url = "/" + url;
             }
-            url = StringUtils.defaultIfEmpty(restClientData.getConfig().get("baseUrl"), "http://localhost:8080") + url;
+            url = StringUtils.defaultIfEmpty(config.get("baseUrl"), "http://localhost:8080") + url;
             // 环境变量未设置【baseUrl】时强行替换为localhost:8080
             url = url.replace("{{baseUrl}}", "http://localhost:8080");
+        }
+        // 移除未设置的证书
+        if ("{{p12Path}}".equals(config.get("p12Path"))) {
+            config.remove("p12Path");
+        }
+        if ("{{p12Passwd}}".equals(config.get("p12Passwd"))) {
+            config.remove("p12Passwd");
         }
 
         HttpRequest request = new HttpRequest();
         request.setUrl(url);
         request.setMethod(restClientData.getMethod());
-        request.setConfig(restClientData.getConfig());
+        request.setConfig(config);
         request.setHeaders(restClientData.getHeaders());
         request.setParams(restClientData.getParams());
         request.setBody(restClientData.getBody());
