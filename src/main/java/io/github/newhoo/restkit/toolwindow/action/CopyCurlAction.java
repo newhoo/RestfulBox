@@ -71,6 +71,10 @@ public class CopyCurlAction extends AnAction {
 //            url += url.contains("?") ? "&" + params : "?" + params;
         }
         sb.append(url);
+        if (url.startsWith("https://")) {
+            sb.append(" -k");
+        }
+
 
         IdeaUtils.copyToClipboard(sb.toString());
         NotifierUtils.infoBalloon("", "Curl copied to clipboard successfully.", null, e.getRequiredData(CommonDataKeys.PROJECT));

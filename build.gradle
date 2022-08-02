@@ -27,6 +27,6 @@ intellij {
     pluginName 'RESTKit'
     updateSinceUntilBuild false
     downloadSources = true
-    plugins = ['java', 'kotlin']
+    plugins = ['java', 'Kotlin']
     sandboxDirectory = "${rootProject.rootDir}/idea-sandbox"
 }
