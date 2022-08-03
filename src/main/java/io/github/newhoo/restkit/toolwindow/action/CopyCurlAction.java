@@ -2,7 +2,6 @@ package io.github.newhoo.restkit.toolwindow.action;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
 import io.github.newhoo.restkit.common.RestClientApiInfo;
 import io.github.newhoo.restkit.common.RestDataKey;
@@ -73,19 +72,21 @@ public class CopyCurlAction extends AnAction {
         }
         sb.append(url);
         if (url.startsWith("https://")) {
-            Environment environment = Environment.getInstance(project);
-            Map<String, String> env = environment.getCurrentEnabledEnvMap();
-
-            // TODO huzunrong, 2022/8/2 23:28 []
-//            EnvironmentUtils.handlePlaceholderVariable()
             sb.append(" -k");
-            sb.append(" --cert-type P12 --cert ")
-              .append(env.getOrDefault("p12Path", "p12Path"))
-              .append(":")
-              .append(env.getOrDefault("p12Passwd", "p12Passwd"));
+
+            Map<String, String> env = Environment.getInstance(project).getCurrentEnabledEnvMap();
+            String p12Path = env.get("p12Path");
+            String p12Passwd = env.get("p12Passwd");
+            // 双向认证
+            if (!StringUtils.isAnyEmpty(p12Path, p12Passwd)) {
+                p12Path = EnvironmentUtils.handlePlaceholderVariable(p12Path, project);
+                p12Passwd = EnvironmentUtils.handlePlaceholderVariable(p12Passwd, project);
+
+                sb.append(" --cert-type P12 --cert ").append(p12Path).append(":").append(p12Passwd);
+            }
         }
 
         IdeaUtils.copyToClipboard(sb.toString());
-        NotifierUtils.infoBalloon("", "Curl copied to clipboard successfully.", null, e.getRequiredData(CommonDataKeys.PROJECT));
+        NotifierUtils.infoBalloon("", "Curl copied to clipboard successfully.", null, project);
     }
 }

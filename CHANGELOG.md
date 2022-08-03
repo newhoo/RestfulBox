@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2.0.6
+
+- fix bugs with 2022.2
+
+
 ## 2.0.5
 
 - Add icon for springmvc mapping methods. Enable [Jump to tree using method line marker] in the setting.

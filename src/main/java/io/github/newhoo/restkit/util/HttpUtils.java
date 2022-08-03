@@ -213,7 +213,6 @@ public class HttpUtils {
             return new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
         } catch (Exception e) {
             LOG.error("单项认证配置异常: " + e);
-            e.printStackTrace();
         }
         return null;
     }
@@ -251,7 +250,6 @@ public class HttpUtils {
             return new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
         } catch (Exception e) {
             LOG.error("双向认证配置异常: " + e);
-            e.printStackTrace();
         }
         return null;
     }
