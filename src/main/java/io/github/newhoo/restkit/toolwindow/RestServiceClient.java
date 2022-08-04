@@ -174,34 +174,34 @@ public class RestServiceClient extends JPanel implements DataProvider {
         tabbedPane = new JBTabbedPane();
 
         AppUIUtil.invokeOnEdt(() -> {
-            requestConfigEditor = createEditor("Config", PlainTextLanguage.INSTANCE, null, project);
+            requestConfigEditor = createEditor("Config", PlainTextLanguage.INSTANCE, null, "RESTKit.EditorContextMenu.ConfigTab", project);
             tabbedPane.addTab("Config", requestConfigEditor.getComponent());
             requestConfigEditor.getComponent().setBorder(BorderFactory.createEmptyBorder());
             // 默认显示
             setConfig(Collections.singletonList(new KV(PROTOCOL, PROTOCOL_HTTP)));
         });
         AppUIUtil.invokeOnEdt(() -> {
-            requestHeaderEditor = createEditor("Headers", PlainTextLanguage.INSTANCE, null, project);
+            requestHeaderEditor = createEditor("Headers", PlainTextLanguage.INSTANCE, null, "RESTKit.EditorContextMenu", project);
             tabbedPane.addTab("Headers", requestHeaderEditor.getComponent());
             requestHeaderEditor.getComponent().setBorder(BorderFactory.createEmptyBorder());
         });
         AppUIUtil.invokeOnEdt(() -> {
-            requestParamEditor = createEditor("Params", PlainTextLanguage.INSTANCE, null, project);
+            requestParamEditor = createEditor("Params", PlainTextLanguage.INSTANCE, null, "RESTKit.EditorContextMenu", project);
             tabbedPane.addTab("Params", requestParamEditor.getComponent());
             requestParamEditor.getComponent().setBorder(BorderFactory.createEmptyBorder());
         });
         AppUIUtil.invokeOnEdt(() -> {
-            requestBodyEditor = createEditor("Body", JsonLanguage.INSTANCE, null, project);
+            requestBodyEditor = createEditor("Body", JsonLanguage.INSTANCE, null, "RESTKit.EditorContextMenu", project);
             tabbedPane.addTab("Body", requestBodyEditor.getComponent());
             requestBodyEditor.getComponent().setBorder(BorderFactory.createEmptyBorder());
         });
         AppUIUtil.invokeOnEdt(() -> {
-            responseEditor = createEditor("Response", JsonLanguage.INSTANCE, null, project);
+            responseEditor = createEditor("Response", JsonLanguage.INSTANCE, null, "RESTKit.EditorContextMenu", project);
             tabbedPane.addTab("Response", responseEditor.getComponent());
             responseEditor.getComponent().setBorder(BorderFactory.createEmptyBorder());
         });
         AppUIUtil.invokeOnEdt(() -> {
-            infoEditor = createEditor("Info", PlainTextLanguage.INSTANCE, null, project);
+            infoEditor = createEditor("Info", PlainTextLanguage.INSTANCE, null, "RESTKit.EditorContextMenu", project);
             tabbedPane.addTab("Info", infoEditor.getComponent());
             infoEditor.getComponent().setBorder(BorderFactory.createEmptyBorder());
         });
@@ -479,6 +479,7 @@ public class RestServiceClient extends JPanel implements DataProvider {
             restClientApiInfo.setHeaders(getEditorText(requestHeaderEditor));
             restClientApiInfo.setParams(getEditorText(requestParamEditor));
             restClientApiInfo.setBodyJson(getEditorText(requestBodyEditor));
+            restClientApiInfo.setConfig(getEditorText(requestConfigEditor));
             return restClientApiInfo;
         }
         return null;

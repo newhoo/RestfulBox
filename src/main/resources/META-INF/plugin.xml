@@ -237,6 +237,12 @@
             <action id="Menu.CopyCurlAction" class="io.github.newhoo.restkit.toolwindow.action.CopyCurlAction" text="Copy as Curl" icon="AllIcons.Actions.Copy"/>
             <reference id="BasicEditorPopupMenu"/>
         </group>
+        <group id="RESTKit.EditorContextMenu.ConfigTab">
+            <reference id="Menu.SaveLocalApiAction"/>
+            <reference id="Menu.CopyCurlAction"/>
+            <action id="Menu.P12GenerateAction" class="io.github.newhoo.restkit.toolwindow.action.editor.P12GenerateAction" text="Add P12 Cert" icon="AllIcons.General.Add"/>
+            <reference id="BasicEditorPopupMenu"/>
+        </group>
     </actions>
 
 </idea-plugin>

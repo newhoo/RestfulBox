@@ -113,7 +113,7 @@ public class IdeaUtils {
                 || ApplicationManager.getApplication().isHeadlessEnvironment());
     }
 
-    public static FileEditor createEditor(String filename, Language language, String text, Project project) {
+    public static FileEditor createEditor(String filename, Language language, String text, String menuGroupId, Project project) {
         if (StringUtils.isEmpty(text)) {
             text = "";
         }
@@ -130,9 +130,9 @@ public class IdeaUtils {
             EditorSettings settings = editor.getSettings();
             settings.setGutterIconsShown(false);
 
-            if (editor instanceof EditorEx) {
+            if (StringUtils.isNotEmpty(menuGroupId) && editor instanceof EditorEx) {
                 // IdeActions.GROUP_BASIC_EDITOR_POPUP
-                ((EditorEx) editor).setContextMenuGroupId("RESTKit.EditorContextMenu");
+                ((EditorEx) editor).setContextMenuGroupId(menuGroupId);
             }
         }
         Disposer.register(project, fileEditor);

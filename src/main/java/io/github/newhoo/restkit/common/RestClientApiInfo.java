@@ -39,4 +39,15 @@ public class RestClientApiInfo {
      * Request body json
      */
     private String bodyJson;
+
+    /**
+     * Request config list
+     * <p>
+     * 格式：英文冒号分割
+     * <pre>
+     *     key1: value1
+     *     key2: value2
+     * </pre>
+     */
+    private String config;
 }

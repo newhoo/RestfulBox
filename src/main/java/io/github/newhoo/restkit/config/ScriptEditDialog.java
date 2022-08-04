@@ -60,7 +60,7 @@ public class ScriptEditDialog extends DialogWrapper {
         Language language = project.isDefault()
                 ? PlainTextLanguage.INSTANCE
                 : ObjectUtils.defaultIfNull(Language.findLanguageByID("JAVA"), PlainTextLanguage.INSTANCE);
-        scriptEditor = createEditor("RestKitScript.java", language, scriptText, project);
+        scriptEditor = createEditor("RestKitScript.java", language, scriptText, "BasicEditorPopupMenu", project);
         contentPanel.add(scriptEditor.getComponent(),
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_GROW | GridConstraints.SIZEPOLICY_CAN_SHRINK,

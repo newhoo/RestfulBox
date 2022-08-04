@@ -7,6 +7,7 @@ import io.github.newhoo.restkit.common.RequestInfo;
 import io.github.newhoo.restkit.common.RestClientData;
 import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
+import io.github.newhoo.restkit.config.Environment;
 import io.github.newhoo.restkit.restful.RestClient;
 import io.github.newhoo.restkit.restful.ep.RestClientProvider;
 import io.github.newhoo.restkit.util.HttpUtils;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,12 +47,19 @@ public class HttpClient implements RestClient {
         if (timeout <= 0) {
             timeout = 60000;
         }
-        return Arrays.asList(
-                new KV("baseUrl", "{{baseUrl}}"),
-                new KV("timeout", String.valueOf(timeout)),
-                new KV("p12Path", "{{p12Path}}"),
-                new KV("p12Passwd", "{{p12Passwd}}")
-        );
+        List<KV> list = new LinkedList<>();
+        list.add(new KV("baseUrl", "{{baseUrl}}"));
+        list.add(new KV("timeout", String.valueOf(timeout)));
+
+        Map<String, String> env = Environment.getInstance(project).getCurrentEnabledEnvMap();
+        String p12Path = env.get("p12Path");
+        String p12Passwd = env.get("p12Passwd");
+        // 双向认证
+        if (!StringUtils.isAnyEmpty(p12Path, p12Passwd)) {
+            list.add(new KV("p12Path", "{{p12Path}}"));
+            list.add(new KV("p12Passwd", "{{p12Passwd}}"));
+        }
+        return list;
     }
 
     @NotNull

@@ -5,16 +5,18 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import io.github.newhoo.restkit.common.RestClientApiInfo;
 import io.github.newhoo.restkit.common.RestDataKey;
-import io.github.newhoo.restkit.config.Environment;
 import io.github.newhoo.restkit.util.EnvironmentUtils;
 import io.github.newhoo.restkit.util.IdeaUtils;
 import io.github.newhoo.restkit.util.NotifierUtils;
 import io.github.newhoo.restkit.util.ToolkitUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 import static io.github.newhoo.restkit.common.RestConstant.PLACEHOLDER_BASE_URL;
+import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL;
+import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
 
 /**
  * CopyCurlAction
@@ -23,6 +25,20 @@ import static io.github.newhoo.restkit.common.RestConstant.PLACEHOLDER_BASE_URL;
  * @since 2.0.1
  */
 public class CopyCurlAction extends AnAction {
+
+    @Override
+    public void update(@NotNull AnActionEvent e) {
+        Project project = e.getProject();
+        RestClientApiInfo apiInfo = RestDataKey.CLIENT_API_INFO.getData(e.getDataContext());
+        if (project == null || apiInfo == null) {
+            e.getPresentation().setVisible(false);
+            return;
+        }
+        Map<String, String> configMap = ToolkitUtil.textToModifiableMap(apiInfo.getConfig());
+        if (configMap.containsKey(PROTOCOL) && !PROTOCOL_HTTP.equals(configMap.get(PROTOCOL))) {
+            e.getPresentation().setVisible(false);
+        }
+    }
 
     @Override
     public void actionPerformed(AnActionEvent e) {
@@ -74,14 +90,11 @@ public class CopyCurlAction extends AnAction {
         if (url.startsWith("https://")) {
             sb.append(" -k");
 
-            Map<String, String> env = Environment.getInstance(project).getCurrentEnabledEnvMap();
-            String p12Path = env.get("p12Path");
-            String p12Passwd = env.get("p12Passwd");
+            Map<String, String> configMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(apiInfo.getConfig(), project));
+            String p12Path = configMap.get("p12Path");
+            String p12Passwd = configMap.get("p12Passwd");
             // 双向认证
             if (!StringUtils.isAnyEmpty(p12Path, p12Passwd)) {
-                p12Path = EnvironmentUtils.handlePlaceholderVariable(p12Path, project);
-                p12Passwd = EnvironmentUtils.handlePlaceholderVariable(p12Passwd, project);
-
                 sb.append(" --cert-type P12 --cert ").append(p12Path).append(":").append(p12Passwd);
             }
         }
