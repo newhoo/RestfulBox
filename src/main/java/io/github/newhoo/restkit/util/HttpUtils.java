@@ -28,9 +28,12 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestExecutor;
 import org.apache.http.ssl.SSLContextBuilder;
@@ -40,6 +43,7 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,8 +52,13 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_PREFIX;
 
 public class HttpUtils {
     public static final Logger LOG = Logger.getInstance(HttpUtils.class);
@@ -60,23 +69,6 @@ public class HttpUtils {
         if (req.getMethod() == null || HttpMethod.getByRequestMethod(req.getMethod()) == HttpMethod.UNDEFINED) {
             return new RequestInfo(req, "http method is null");
         }
-
-        String url = req.getUrl();
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            url = "http://" + url;
-        }
-        Map<String, String> paramMap = req.getParams();
-        if (!paramMap.isEmpty()) {
-            // 替换URL 路径参数
-            for (String key : paramMap.keySet()) {
-                url = url.replaceFirst("\\{(" + key + "[\\s\\S]*?)}", StringUtils.defaultString(paramMap.get(key)));
-            }
-            String params = ToolkitUtil.getRequestParam(paramMap);
-            // URL可能包含了参数
-            url += url.contains("?") ? "&" + params : "?" + params;
-        }
-
-        req.setUrl(url);
 
         return doRequest(req);
     }
@@ -113,9 +105,53 @@ public class HttpUtils {
     }
 
     private static HttpRequestBase getRequest(io.github.newhoo.restkit.restful.http.HttpRequest req) {
-        HttpRequestBase request;
         HttpMethod httpMethod = HttpMethod.nameOf(req.getMethod());
+
         String url = req.getUrl();
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "http://" + url;
+        }
+        // 自带的query参数编码
+        if (url.contains("?")) {
+            String[] split = StringUtils.split(url, "?", 2);
+            url = split[0] + "?" + ToolkitUtil.encodeQueryParam(split[1]);
+        }
+
+        Map<String, String> paramMap = req.getParams();
+        // file params
+        Map<String, String> fileParamsMap = paramMap.entrySet()
+                                                    .stream()
+                                                    .filter(entry -> StringUtils.startsWith(entry.getValue(), HTTP_FILE_PREFIX))
+                                                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        // path variables
+        Set<String> pathVariables = new HashSet<>(4);
+        // 替换URL
+        if (url.contains("{") && url.contains("}") && !paramMap.isEmpty()) {
+            for (Map.Entry<String, String> entry : paramMap.entrySet()) {
+                String placeholder = "{" + entry.getKey() + "}";
+                if (StringUtils.isNotEmpty(entry.getValue()) && !fileParamsMap.containsKey(entry.getKey()) && url.contains(placeholder)) {
+                    pathVariables.add(entry.getKey());
+                    url = url.replace(placeholder, entry.getValue());
+//                    url = url.replaceFirst("\\{(" + key + "[\\s\\S]*?)}", v);
+                }
+            }
+        }
+        // query/form params
+        Map<String, String> queryOrFormParamsMap = paramMap.entrySet()
+                                                           .stream()
+                                                           .filter(entry -> !fileParamsMap.containsKey(entry.getKey()))
+                                                           .filter(entry -> !pathVariables.contains(entry.getKey()))
+                                                           .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        // query params
+        if (HttpMethod.GET == httpMethod || StringUtils.isNotEmpty(req.getBody())) {
+            if (!queryOrFormParamsMap.isEmpty()) {
+                String params = ToolkitUtil.getRequestParam(queryOrFormParamsMap);
+                // URL可能包含了参数
+                url += url.contains("?") ? "&" + params : "?" + params;
+            }
+        }
+
+        HttpRequestBase request;
         switch (httpMethod) {
             case GET:
                 request = new HttpGet(url);
@@ -141,13 +177,45 @@ public class HttpUtils {
 
         req.getHeaders().forEach(request::addHeader);
         if (request instanceof HttpEntityEnclosingRequest) {
-            HttpEntity httpEntity = StringUtils.isBlank(req.getBody())
-                    ? new UrlEncodedFormEntity(Collections.emptyList(), StandardCharsets.UTF_8)
-                    : new StringEntity(req.getBody(), ContentType.APPLICATION_JSON);
-            ((HttpEntityEnclosingRequest) request).setEntity(httpEntity);
+            if (StringUtils.isNotEmpty(req.getBody())) {
+                StringEntity httpEntity = new StringEntity(req.getBody(), ContentType.APPLICATION_JSON);
+                ((HttpEntityEnclosingRequest) request).setEntity(httpEntity);
+            } else {
+                // form params: Content-Type: application/x-www-form-urlencoded
+                if (fileParamsMap.isEmpty()) {
+                    List<BasicNameValuePair> nameValuePairList = queryOrFormParamsMap.entrySet()
+                                                                                     .stream()
+                                                                                     .map(entry -> new BasicNameValuePair(entry.getKey(), entry.getValue()))
+                                                                                     .collect(Collectors.toList());
+                    HttpEntity httpEntity = new UrlEncodedFormEntity(nameValuePairList, StandardCharsets.UTF_8);
+                    ((HttpEntityEnclosingRequest) request).setEntity(httpEntity);
+                } else {
+                    // form params: Content-Type: multipart/form-data; boundary=------------------------75a1b524af201d5c
+                    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+                    builder.setCharset(StandardCharsets.UTF_8);
+                    // 和curl/postman一样，only write Content-Disposition; use content charset
+                    builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+                    // add form parameter，中文乱码
+                    ContentType contentType = ContentType.TEXT_PLAIN.withCharset(StandardCharsets.UTF_8);
+                    queryOrFormParamsMap.forEach((k, v) -> {
+                        builder.addTextBody(k, v, contentType);
+                    });
+
+                    // add file parameter
+                    fileParamsMap.forEach((k, v) -> {
+                        String filepath = ToolkitUtil.getUploadFilepath(v);
+                        File file = new File(filepath);
+                        builder.addBinaryBody(k, file);
+                    });
+
+                    HttpEntity httpEntity = builder.build();
+                    ((HttpEntityEnclosingRequest) request).setEntity(httpEntity);
+                }
+            }
         }
 
-        String timeout = StringUtils.defaultIfEmpty(req.getConfig().get("timeout"), "5000");
+        String timeout = StringUtils.defaultIfEmpty(req.getConfig().get("timeout"), "60000");
         int requestTimeout = (int) Double.parseDouble(timeout);
         if (requestTimeout > 0) {
             RequestConfig requestConfig = RequestConfig.custom()

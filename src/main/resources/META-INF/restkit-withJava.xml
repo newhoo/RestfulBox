@@ -5,6 +5,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <projectService serviceImplementation="io.github.newhoo.restkit.feature.javaimpl.config.FilterParamComponent"/>
+        <projectService serviceImplementation="io.github.newhoo.restkit.feature.javaimpl.config.FileParameterTypeComponent"/>
         <projectConfigurable instance="io.github.newhoo.restkit.feature.javaimpl.config.FilterParamConfigurable" parentId="RESTKit.SettingConfigurable"/>
         <codeInsight.lineMarkerProvider language="" implementationClass="io.github.newhoo.restkit.feature.javaimpl.linemarker.MappingLineMarkerProvider"/>
     </extensions>

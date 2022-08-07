@@ -1,14 +1,19 @@
 package io.github.newhoo.restkit.util;
 
+import com.intellij.openapi.util.text.Strings;
 import io.github.newhoo.restkit.common.KV;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_PREFIX;
 
 public class ToolkitUtil {
 
@@ -21,10 +26,50 @@ public class ToolkitUtil {
         List<String> params = new ArrayList<>();
 
         if (paramMap != null && paramMap.size() > 0) {
-            paramMap.forEach((k, v) -> params.add(k + "=" + v));
+            paramMap.entrySet()
+                    .stream()
+                    .filter(entry -> entry.getValue() == null || !entry.getValue().startsWith(HTTP_FILE_PREFIX))
+                    .forEach(entry -> {
+                        String k = encodeURLParam(entry.getKey());
+                        String v = encodeURLParam(entry.getValue());
+                        params.add(k + "=" + v);
+                    });
         }
 
         return String.join("&", params);
+    }
+
+    @NotNull
+    public static String encodeQueryParam(String queryParams) {
+        String[] split = StringUtils.split(queryParams, '&');
+        if (split == null) {
+            return queryParams;
+        }
+        List<String> encodeQueryParams = new ArrayList<>();
+        for (String pair : split) {
+            String[] kv = StringUtils.split(pair, "=", 2);
+            if (kv == null || kv.length <= 0) {
+                continue;
+            }
+            if (kv.length > 1) {
+                encodeQueryParams.add(encodeURLParam(kv[0]) + "=" + encodeURLParam(kv[1]));
+            } else {
+                encodeQueryParams.add(encodeURLParam(kv[0]) + "=");
+            }
+        }
+        if (!encodeQueryParams.isEmpty()) {
+            return Strings.join(encodeQueryParams, "&");
+        }
+        return queryParams;
+    }
+
+    @NotNull
+    public static String encodeURLParam(String s) {
+        try {
+            return URLEncoder.encode(s, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+        }
+        return s;
     }
 
     /**
@@ -84,5 +129,13 @@ public class ToolkitUtil {
             list.add(kv);
         }
         return list;
+    }
+
+    public static String getUploadFileDescriptor(String filepath) {
+        return "file@[" + filepath + "]";
+    }
+
+    public static String getUploadFilepath(String uploadFileDescriptor) {
+        return uploadFileDescriptor.substring(HTTP_FILE_PREFIX.length(), uploadFileDescriptor.length() - 1);
     }
 }

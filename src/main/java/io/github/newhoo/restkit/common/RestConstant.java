@@ -17,6 +17,9 @@ public class RestConstant {
     public static final String PROTOCOL = "protocol";
     public static final String PROTOCOL_HTTP = "http";
 
+    public static final String HTTP_FILE_PREFIX = "file@[";
+    public static final String HTTP_FILE_DEFAULT_DESCRIPTOR = "file@[filepath]";
+
     public static final String PRE_REQUEST_SCRIPT =
             "// You can use custom preset object request and environment, attributes are:\n" +
             "// \n" +

@@ -3,6 +3,7 @@ package io.github.newhoo.restkit.toolwindow.action;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
+import io.github.newhoo.restkit.common.HttpMethod;
 import io.github.newhoo.restkit.common.RestClientApiInfo;
 import io.github.newhoo.restkit.common.RestDataKey;
 import io.github.newhoo.restkit.util.EnvironmentUtils;
@@ -12,8 +13,12 @@ import io.github.newhoo.restkit.util.ToolkitUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_PREFIX;
 import static io.github.newhoo.restkit.common.RestConstant.PLACEHOLDER_BASE_URL;
 import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL;
 import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
@@ -47,23 +52,16 @@ public class CopyCurlAction extends AnAction {
         if (project == null || apiInfo == null) {
             return;
         }
-        StringBuilder sb = new StringBuilder();
-        sb.append("curl ");
+        HttpMethod httpMethod = apiInfo.getMethod();
+        if (httpMethod == null || httpMethod == HttpMethod.UNDEFINED) {
+            return;
+        }
 
         // header
         Map<String, String> headerMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(apiInfo.getHeaders(), project));
-
-        headerMap.forEach((k, v) -> {
-            sb.append("-H").append(" ").append("\"").append(k).append(": ").append(v).append("\"").append(" ");
-        });
-
-        String bodyJson = apiInfo.getBodyJson();
-        if (StringUtils.isNotEmpty(bodyJson)) {
-            sb.append("-H \"Content-Type: application/json;charset=UTF-8\" ");
-            sb.append("-d '").append(bodyJson).append("'").append(" ");
+        if (HttpMethod.GET != httpMethod && StringUtils.isNotEmpty(apiInfo.getBodyJson())) {
+            headerMap.putIfAbsent("Content-Type", "application/json;charset=UTF-8");
         }
-
-        sb.append("-X").append(" ").append(apiInfo.getMethod().name()).append(" ");
 
         String url = apiInfo.getUrl();
         if (!url.contains("://")) {
@@ -74,28 +72,86 @@ public class CopyCurlAction extends AnAction {
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
             url = "http://" + url;
         }
-        // param
-        Map<String, String> paramMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(apiInfo.getParams(), project));
-        if (!paramMap.isEmpty()) {
-            // 替换URL 路径参数
-            for (String key : paramMap.keySet()) {
-                url = url.replaceFirst("\\{(" + key + "[\\s\\S]*?)}", StringUtils.defaultString(paramMap.get(key)));
-                sb.append("-d '").append(key).append("=").append(paramMap.get(key)).append("'").append(" ");
-            }
-//            String params = ToolkitUtil.getRequestParam(paramMap);
-//            // URL可能包含了参数
-//            url += url.contains("?") ? "&" + params : "?" + params;
+        // 自带的query参数编码: todo curl要转义特殊字符
+        if (url.contains("?")) {
+            String[] split = StringUtils.split(url, "?", 2);
+            url = split[0] + "?" + ToolkitUtil.encodeQueryParam(split[1]);
         }
-        sb.append(url);
+
+        Map<String, String> paramMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(apiInfo.getParams(), project));
+        // file params
+        Map<String, String> fileParamsMap = paramMap.entrySet()
+                                                    .stream()
+                                                    .filter(entry -> StringUtils.startsWith(entry.getValue(), HTTP_FILE_PREFIX))
+                                                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        // path variables
+        Set<String> pathVariables = new HashSet<>(4);
+        // 替换URL
+        if (url.contains("{") && url.contains("}") && !paramMap.isEmpty()) {
+            for (Map.Entry<String, String> entry : paramMap.entrySet()) {
+                String placeholder = "{" + entry.getKey() + "}";
+                if (StringUtils.isNotEmpty(entry.getValue()) && !fileParamsMap.containsKey(entry.getKey()) && url.contains(placeholder)) {
+                    pathVariables.add(entry.getKey());
+                    url = url.replace(placeholder, entry.getValue());
+//                    url = url.replaceFirst("\\{(" + key + "[\\s\\S]*?)}", v);
+                }
+            }
+        }
+        // query/form params
+        Map<String, String> queryOrFormParamsMap = paramMap.entrySet()
+                                                           .stream()
+                                                           .filter(entry -> !fileParamsMap.containsKey(entry.getKey()))
+                                                           .filter(entry -> !pathVariables.contains(entry.getKey()))
+                                                           .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        // query params
+        if (HttpMethod.GET == httpMethod || StringUtils.isNotEmpty(apiInfo.getBodyJson())) {
+            fileParamsMap.clear();
+            if (!queryOrFormParamsMap.isEmpty()) {
+                String params = ToolkitUtil.getRequestParam(queryOrFormParamsMap);
+                // URL可能包含了参数: todo curl要转义特殊字符
+                url += url.contains("?") ? "&" + params : "?" + params;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("curl ");
+        sb.append("-X").append(" ").append(httpMethod.name()).append(" ");
+        sb.append(url).append(" ");
+
+        headerMap.forEach((k, v) -> {
+            sb.append("-H").append(" ").append("'").append(k).append(": ").append(v).append("'").append(" ");
+        });
+
+        if (HttpMethod.GET != httpMethod) {
+            if (StringUtils.isNotEmpty(apiInfo.getBodyJson())) {
+                sb.append("-d '").append(apiInfo.getBodyJson()).append("'").append(" ");
+            } else {
+                // form params: Content-Type: application/x-www-form-urlencoded
+                if (fileParamsMap.isEmpty()) {
+                    queryOrFormParamsMap.forEach((k, v) -> {
+                        sb.append("-d '").append(k).append("=").append(v).append("'").append(" ");
+                    });
+                } else {
+                    // form params: Content-Type: multipart/form-data; boundary=------------------------75a1b524af201d5c
+                    queryOrFormParamsMap.forEach((k, v) -> {
+                        sb.append("-F '").append(k).append("=").append(v).append("'").append(" ");
+                    });
+                    fileParamsMap.forEach((k, v) -> {
+                        sb.append("-F '").append(k).append("=@\"").append(ToolkitUtil.getUploadFilepath(v)).append("\"'").append(" ");
+                    });
+                }
+            }
+        }
+
         if (url.startsWith("https://")) {
-            sb.append(" -k");
+            sb.append("-k ");
 
             Map<String, String> configMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(apiInfo.getConfig(), project));
             String p12Path = configMap.get("p12Path");
             String p12Passwd = configMap.get("p12Passwd");
             // 双向认证
             if (!StringUtils.isAnyEmpty(p12Path, p12Passwd)) {
-                sb.append(" --cert-type P12 --cert ").append(p12Path).append(":").append(p12Passwd);
+                sb.append("--cert-type P12 --cert ").append(p12Path).append(":").append(p12Passwd);
             }
         }
 

@@ -18,6 +18,7 @@ import io.github.newhoo.restkit.common.PsiRestItem;
 import io.github.newhoo.restkit.common.RestItem;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.feature.javaimpl.MethodPath;
+import io.github.newhoo.restkit.feature.javaimpl.config.FileParameterTypeComponent;
 import io.github.newhoo.restkit.feature.javaimpl.config.FilterParamComponent;
 import io.github.newhoo.restkit.feature.javaimpl.helper.PsiAnnotationHelper;
 import io.github.newhoo.restkit.feature.javaimpl.helper.PsiClassHelper;
@@ -42,6 +43,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_DEFAULT_DESCRIPTOR;
 import static io.github.newhoo.restkit.common.RestConstant.WEB_FRAMEWORK_SPRING_MVC;
 import static io.github.newhoo.restkit.feature.javaimpl.spring.SpringRequestMethodAnnotation.REQUEST_MAPPING;
 import static io.github.newhoo.restkit.feature.javaimpl.spring.SpringRequestParamAnnotation.PATH_VARIABLE;
@@ -195,6 +197,12 @@ public abstract class BaseLanguageResolver extends BaseRequestResolver implement
             // 简单常用类型
             if (TypeUtils.isPrimitiveOrSimpleType(paramType)) {
                 list.add(new KV(parameter.getParamName(), String.valueOf(TypeUtils.getExampleValue(paramType, true))));
+                continue;
+            }
+            // 文件类型
+            Set<String> fileParameterTypeSet = FileParameterTypeComponent.getInstance(psiMethod.getProject()).getQualifiedNames();
+            if (fileParameterTypeSet.contains(paramType)) {
+                list.add(new KV(parameter.getParamName(), HTTP_FILE_DEFAULT_DESCRIPTOR));
                 continue;
             }
 
