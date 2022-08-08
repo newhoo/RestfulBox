@@ -13,7 +13,10 @@ import io.github.newhoo.restkit.restful.ep.RestClientProvider;
 import io.github.newhoo.restkit.util.HttpUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.StatusLine;
+import org.apache.http.message.BasicHeader;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -118,7 +121,15 @@ public class HttpClient implements RestClient {
 
         if (request.getOriginal() != null) {
             sb.append(request.getOriginal().getRequestLine()).append("\n");
-            String reqHeader = formatHeader(request.getOriginal().getAllHeaders());
+            List<Header> collect = Arrays.stream(request.getOriginal().getAllHeaders())
+                                         .collect(Collectors.toList());
+            if (request.getOriginal() instanceof HttpEntityEnclosingRequest){
+                HttpEntity entity = ((HttpEntityEnclosingRequest) request.getOriginal()).getEntity();
+                collect.add(entity.getContentType());
+                collect.add(new BasicHeader("Content-Length", String.valueOf(entity.getContentLength())));
+            }
+            String reqHeader = formatHeader(collect.toArray(new Header[0]));
+            // String reqHeader = formatHeader(request.getOriginal().getAllHeaders());
             if (StringUtils.isNotEmpty(reqHeader)) {
                 sb.append(reqHeader).append("\n");
             }
@@ -161,7 +172,15 @@ public class HttpClient implements RestClient {
 
         if (request.getOriginal() != null) {
             sb.append(">>> ").append(request.getOriginal().getRequestLine()).append("\n");
-            String reqHeader = formatHeader(request.getOriginal().getAllHeaders());
+            List<Header> collect = Arrays.stream(request.getOriginal().getAllHeaders())
+                                         .collect(Collectors.toList());
+            if (request.getOriginal() instanceof HttpEntityEnclosingRequest){
+                HttpEntity entity = ((HttpEntityEnclosingRequest) request.getOriginal()).getEntity();
+                collect.add(entity.getContentType());
+                collect.add(new BasicHeader("Content-Length", String.valueOf(entity.getContentLength())));
+            }
+            String reqHeader = formatHeader(collect.toArray(new Header[0]));
+            // String reqHeader = formatHeader(request.getOriginal().getAllHeaders());
             if (StringUtils.isNotEmpty(reqHeader)) {
                 sb.append(reqHeader).append("\n");
             }

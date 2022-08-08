@@ -36,7 +36,7 @@ public class SelectUploadFileAction extends AnAction {
     @Override
     public void update(@NotNull AnActionEvent e) {
         Editor editor = e.getData(CommonDataKeys.EDITOR);
-        if (editor == null || !editor.toString().contains("/Params")) {
+        if (editor == null || !editor.toString().replace("\\", "/").contains("/Params")) {
             e.getPresentation().setVisible(false);
             return;
         }
