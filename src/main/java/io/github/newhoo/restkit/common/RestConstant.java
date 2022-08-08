@@ -63,8 +63,9 @@ public class RestConstant {
             "// request: see pre-request script comment\n" +
             "//\n" +
             "// response attributes\n" +
-            "// original:    org.apache.http.HttpResponse,   original http response, from http-client 4.4.\n" +
-            "// body:        java.lang.String,               response body can be modified by post-request script.\n" +
+            "// code:        java.lang.Integer,              response code, can be modified by post-request script.\n" +
+            "// headers:     java.util.Map<String, String>,  response headers, can be modified by post-request script.\n" +
+            "// body:        java.lang.String,               response body, can be modified by post-request script.\n" +
             "//\n" +
             "// environment: java.util.Map<String, String>,  current environment, defined in the Environment setting, readonly.\n" +
             "//\n" +
@@ -76,9 +77,11 @@ public class RestConstant {
             "\n" +
             "var req = request;\n" +
             "var resp = response;\n" +
-            "var statusCode = resp.original.getStatusLine().getStatusCode();\n" +
             "\n" +
-            "if (statusCode != 200) {\n" +
+            "var code = resp.code;\n" +
+            "var headers = resp.headers;\n" +
+            "\n" +
+            "if (code != 200) {\n" +
             "    resp.body = JSON.stringify({ error: 'error occurred!' });\n" +
             "} else {\n" +
             "    resp.body = JSON.parse(resp.body).origin;\n" +
