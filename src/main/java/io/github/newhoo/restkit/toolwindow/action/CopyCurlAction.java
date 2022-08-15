@@ -2,7 +2,11 @@ package io.github.newhoo.restkit.toolwindow.action;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.ui.popup.ListPopup;
+import com.intellij.openapi.util.SystemInfo;
 import io.github.newhoo.restkit.common.HttpMethod;
 import io.github.newhoo.restkit.common.RestClientApiInfo;
 import io.github.newhoo.restkit.common.RestDataKey;
@@ -13,7 +17,9 @@ import io.github.newhoo.restkit.util.ToolkitUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -113,6 +119,71 @@ public class CopyCurlAction extends AnAction {
             }
         }
 
+        String p12Path = null, p12Passwd = null;
+        if (url.startsWith("https://")) {
+            Map<String, String> configMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(apiInfo.getConfig(), project));
+            p12Path = configMap.get("p12Path");
+            p12Passwd = configMap.get("p12Passwd");
+        }
+
+
+        // not windows
+        if (!SystemInfo.isWindows) {
+            doCopyCurl(url, httpMethod, headerMap,
+                    fileParamsMap, queryOrFormParamsMap, apiInfo.getBodyJson(),
+                    p12Path, p12Passwd, false, project);
+            return;
+        }
+
+        String finalUrl = url;
+        String finalP12Path = p12Path;
+        String finalP12Passwd = p12Passwd;
+        List<AnAction> actions = new ArrayList<>(4);
+        actions.add(new AnAction("Copy") {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                doCopyCurl(finalUrl, httpMethod, headerMap,
+                        fileParamsMap, queryOrFormParamsMap, apiInfo.getBodyJson(),
+                        finalP12Path, finalP12Passwd, false, project);
+            }
+        });
+        if (!StringUtils.isAnyEmpty(p12Path, p12Passwd)
+                || (HttpMethod.GET != httpMethod && StringUtils.isEmpty(apiInfo.getBodyJson()) && !fileParamsMap.isEmpty())) {
+            actions.add(new AnAction("Copy for Wsl") {
+                @Override
+                public void actionPerformed(@NotNull AnActionEvent e) {
+                    doCopyCurl(finalUrl, httpMethod, headerMap,
+                            fileParamsMap, queryOrFormParamsMap, apiInfo.getBodyJson(),
+                            finalP12Path, finalP12Passwd, true, project);
+                }
+            });
+        }
+
+        if (actions.size() == 1) {
+            actions.get(0).actionPerformed(e);
+            return;
+        }
+
+        final ListPopup popup = JBPopupFactory.getInstance()
+                                              .createActionGroupPopup(
+                                                      null,
+                                                      new DefaultActionGroup(actions),
+                                                      e.getDataContext(),
+                                                      JBPopupFactory.ActionSelectionAid.SPEEDSEARCH,
+                                                      true);
+        popup.showInBestPositionFor(e.getDataContext());
+    }
+
+    private void doCopyCurl(String url,
+                            HttpMethod httpMethod,
+                            Map<String, String> headerMap,
+                            Map<String, String> fileParamsMap,
+                            Map<String, String> queryOrFormParamsMap,
+                            String bodyJson,
+                            String p12Path, String p12Passwd,
+                            boolean wsl,
+                            Project project
+    ) {
         StringBuilder sb = new StringBuilder();
         sb.append("curl ");
         sb.append("-X").append(" ").append(httpMethod.name()).append(" ");
@@ -123,8 +194,8 @@ public class CopyCurlAction extends AnAction {
         });
 
         if (HttpMethod.GET != httpMethod) {
-            if (StringUtils.isNotEmpty(apiInfo.getBodyJson())) {
-                sb.append("-d '").append(apiInfo.getBodyJson()).append("'").append(" ");
+            if (StringUtils.isNotEmpty(bodyJson)) {
+                sb.append("-d '").append(bodyJson).append("'").append(" ");
             } else {
                 // form params: Content-Type: application/x-www-form-urlencoded
                 if (fileParamsMap.isEmpty()) {
@@ -137,7 +208,7 @@ public class CopyCurlAction extends AnAction {
                         sb.append("-F '").append(k).append("=").append(v).append("'").append(" ");
                     });
                     fileParamsMap.forEach((k, v) -> {
-                        sb.append("-F '").append(k).append("=@\"").append(ToolkitUtil.getUploadFilepath(v)).append("\"'").append(" ");
+                        sb.append("-F '").append(k).append("=@\"").append(getFilepath(ToolkitUtil.getUploadFilepath(v), wsl)).append("\"'").append(" ");
                     });
                 }
             }
@@ -146,16 +217,21 @@ public class CopyCurlAction extends AnAction {
         if (url.startsWith("https://")) {
             sb.append("-k ");
 
-            Map<String, String> configMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(apiInfo.getConfig(), project));
-            String p12Path = configMap.get("p12Path");
-            String p12Passwd = configMap.get("p12Passwd");
             // 双向认证
             if (!StringUtils.isAnyEmpty(p12Path, p12Passwd)) {
-                sb.append("--cert-type P12 --cert ").append(p12Path).append(":").append(p12Passwd);
+                sb.append("--cert-type P12 --cert ").append("'").append(getFilepath(p12Path, wsl)).append("'").append(":").append("'").append(p12Passwd).append("'");
             }
         }
 
         IdeaUtils.copyToClipboard(sb.toString());
         NotifierUtils.infoBalloon("", "Curl copied to clipboard successfully.", null, project);
+    }
+
+    private String getFilepath(String filepath, boolean wsl) {
+        if (wsl && StringUtils.contains(filepath, ':')) {
+            filepath = filepath.substring(0, 1).toLowerCase() + filepath.substring(1);
+            filepath = "/mnt/" + filepath.replace(":", "").replace('\\', '/');
+        }
+        return filepath;
     }
 }

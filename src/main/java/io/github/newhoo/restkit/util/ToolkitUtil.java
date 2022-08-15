@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_POSTFIX;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_PREFIX;
 
 public class ToolkitUtil {
@@ -132,10 +133,14 @@ public class ToolkitUtil {
     }
 
     public static String getUploadFileDescriptor(String filepath) {
-        return "file@[" + filepath + "]";
+        return HTTP_FILE_PREFIX + filepath + HTTP_FILE_POSTFIX;
     }
 
     public static String getUploadFilepath(String uploadFileDescriptor) {
-        return uploadFileDescriptor.substring(HTTP_FILE_PREFIX.length(), uploadFileDescriptor.length() - 1);
+        String s = uploadFileDescriptor.substring(HTTP_FILE_PREFIX.length());
+        if (StringUtils.endsWith(s, HTTP_FILE_POSTFIX)) {
+            return s.substring(0, s.length() - 1);
+        }
+        return s;
     }
 }

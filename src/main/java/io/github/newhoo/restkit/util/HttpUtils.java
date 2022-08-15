@@ -3,13 +3,16 @@ package io.github.newhoo.restkit.util;
 import com.intellij.openapi.diagnostic.Logger;
 import io.github.newhoo.restkit.common.HttpMethod;
 import io.github.newhoo.restkit.common.RequestInfo;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpClientConnection;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -52,16 +55,18 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_PREFIX;
 
 public class HttpUtils {
-    public static final Logger LOG = Logger.getInstance(HttpUtils.class);
+    private static final Logger LOG = Logger.getInstance(HttpUtils.class);
 
     private static final String HTTP_HOSTADDRESS = "http.hostAddress";
 
@@ -91,6 +96,24 @@ public class HttpUtils {
              CloseableHttpResponse response = httpClient.execute(request, context)) {
             String hostAddress = (String) context.getAttribute(HTTP_HOSTADDRESS);
 
+            //Content-Disposition: attachment; filename="2d8e6de174899729ccd12f41230a5510.webp"; filename*=utf-8''2d8e6de174899729ccd12f41230a5510.webp
+            Header fileHeader = response.getFirstHeader("Content-Disposition");
+            if (fileHeader != null) {
+                String filename = Arrays.stream(fileHeader.getElements())
+                                        .filter(e -> StringUtils.startsWith(e.getName(), "attachment"))
+                                        .map(e -> e.getParameterByName("filename"))
+                                        .filter(Objects::nonNull)
+                                        .map(NameValuePair::getValue)
+                                        .findFirst()
+                                        .orElse("noname_file");
+
+                File file = new File(req.getConfig().get("downloadDirectory") + System.currentTimeMillis() + "_" + filename);
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+                FileUtils.copyToFile(response.getEntity().getContent(), file);
+                return new RequestInfo(req, new io.github.newhoo.restkit.restful.http.HttpResponse(response, file.getPath()), hostAddress, (System.currentTimeMillis() - startTs));
+            }
             String result = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
             // unicode 转码
             result = org.apache.commons.lang.StringEscapeUtils.unescapeJava(result);

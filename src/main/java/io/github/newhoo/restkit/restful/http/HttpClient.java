@@ -10,6 +10,7 @@ import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.Environment;
 import io.github.newhoo.restkit.restful.RestClient;
 import io.github.newhoo.restkit.restful.ep.RestClientProvider;
+import io.github.newhoo.restkit.util.FileUtils;
 import io.github.newhoo.restkit.util.HttpUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -99,6 +100,7 @@ public class HttpClient implements RestClient {
     @NotNull
     @Override
     public RequestInfo sendRequest(Request request, Project project) {
+        request.getConfig().put("downloadDirectory", FileUtils.getRestDirectory(project));
         return HttpUtils.request((HttpRequest) request);
     }
 
@@ -123,7 +125,7 @@ public class HttpClient implements RestClient {
             sb.append(request.getOriginal().getRequestLine()).append("\n");
             List<Header> collect = Arrays.stream(request.getOriginal().getAllHeaders())
                                          .collect(Collectors.toList());
-            if (request.getOriginal() instanceof HttpEntityEnclosingRequest){
+            if (request.getOriginal() instanceof HttpEntityEnclosingRequest) {
                 HttpEntity entity = ((HttpEntityEnclosingRequest) request.getOriginal()).getEntity();
                 collect.add(entity.getContentType());
                 collect.add(new BasicHeader("Content-Length", String.valueOf(entity.getContentLength())));
@@ -174,7 +176,7 @@ public class HttpClient implements RestClient {
             sb.append(">>> ").append(request.getOriginal().getRequestLine()).append("\n");
             List<Header> collect = Arrays.stream(request.getOriginal().getAllHeaders())
                                          .collect(Collectors.toList());
-            if (request.getOriginal() instanceof HttpEntityEnclosingRequest){
+            if (request.getOriginal() instanceof HttpEntityEnclosingRequest) {
                 HttpEntity entity = ((HttpEntityEnclosingRequest) request.getOriginal()).getEntity();
                 collect.add(entity.getContentType());
                 collect.add(new BasicHeader("Content-Length", String.valueOf(entity.getContentLength())));
