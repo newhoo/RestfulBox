@@ -8,6 +8,8 @@ import io.github.newhoo.restkit.common.EnvList;
 import io.github.newhoo.restkit.config.CommonSetting;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.Environment;
+import io.github.newhoo.restkit.config.HttpSetting;
+import io.github.newhoo.restkit.config.HttpSettingComponent;
 import io.github.newhoo.restkit.util.EnvironmentUtils;
 import io.github.newhoo.restkit.util.FileUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -42,6 +44,11 @@ public class MyStartupActivity implements StartupActivity {
         if (StringUtils.isEmpty(apiFile)) {
             apiFile = FileUtils.getApiFilePath(project);
             setting.setApiFilePath(apiFile);
+        }
+        HttpSetting httpSetting = HttpSettingComponent.getInstance(project).getState();
+        httpSetting.setRequestTimeout(setting.getRequestTimeout());
+        if (StringUtils.isEmpty(httpSetting.getDownloadDirectory())) {
+            httpSetting.setDownloadDirectory(FileUtils.getRestDirectory(project));
         }
 
         PropertiesComponent fromSetting = PropertiesComponent.getInstance(project);

@@ -36,8 +36,13 @@
     <change-notes><![CDATA[
         2.0.8
         <ul>
-            <li>support ssl.</li>
-            <li>support upload file.</li>
+            <li>Support ssl.</li>
+            <li>Support upload/download file.</li>
+            <li>Optimize curl.</li>
+            <br/>
+            <li>支持SSL（单项认证和双向认证）.</li>
+            <li>支持上传下载文件.</li>
+            <li>优化复制curl.</li>
         </ul>
 
         2.0.6
@@ -131,9 +136,11 @@
         <postStartupActivity implementation="io.github.newhoo.restkit.MyStartupActivity"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.EnvironmentComponent"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.CommonSettingComponent"/>
+        <projectService serviceImplementation="io.github.newhoo.restkit.config.HttpSettingComponent"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.ParameterLibrary"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.HttpMethodFilterConfiguration"/>
         <projectConfigurable id="RESTKit.SettingConfigurable" instance="io.github.newhoo.restkit.config.SettingConfigurable">
+            <configurable instance="io.github.newhoo.restkit.config.HttpSettingConfigurable" displayName="HTTP"/>
             <configurable instance="io.github.newhoo.restkit.config.EnvironmentConfigurable" displayName="Environment"/>
         </projectConfigurable>
         <searchEverywhereContributor implementation="io.github.newhoo.restkit.navigation.RestSearchEverywhereContributor$Factory"/>

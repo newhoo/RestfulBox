@@ -6,8 +6,8 @@ import io.github.newhoo.restkit.common.Request;
 import io.github.newhoo.restkit.common.RequestInfo;
 import io.github.newhoo.restkit.common.RestClientData;
 import io.github.newhoo.restkit.common.RestItem;
-import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.Environment;
+import io.github.newhoo.restkit.config.HttpSettingComponent;
 import io.github.newhoo.restkit.restful.RestClient;
 import io.github.newhoo.restkit.restful.ep.RestClientProvider;
 import io.github.newhoo.restkit.util.FileUtils;
@@ -46,7 +46,7 @@ public class HttpClient implements RestClient {
 
     @Override
     public List<KV> getConfig(@NotNull RestItem restItem, @NotNull Project project) {
-        int timeout = CommonSettingComponent.getInstance(project).getState().getRequestTimeout();
+        int timeout = HttpSettingComponent.getInstance(project).getState().getRequestTimeout();
         // 默认最大设置60s
         if (timeout <= 0) {
             timeout = 60000;
@@ -100,7 +100,11 @@ public class HttpClient implements RestClient {
     @NotNull
     @Override
     public RequestInfo sendRequest(Request request, Project project) {
-        request.getConfig().put("downloadDirectory", FileUtils.getRestDirectory(project));
+        String downloadDirectory = HttpSettingComponent.getInstance(project).getState().getDownloadDirectory();
+        if (StringUtils.isEmpty(downloadDirectory)) {
+            downloadDirectory = FileUtils.getRestDirectory(project);
+        }
+        request.getConfig().put("downloadDirectory", downloadDirectory);
         return HttpUtils.request((HttpRequest) request);
     }
 

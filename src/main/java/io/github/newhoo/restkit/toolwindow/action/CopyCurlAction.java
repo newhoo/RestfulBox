@@ -10,6 +10,8 @@ import com.intellij.openapi.util.SystemInfo;
 import io.github.newhoo.restkit.common.HttpMethod;
 import io.github.newhoo.restkit.common.RestClientApiInfo;
 import io.github.newhoo.restkit.common.RestDataKey;
+import io.github.newhoo.restkit.config.HttpSetting;
+import io.github.newhoo.restkit.config.HttpSettingComponent;
 import io.github.newhoo.restkit.util.EnvironmentUtils;
 import io.github.newhoo.restkit.util.IdeaUtils;
 import io.github.newhoo.restkit.util.NotifierUtils;
@@ -128,10 +130,11 @@ public class CopyCurlAction extends AnAction {
 
 
         // not windows
-        if (!SystemInfo.isWindows) {
+        HttpSetting httpSetting = HttpSettingComponent.getInstance(project).getState();
+        if (!SystemInfo.isWindows || !httpSetting.isSupportForWslPath()) {
             doCopyCurl(url, httpMethod, headerMap,
                     fileParamsMap, queryOrFormParamsMap, apiInfo.getBodyJson(),
-                    p12Path, p12Passwd, false, project);
+                    p12Path, p12Passwd, false, httpSetting.isGenerateMultilineCurlSnippet(), project);
             return;
         }
 
@@ -144,7 +147,7 @@ public class CopyCurlAction extends AnAction {
             public void actionPerformed(@NotNull AnActionEvent e) {
                 doCopyCurl(finalUrl, httpMethod, headerMap,
                         fileParamsMap, queryOrFormParamsMap, apiInfo.getBodyJson(),
-                        finalP12Path, finalP12Passwd, false, project);
+                        finalP12Path, finalP12Passwd, false, httpSetting.isGenerateMultilineCurlSnippet(), project);
             }
         });
         if (!StringUtils.isAnyEmpty(p12Path, p12Passwd)
@@ -154,7 +157,7 @@ public class CopyCurlAction extends AnAction {
                 public void actionPerformed(@NotNull AnActionEvent e) {
                     doCopyCurl(finalUrl, httpMethod, headerMap,
                             fileParamsMap, queryOrFormParamsMap, apiInfo.getBodyJson(),
-                            finalP12Path, finalP12Passwd, true, project);
+                            finalP12Path, finalP12Passwd, true, httpSetting.isGenerateMultilineCurlSnippet(), project);
                 }
             });
         }
@@ -181,34 +184,34 @@ public class CopyCurlAction extends AnAction {
                             Map<String, String> queryOrFormParamsMap,
                             String bodyJson,
                             String p12Path, String p12Passwd,
-                            boolean wsl,
+                            boolean wsl, boolean supportMultiline,
                             Project project
     ) {
         StringBuilder sb = new StringBuilder();
         sb.append("curl ");
         sb.append("-X").append(" ").append(httpMethod.name()).append(" ");
-        sb.append(url).append(" ");
+        sb.append(url).append(" ").append(appendMultilineStr(supportMultiline));
 
         headerMap.forEach((k, v) -> {
-            sb.append("-H").append(" ").append("'").append(k).append(": ").append(v).append("'").append(" ");
+            sb.append("-H").append(" ").append("'").append(k).append(": ").append(v).append("'").append(" ").append(appendMultilineStr(supportMultiline));
         });
 
         if (HttpMethod.GET != httpMethod) {
             if (StringUtils.isNotEmpty(bodyJson)) {
-                sb.append("-d '").append(bodyJson).append("'").append(" ");
+                sb.append("-d '").append(bodyJson).append("'").append(" ").append(appendMultilineStr(supportMultiline));
             } else {
                 // form params: Content-Type: application/x-www-form-urlencoded
                 if (fileParamsMap.isEmpty()) {
                     queryOrFormParamsMap.forEach((k, v) -> {
-                        sb.append("-d '").append(k).append("=").append(v).append("'").append(" ");
+                        sb.append("-d '").append(k).append("=").append(v).append("'").append(" ").append(appendMultilineStr(supportMultiline));
                     });
                 } else {
                     // form params: Content-Type: multipart/form-data; boundary=------------------------75a1b524af201d5c
                     queryOrFormParamsMap.forEach((k, v) -> {
-                        sb.append("-F '").append(k).append("=").append(v).append("'").append(" ");
+                        sb.append("-F '").append(k).append("=").append(v).append("'").append(" ").append(appendMultilineStr(supportMultiline));
                     });
                     fileParamsMap.forEach((k, v) -> {
-                        sb.append("-F '").append(k).append("=@\"").append(getFilepath(ToolkitUtil.getUploadFilepath(v), wsl)).append("\"'").append(" ");
+                        sb.append("-F '").append(k).append("=@\"").append(getFilepath(ToolkitUtil.getUploadFilepath(v), wsl)).append("\"'").append(" ").append(appendMultilineStr(supportMultiline));
                     });
                 }
             }
@@ -223,8 +226,17 @@ public class CopyCurlAction extends AnAction {
             }
         }
 
-        IdeaUtils.copyToClipboard(sb.toString());
+        String s = sb.toString();
+        if (s.endsWith("\\\n")) {
+            s = s.substring(0, s.length() - 2);
+        }
+
+        IdeaUtils.copyToClipboard(s);
         NotifierUtils.infoBalloon("", "Curl copied to clipboard successfully.", null, project);
+    }
+
+    private String appendMultilineStr(boolean supportMultiline) {
+        return supportMultiline ? "\\\n" : "";
     }
 
     private String getFilepath(String filepath, boolean wsl) {

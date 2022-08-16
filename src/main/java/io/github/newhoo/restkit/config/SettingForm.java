@@ -54,7 +54,6 @@ public class SettingForm {
     private JCheckBox enableMethodLineMarkerCheckBox;
 
     private JPanel requestPanel;
-    private JTextField requestTimeoutField;
     private JCheckBox saveRequestLogCheckBox;
     private JPanel preRequestScriptPanel;
     private JLabel preRequestScriptLabel;
@@ -187,7 +186,6 @@ public class SettingForm {
         commonSetting.setEnableMethodLineMarker(enableMethodLineMarkerCheckBox.isSelected());
 
         commonSetting.setSaveRequestLog(saveRequestLogCheckBox.isSelected());
-        commonSetting.setRequestTimeout(parseIntOrZero(requestTimeoutField.getText()));
         commonSetting.setPreRequestScriptPath(preRequestScriptPathTextField.getText().trim());
         commonSetting.setPostRequestScriptPath(postRequestScriptPathTextField.getText().trim());
 
@@ -211,7 +209,6 @@ public class SettingForm {
         enableMethodLineMarkerCheckBox.setSelected(commonSetting.isEnableMethodLineMarker());
 
         saveRequestLogCheckBox.setSelected(commonSetting.isSaveRequestLog());
-        requestTimeoutField.setText(String.valueOf(commonSetting.getRequestTimeout()));
         preRequestScriptPathTextField.setText(FileUtil.toSystemDependentName(commonSetting.getPreRequestScriptPath()));
         postRequestScriptPathTextField.setText(FileUtil.toSystemDependentName(commonSetting.getPostRequestScriptPath()));
 
@@ -229,13 +226,5 @@ public class SettingForm {
             }
         }
         return enabledWebFrameworks;
-    }
-
-    private int parseIntOrZero(String str) {
-        try {
-            return Integer.parseInt(str);
-        } catch (Exception e) {
-            return 0;
-        }
     }
 }

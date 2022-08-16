@@ -24,6 +24,7 @@ public class CommonSetting {
 
     private boolean scanServiceWithLib = false;
 
+    @Deprecated
     private int requestTimeout = 0;
 
     private boolean saveRequestLog = false;
@@ -37,8 +38,7 @@ public class CommonSetting {
     private String apiFilePath = "";
 
     public boolean isModified(CommonSetting modifiedSetting) {
-        return requestTimeout != modifiedSetting.getRequestTimeout()
-                || saveRequestLog != modifiedSetting.isSaveRequestLog()
+        return saveRequestLog != modifiedSetting.isSaveRequestLog()
                 || showModuleInSearchEvery != modifiedSetting.isShowModuleInSearchEvery()
                 || displayApiGroupUsingFileName != modifiedSetting.isDisplayApiGroupUsingFileName()
                 || displayTreeListUsingApiDesc != modifiedSetting.isDisplayTreeListUsingApiDesc()
