@@ -63,7 +63,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_DOWNLOAD_DIRECTORY;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_PREFIX;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PATH;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_TIMEOUT;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_URL_HTTP;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_URL_HTTPS;
 
 public class HttpUtils {
     private static final Logger LOG = Logger.getInstance(HttpUtils.class);
@@ -107,7 +113,7 @@ public class HttpUtils {
                                         .findFirst()
                                         .orElse("noname_file");
 
-                File file = new File(req.getConfig().get("downloadDirectory") + System.currentTimeMillis() + "_" + filename);
+                File file = new File(req.getConfig().get(HTTP_FILE_DOWNLOAD_DIRECTORY) + System.currentTimeMillis() + "_" + filename);
                 if (!file.exists()) {
                     file.createNewFile();
                 }
@@ -131,8 +137,8 @@ public class HttpUtils {
         HttpMethod httpMethod = HttpMethod.nameOf(req.getMethod());
 
         String url = req.getUrl();
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            url = "http://" + url;
+        if (!url.startsWith(HTTP_URL_HTTP) && !url.startsWith(HTTP_URL_HTTPS)) {
+            url = HTTP_URL_HTTP + url;
         }
         // 自带的query参数编码
         if (url.contains("?")) {
@@ -238,7 +244,7 @@ public class HttpUtils {
             }
         }
 
-        String timeout = StringUtils.defaultIfEmpty(req.getConfig().get("timeout"), "60000");
+        String timeout = StringUtils.defaultIfEmpty(req.getConfig().get(HTTP_TIMEOUT), "60000");
         int requestTimeout = (int) Double.parseDouble(timeout);
         if (requestTimeout > 0) {
             RequestConfig requestConfig = RequestConfig.custom()
@@ -278,9 +284,9 @@ public class HttpUtils {
         HttpClientBuilder builder = HttpClients.custom()
                                                .setRequestExecutor(getHttpRequestExecutor());
         SSLConnectionSocketFactory socketFactory = null;
-        if (req.getUrl().startsWith("https://")) {
-            String p12Path = StringUtils.defaultString(req.getConfig().get("p12Path"));
-            String p12Passwd = StringUtils.defaultString(req.getConfig().get("p12Passwd"));
+        if (req.getUrl().startsWith(HTTP_URL_HTTPS)) {
+            String p12Path = StringUtils.defaultString(req.getConfig().get(HTTP_P12_PATH));
+            String p12Passwd = StringUtils.defaultString(req.getConfig().get(HTTP_P12_PASSWD));
 
             // 单向认证
             if (StringUtils.isAnyEmpty(p12Path, p12Passwd)) {

@@ -26,8 +26,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL_DEFAULT;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL_PLACEHOLDER;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_PREFIX;
-import static io.github.newhoo.restkit.common.RestConstant.PLACEHOLDER_BASE_URL;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PATH;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_URL_HTTP;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_URL_HTTPS;
 import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL;
 import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
 
@@ -73,12 +78,12 @@ public class CopyCurlAction extends AnAction {
 
         String url = apiInfo.getUrl();
         if (!url.contains("://")) {
-            url = EnvironmentUtils.handlePlaceholderVariable(PLACEHOLDER_BASE_URL + url, project);
+            url = EnvironmentUtils.handlePlaceholderVariable(HTTP_BASE_URL_PLACEHOLDER + url, project);
             // 环境变量未设置【baseUrl】时强行替换为localhost:8080
-            url = url.replaceFirst("\\{\\{baseUrl}}", "http://localhost:8080");
+            url = url.replace(HTTP_BASE_URL_PLACEHOLDER, HTTP_BASE_URL_DEFAULT);
         }
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            url = "http://" + url;
+        if (!url.startsWith(HTTP_URL_HTTP) && !url.startsWith(HTTP_URL_HTTPS)) {
+            url = HTTP_URL_HTTP + url;
         }
         // 自带的query参数编码: todo curl要转义特殊字符
         if (url.contains("?")) {
@@ -122,10 +127,10 @@ public class CopyCurlAction extends AnAction {
         }
 
         String p12Path = null, p12Passwd = null;
-        if (url.startsWith("https://")) {
+        if (url.startsWith(HTTP_URL_HTTPS)) {
             Map<String, String> configMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(apiInfo.getConfig(), project));
-            p12Path = configMap.get("p12Path");
-            p12Passwd = configMap.get("p12Passwd");
+            p12Path = configMap.get(HTTP_P12_PATH);
+            p12Passwd = configMap.get(HTTP_P12_PASSWD);
         }
 
 
@@ -217,7 +222,7 @@ public class CopyCurlAction extends AnAction {
             }
         }
 
-        if (url.startsWith("https://")) {
+        if (url.startsWith(HTTP_URL_HTTPS)) {
             sb.append("-k ");
 
             // 双向认证

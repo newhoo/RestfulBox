@@ -14,8 +14,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PATH;
 import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL;
 import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_URL_HTTP;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_URL_HTTPS;
 
 /**
  * P12GenerateAction
@@ -34,13 +39,13 @@ public class P12GenerateAction extends AnAction {
             return;
         }
         // http请求
-        if (StringUtils.startsWith(apiInfo.getUrl(), "http://")) {
+        if (StringUtils.startsWith(apiInfo.getUrl(), HTTP_URL_HTTP)) {
             e.getPresentation().setVisible(false);
             return;
         }
         Map<String, String> configMap = ToolkitUtil.textToModifiableMap(apiInfo.getConfig());
         // 已包含
-        if (configMap.containsKey("p12Path") && configMap.containsKey("p12Passwd")) {
+        if (configMap.containsKey(HTTP_P12_PATH) && configMap.containsKey(HTTP_P12_PASSWD)) {
             e.getPresentation().setVisible(false);
             return;
         }
@@ -50,14 +55,14 @@ public class P12GenerateAction extends AnAction {
             return;
         }
         // 非https请求
-        if (!StringUtils.startsWith(apiInfo.getUrl(), "https://")) {
-            String baseUrl = configMap.get("baseUrl");
+        if (!StringUtils.startsWith(apiInfo.getUrl(), HTTP_URL_HTTPS)) {
+            String baseUrl = configMap.get(HTTP_BASE_URL);
             if (StringUtils.isEmpty(baseUrl)) {
                 e.getPresentation().setVisible(false);
                 return;
             }
             if (!StringUtils.startsWith(baseUrl, "{{")
-                    && !StringUtils.startsWith(baseUrl, "https://")) {
+                    && !StringUtils.startsWith(baseUrl, HTTP_URL_HTTPS)) {
                 e.getPresentation().setVisible(false);
             }
         }

@@ -25,6 +25,9 @@ import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL_DEFAULT;
+
 /**
  * EnvironmentForm
  *
@@ -84,7 +87,7 @@ public class EnvironmentForm {
                 return;
             }
             KeyValueTableModel defaultTableModel = new KeyValueTableModel();
-            defaultTableModel.addRow(true, "baseUrl", "http://localhost:8080");
+            defaultTableModel.addRow(true, HTTP_BASE_URL, HTTP_BASE_URL_DEFAULT);
 
             addEnvTab(envName, defaultTableModel);
         });

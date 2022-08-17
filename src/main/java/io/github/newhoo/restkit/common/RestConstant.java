@@ -17,9 +17,20 @@ public class RestConstant {
     public static final String PROTOCOL = "protocol";
     public static final String PROTOCOL_HTTP = "http";
 
+    public static final String HTTP_URL_HTTP = "http://";
+    public static final String HTTP_URL_HTTPS = "https://";
     public static final String HTTP_FILE_PREFIX = "file@[";
     public static final String HTTP_FILE_POSTFIX = "]";
     public static final String HTTP_FILE_DEFAULT_DESCRIPTOR = "file@[filepath]";
+    public static final String HTTP_FILE_DOWNLOAD_DIRECTORY = "downloadDirectory";
+    public static final String HTTP_BASE_URL = "baseUrl";
+    public static final String HTTP_BASE_URL_PLACEHOLDER = PLACEHOLDER_BASE_URL;
+    public static final String HTTP_BASE_URL_DEFAULT = "http://localhost:8080";
+    public static final String HTTP_TIMEOUT = "timeout";
+    public static final String HTTP_P12_PATH = "p12Path";
+    public static final String HTTP_P12_PATH_PLACEHOLDER = "{{p12Path}}";
+    public static final String HTTP_P12_PASSWD = "p12Passwd";
+    public static final String HTTP_P12_PASSWD_PLACEHOLDER = "{{p12Passwd}}";
 
     public static final String PRE_REQUEST_SCRIPT =
             "// You can use custom preset object request and environment, attributes are:\n" +

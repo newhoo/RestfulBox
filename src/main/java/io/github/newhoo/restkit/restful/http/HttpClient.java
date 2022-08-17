@@ -27,6 +27,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL_DEFAULT;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL_PLACEHOLDER;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_DOWNLOAD_DIRECTORY;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD_PLACEHOLDER;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PATH;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PATH_PLACEHOLDER;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_TIMEOUT;
 import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
 
 /**
@@ -52,16 +61,16 @@ public class HttpClient implements RestClient {
             timeout = 60000;
         }
         List<KV> list = new LinkedList<>();
-        list.add(new KV("baseUrl", "{{baseUrl}}"));
-        list.add(new KV("timeout", String.valueOf(timeout)));
+        list.add(new KV(HTTP_BASE_URL, HTTP_BASE_URL_PLACEHOLDER));
+        list.add(new KV(HTTP_TIMEOUT, String.valueOf(timeout)));
 
         Map<String, String> env = Environment.getInstance(project).getCurrentEnabledEnvMap();
-        String p12Path = env.get("p12Path");
-        String p12Passwd = env.get("p12Passwd");
+        String p12Path = env.get(HTTP_P12_PATH);
+        String p12Passwd = env.get(HTTP_P12_PASSWD);
         // 双向认证
         if (!StringUtils.isAnyEmpty(p12Path, p12Passwd)) {
-            list.add(new KV("p12Path", "{{p12Path}}"));
-            list.add(new KV("p12Passwd", "{{p12Passwd}}"));
+            list.add(new KV(HTTP_P12_PATH, HTTP_P12_PATH_PLACEHOLDER));
+            list.add(new KV(HTTP_P12_PASSWD, HTTP_P12_PASSWD_PLACEHOLDER));
         }
         return list;
     }
@@ -75,16 +84,16 @@ public class HttpClient implements RestClient {
             if (!url.startsWith("/")) {
                 url = "/" + url;
             }
-            url = StringUtils.defaultIfEmpty(config.get("baseUrl"), "http://localhost:8080") + url;
+            url = StringUtils.defaultIfEmpty(config.get(HTTP_BASE_URL), HTTP_BASE_URL_DEFAULT) + url;
             // 环境变量未设置【baseUrl】时强行替换为localhost:8080
-            url = url.replace("{{baseUrl}}", "http://localhost:8080");
+            url = url.replace(HTTP_BASE_URL_PLACEHOLDER, HTTP_BASE_URL_DEFAULT);
         }
         // 移除未设置的证书
-        if ("{{p12Path}}".equals(config.get("p12Path"))) {
-            config.remove("p12Path");
+        if (HTTP_P12_PATH_PLACEHOLDER.equals(config.get(HTTP_P12_PATH))) {
+            config.remove(HTTP_P12_PATH);
         }
-        if ("{{p12Passwd}}".equals(config.get("p12Passwd"))) {
-            config.remove("p12Passwd");
+        if (HTTP_P12_PASSWD_PLACEHOLDER.equals(config.get(HTTP_P12_PASSWD))) {
+            config.remove(HTTP_P12_PASSWD);
         }
 
         HttpRequest request = new HttpRequest();
@@ -104,7 +113,7 @@ public class HttpClient implements RestClient {
         if (StringUtils.isEmpty(downloadDirectory)) {
             downloadDirectory = FileUtils.getRestDirectory(project);
         }
-        request.getConfig().put("downloadDirectory", downloadDirectory);
+        request.getConfig().put(HTTP_FILE_DOWNLOAD_DIRECTORY, downloadDirectory);
         return HttpUtils.request((HttpRequest) request);
     }
 
