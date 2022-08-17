@@ -102,23 +102,10 @@ public class HttpUtils {
              CloseableHttpResponse response = httpClient.execute(request, context)) {
             String hostAddress = (String) context.getAttribute(HTTP_HOSTADDRESS);
 
-            //Content-Disposition: attachment; filename="2d8e6de174899729ccd12f41230a5510.webp"; filename*=utf-8''2d8e6de174899729ccd12f41230a5510.webp
-            Header fileHeader = response.getFirstHeader("Content-Disposition");
-            if (fileHeader != null) {
-                String filename = Arrays.stream(fileHeader.getElements())
-                                        .filter(e -> StringUtils.startsWith(e.getName(), "attachment"))
-                                        .map(e -> e.getParameterByName("filename"))
-                                        .filter(Objects::nonNull)
-                                        .map(NameValuePair::getValue)
-                                        .findFirst()
-                                        .orElse("noname_file");
-
-                File file = new File(req.getConfig().get(HTTP_FILE_DOWNLOAD_DIRECTORY) + System.currentTimeMillis() + "_" + filename);
-                if (!file.exists()) {
-                    file.createNewFile();
-                }
-                FileUtils.copyToFile(response.getEntity().getContent(), file);
-                return new RequestInfo(req, new io.github.newhoo.restkit.restful.http.HttpResponse(response, file.getPath()), hostAddress, (System.currentTimeMillis() - startTs));
+            // 判断下载文件
+            File downloadFile = downloadFile(req, response);
+            if (downloadFile != null) {
+                return new RequestInfo(req, new io.github.newhoo.restkit.restful.http.HttpResponse(response, downloadFile.getPath()), hostAddress, (System.currentTimeMillis() - startTs));
             }
             String result = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
             // unicode 转码
@@ -361,5 +348,30 @@ public class HttpUtils {
         public String getMethod() {
             return "DELETE";
         }
+    }
+
+    private static File downloadFile(io.github.newhoo.restkit.restful.http.HttpRequest req, CloseableHttpResponse response) throws IOException {
+        //Content-Disposition: attachment; filename="2d8e6de174899729ccd12f41230a5510.webp"; filename*=utf-8''2d8e6de174899729ccd12f41230a5510.webp
+        Header fileHeader = response.getFirstHeader("Content-Disposition");
+        if (fileHeader != null) {
+            String filename = Arrays.stream(fileHeader.getElements())
+                                    .filter(e -> StringUtils.startsWith(e.getName(), "attachment"))
+                                    .map(e -> e.getParameterByName("filename"))
+                                    .filter(Objects::nonNull)
+                                    .map(NameValuePair::getValue)
+                                    .findFirst()
+                                    .orElse("noname_file");
+            String downloadDirectory = req.getConfig().get(HTTP_FILE_DOWNLOAD_DIRECTORY);
+            if (!StringUtils.endsWith(downloadDirectory, "/")) {
+                downloadDirectory += "/";
+            }
+            File file = new File(downloadDirectory + System.currentTimeMillis() + "_" + filename);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileUtils.copyToFile(response.getEntity().getContent(), file);
+            return file;
+        }
+        return null;
     }
 }

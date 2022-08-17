@@ -1,5 +1,6 @@
 package io.github.newhoo.restkit.restful.http;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import io.github.newhoo.restkit.common.KV;
 import io.github.newhoo.restkit.common.Request;
@@ -12,6 +13,7 @@ import io.github.newhoo.restkit.restful.RestClient;
 import io.github.newhoo.restkit.restful.ep.RestClientProvider;
 import io.github.newhoo.restkit.util.FileUtils;
 import io.github.newhoo.restkit.util.HttpUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -20,6 +22,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.message.BasicHeader;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -46,6 +49,8 @@ import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
  * @since 2.0.3
  */
 public class HttpClient implements RestClient {
+
+    private static final Logger LOG = Logger.getInstance(HttpClient.class);
 
     @NotNull
     @Override
@@ -150,6 +155,17 @@ public class HttpClient implements RestClient {
             }
             if (StringUtils.isNotEmpty(request.getBody())) {
                 sb.append("\n").append(request.getBody()).append("\n");
+            } else if (request.getOriginal() instanceof HttpEntityEnclosingRequest) {
+                try {
+                    String s = "Content length is too long";
+                    HttpEntity entity = ((HttpEntityEnclosingRequest) request.getOriginal()).getEntity();
+                    if (entity.getContentLength() <= 25 * 1024) { // org.apache.http.entity.mime.MultipartFormEntity.getContent
+                        s = IOUtils.toString(entity.getContent(), StandardCharsets.UTF_8);
+                    }
+                    sb.append("\n").append(s).append("\n");
+                } catch (Exception e) {
+                    LOG.warn("HttpEntityEnclosingRequest Content exception: " + e);
+                }
             }
         }
 
@@ -160,7 +176,10 @@ public class HttpClient implements RestClient {
             if (StringUtils.isNotEmpty(respHeader)) {
                 sb.append(respHeader).append("\n");
             }
-            if (StringUtils.isNotEmpty(response.getBody0())) {
+            Header fileHeader = response.getOriginal().getFirstHeader("Content-Disposition");
+            if (fileHeader != null) {
+                sb.append("\n").append("[file stream ...]").append("\n");
+            } else if (StringUtils.isNotEmpty(response.getBody0())) {
                 // 替换response内容\r\n的\r
                 sb.append("\n").append(response.getBody0().replace("\r", "")).append("\n");
             }
@@ -201,6 +220,17 @@ public class HttpClient implements RestClient {
             }
             if (StringUtils.isNotEmpty(request.getBody())) {
                 sb.append("\n").append(request.getBody()).append("\n");
+            } else if (request.getOriginal() instanceof HttpEntityEnclosingRequest) {
+                try {
+                    String s = "Content length is too long";
+                    HttpEntity entity = ((HttpEntityEnclosingRequest) request.getOriginal()).getEntity();
+                    if (entity.getContentLength() <= 25 * 1024) { // org.apache.http.entity.mime.MultipartFormEntity.getContent
+                        s = IOUtils.toString(entity.getContent(), StandardCharsets.UTF_8);
+                    }
+                    sb.append("\n").append(s).append("\n");
+                } catch (Exception e) {
+                    LOG.warn("HttpEntityEnclosingRequest Content exception: " + e);
+                }
             }
         }
         if (response != null && response.getOriginal() != null) {
