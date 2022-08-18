@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2.0.8
+
+- Support ssl.
+- Optimize http request, support upload/download file.
+- Optimize curl.
+
+- 支持SSL（单项认证和双向认证）
+- 优化http请求，支持上传下载文件
+- 优化复制curl
+
+
 ## 2.0.6
 
 - fix bugs with 2022.2

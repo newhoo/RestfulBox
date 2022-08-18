@@ -37,12 +37,12 @@
         2.0.8
         <ul>
             <li>Support ssl.</li>
-            <li>Support upload/download file.</li>
+            <li>Optimize http request, support upload/download file.</li>
             <li>Optimize curl.</li>
             <br/>
-            <li>支持SSL（单项认证和双向认证）.</li>
-            <li>支持上传下载文件.</li>
-            <li>优化复制curl.</li>
+            <li>支持SSL（单项认证和双向认证）</li>
+            <li>优化http请求，支持上传下载文件</li>
+            <li>优化复制curl</li>
         </ul>
 
         2.0.6
