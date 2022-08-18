@@ -85,7 +85,7 @@ public class CopyCurlAction extends AnAction {
         if (!url.startsWith(HTTP_URL_HTTP) && !url.startsWith(HTTP_URL_HTTPS)) {
             url = HTTP_URL_HTTP + url;
         }
-        // 自带的query参数编码: todo curl要转义特殊字符
+        // 自带的query参数编码
         if (url.contains("?")) {
             String[] split = StringUtils.split(url, "?", 2);
             url = split[0] + "?" + ToolkitUtil.encodeQueryParam(split[1]);
@@ -121,7 +121,7 @@ public class CopyCurlAction extends AnAction {
             fileParamsMap.clear();
             if (!queryOrFormParamsMap.isEmpty()) {
                 String params = ToolkitUtil.getRequestParam(queryOrFormParamsMap);
-                // URL可能包含了参数: todo curl要转义特殊字符
+                // URL可能包含了参数
                 url += url.contains("?") ? "&" + params : "?" + params;
             }
         }
