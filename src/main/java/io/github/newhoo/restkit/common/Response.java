@@ -2,8 +2,6 @@ package io.github.newhoo.restkit.common;
 
 import lombok.Data;
 
-import java.util.Map;
-
 /**
  * Response
  *
@@ -12,12 +10,6 @@ import java.util.Map;
  */
 @Data
 public class Response {
-
-    /** response code */
-    private int code;
-
-    /** response headers */
-    private Map<String, String> headers;
 
     /** response body */
     private String body;
