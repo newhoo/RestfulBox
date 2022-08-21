@@ -46,7 +46,6 @@ public class MyStartupActivity implements StartupActivity {
             setting.setApiFilePath(apiFile);
         }
         HttpSetting httpSetting = HttpSettingComponent.getInstance(project).getState();
-        httpSetting.setRequestTimeout(setting.getRequestTimeout());
         if (StringUtils.isEmpty(httpSetting.getDownloadDirectory())) {
             httpSetting.setDownloadDirectory(FileUtils.getRestDirectory(project));
         }
