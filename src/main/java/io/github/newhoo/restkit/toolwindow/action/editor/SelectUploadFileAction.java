@@ -55,7 +55,7 @@ public class SelectUploadFileAction extends AnAction {
         String[] lines = editor.getDocument().getText().split("\n");
         for (int i = 0; i < lines.length; i++) {
             if (lines[i].contains(":") && lines[i].contains(HTTP_FILE_PREFIX)) {
-                String actionText = i + "-" + lines[i];
+                String actionText = (i + 1) + "-" + lines[i];
                 int finalI = i;
                 actions.add(new AnAction(() -> actionText) {
                     @Override

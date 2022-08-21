@@ -19,6 +19,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.StatusLine;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicHeader;
 import org.jetbrains.annotations.NotNull;
 
@@ -157,9 +158,9 @@ public class HttpClient implements RestClient {
                 sb.append("\n").append(request.getBody()).append("\n");
             } else if (request.getOriginal() instanceof HttpEntityEnclosingRequest) {
                 try {
-                    String s = "Content length is too long";
+                    String s = "[multipart form data ...]";
                     HttpEntity entity = ((HttpEntityEnclosingRequest) request.getOriginal()).getEntity();
-                    if (entity.getContentLength() <= 25 * 1024) { // org.apache.http.entity.mime.MultipartFormEntity.getContent
+                    if (entity instanceof UrlEncodedFormEntity) {
                         s = IOUtils.toString(entity.getContent(), StandardCharsets.UTF_8);
                     }
                     sb.append("\n").append(s).append("\n");
