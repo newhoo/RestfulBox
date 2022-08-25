@@ -24,14 +24,12 @@ public class CommonSetting {
 
     private boolean scanServiceWithLib = false;
 
-    @Deprecated
-    private int requestTimeout = 0;
-
     private boolean saveRequestLog = false;
     private boolean showModuleInSearchEvery = false;
     private boolean displayApiGroupUsingFileName = false;
     private boolean displayTreeListUsingApiDesc = false;
     private boolean enableParameterLibrary = true;
+    private boolean enableParameterLibraryShortcut = true;
     private boolean enableMethodLineMarker = true;
     private String preRequestScriptPath = "";
     private String postRequestScriptPath = "";
