@@ -100,9 +100,9 @@ public class Environment {
         String classContainer = "public class RestKitScript {{{script}}}";
         String scriptClass = classContainer.replace("{{script}}", script);
 
-        Map<String, byte[]> bytecode = DynamicLoader.compile("RestKitScript.java", scriptClass);
-        DynamicLoader.MemoryClassLoader classLoader = new DynamicLoader.MemoryClassLoader(bytecode);
         try {
+            Map<String, byte[]> bytecode = DynamicLoader.compile("RestKitScript.java", scriptClass);
+            DynamicLoader.MemoryClassLoader classLoader = new DynamicLoader.MemoryClassLoader(bytecode);
             Class<?> clazz = classLoader.loadClass("RestKitScript");
             return Arrays.stream(clazz.getMethods())
                          .filter(m -> !ignoreMethods.contains(m.getName()) && m.getModifiers() == (Modifier.STATIC | Modifier.PUBLIC))
