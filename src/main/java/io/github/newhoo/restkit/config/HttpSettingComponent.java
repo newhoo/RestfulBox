@@ -1,6 +1,7 @@
 package io.github.newhoo.restkit.config;
 
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
@@ -21,7 +22,7 @@ public class HttpSettingComponent implements PersistentStateComponent<HttpSettin
     private final HttpSetting httpSetting = new HttpSetting();
 
     public static HttpSettingComponent getInstance(Project project) {
-        return project.getService(HttpSettingComponent.class);
+        return ServiceManager.getService(project, HttpSettingComponent.class);
     }
 
     @NotNull

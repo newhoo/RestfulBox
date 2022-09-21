@@ -50,7 +50,7 @@ public class OpenPreScriptAction extends DumbAwareAction {
 
         CommonSetting setting = CommonSettingComponent.getInstance(project).getState();
         String requestScriptPath = isPreScript() ? setting.getPreRequestScriptPath() : setting.getPostRequestScriptPath();
-        VirtualFile file = LocalFileSystem.getInstance().refreshAndFindFileByNioFile(Paths.get(requestScriptPath));
+        VirtualFile file = LocalFileSystem.getInstance().refreshAndFindFileByPath(requestScriptPath);
         if (file != null) {
             VfsUtil.markDirtyAndRefresh(true, false, false, file);
             FileEditorManager.getInstance(project).openFile(file, true);

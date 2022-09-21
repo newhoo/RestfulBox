@@ -1,13 +1,11 @@
 package io.github.newhoo.restkit.toolwindow.action.toolbar;
 
 import com.intellij.execution.runners.ExecutionUtil;
-import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.ElementsChooser;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.actionSystem.ToggleAction;
-import com.intellij.openapi.actionSystem.Toggleable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -44,7 +42,7 @@ public class HttpMethodFilterAction extends ToggleAction {
         Icon icon = getTemplatePresentation().getIcon();
         e.getPresentation().setIcon(isActive(project) ? ExecutionUtil.getLiveIndicator(icon) : icon);
         e.getPresentation().setEnabledAndVisible(true);
-        Toggleable.setSelected(e.getPresentation(), isSelected(e));
+//        Toggleable.setSelected(e.getPresentation(), isSelected(e));
     }
 
     @Override
@@ -111,7 +109,7 @@ public class HttpMethodFilterAction extends ToggleAction {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(chooser);
         JPanel buttons = new JPanel();
-        JButton all = new JButton(IdeBundle.message("big.popup.filter.button.all"));
+        JButton all = new JButton("All");
         all.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -119,7 +117,7 @@ public class HttpMethodFilterAction extends ToggleAction {
             }
         });
         buttons.add(all);
-        JButton none = new JButton(IdeBundle.message("big.popup.filter.button.none"));
+        JButton none = new JButton("None");
         none.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -127,7 +125,7 @@ public class HttpMethodFilterAction extends ToggleAction {
             }
         });
         buttons.add(none);
-        JButton invert = new JButton(IdeBundle.message("big.popup.filter.button.invert"));
+        JButton invert = new JButton("Invert");
         invert.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {

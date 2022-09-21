@@ -79,7 +79,7 @@ public class RestServiceTree extends JPanel implements DataProvider {
             public Object getRootElement() {
                 return myRoot;
             }
-        }, null, myProject);
+        }/*, null, myProject*/);
         myTree = new SimpleTree(new AsyncTreeModel(myTreeModel, myProject));
         myTree.setRootVisible(true);
         myTree.setShowsRootHandles(true);
@@ -103,7 +103,7 @@ public class RestServiceTree extends JPanel implements DataProvider {
                     final ActionManager actionManager = ActionManager.getInstance();
                     final ActionGroup actionGroup = (ActionGroup) actionManager.getAction(id);
                     if (actionGroup != null) {
-                        JPopupMenu component = actionManager.createActionPopupMenu(ActionPlaces.TOOLWINDOW_CONTENT, actionGroup).getComponent();
+                        JPopupMenu component = actionManager.createActionPopupMenu("ActionPlaces.TOOLWINDOW_CONTENT", actionGroup).getComponent();
                         component.show(comp, x, y);
                     }
                 }
@@ -113,9 +113,9 @@ public class RestServiceTree extends JPanel implements DataProvider {
              * 同时选择不同类型节点时不展示菜单
              */
             @Nullable
-            private String getMenuId(Collection<? extends RestServiceTree.BaseSimpleNode> nodes) {
+            private String getMenuId(Collection<? extends BaseSimpleNode> nodes) {
                 String id = null;
-                for (RestServiceTree.BaseSimpleNode node : nodes) {
+                for (BaseSimpleNode node : nodes) {
                     String menuId = node.getMenuId();
                     if (menuId == null) {
                         return null;
@@ -135,7 +135,7 @@ public class RestServiceTree extends JPanel implements DataProvider {
      * 跳转到节点
      */
     public void navigateToTree(PsiElement psiElement, Supplier<RestItem> geneWhenNotExistNode) {
-        Optional<RestServiceTree.RequestNode> psiMethodNode = myRoot.moduleNodes.stream()
+        Optional<RequestNode> psiMethodNode = myRoot.moduleNodes.stream()
                                                                                 .flatMap(o -> o.requestNodes.stream())
                                                                                 .filter(o -> o.myRestItem instanceof PsiRestItem)
                                                                                 .filter(o -> ((PsiRestItem) o.myRestItem).getPsiElement() == psiElement)
@@ -176,7 +176,7 @@ public class RestServiceTree extends JPanel implements DataProvider {
      */
     public void navigateToTree(String url, String method, String moduleName) {
         HttpMethod httpMethod = ObjectUtils.defaultIfNull(HttpMethod.getByRequestMethod(method), HttpMethod.GET);
-        Optional<RestServiceTree.RequestNode> psiMethodNode = myRoot.moduleNodes.stream()
+        Optional<RequestNode> psiMethodNode = myRoot.moduleNodes.stream()
                                                                                 .filter(moduleNode -> moduleName == null || moduleNode.getName().equals(moduleName))
                                                                                 .flatMap(o -> o.requestNodes.stream())
                                                                                 .filter(getNavigateFilter(url, httpMethod))
@@ -215,7 +215,7 @@ public class RestServiceTree extends JPanel implements DataProvider {
         if (expand) {
             TreeUtil.expandAll(myTree);
         } else {
-            TreeUtil.collapseAll(myTree, false, 1);
+            TreeUtil.collapseAll(myTree, /*false,*/ 1);
         }
     }
 

@@ -38,7 +38,7 @@ public class OpenRequestLogAction extends DumbAwareAction {
         if (project == null) return;
 
         String todayLog = FileUtils.getTodayLog(project);
-        VirtualFile file = LocalFileSystem.getInstance().refreshAndFindFileByNioFile(Paths.get(todayLog));
+        VirtualFile file = LocalFileSystem.getInstance().refreshAndFindFileByPath(todayLog);
         if (file != null) {
             VfsUtil.markDirtyAndRefresh(true, false, false, file);
             FileEditorManager.getInstance(project).openFile(file, true);

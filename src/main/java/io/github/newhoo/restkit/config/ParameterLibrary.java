@@ -1,6 +1,7 @@
 package io.github.newhoo.restkit.config;
 
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
@@ -27,7 +28,7 @@ public class ParameterLibrary implements PersistentStateComponent<ParameterLibra
     private Map<String, Map<String, List<KV>>> parameterMap = new HashMap<>(0);
 
     public static ParameterLibrary getInstance(Project project) {
-        return project.getService(ParameterLibrary.class);
+        return ServiceManager.getService(project, ParameterLibrary.class);
     }
 
     @Override

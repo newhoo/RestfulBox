@@ -122,14 +122,14 @@
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <!--    until-build="202.*"-->
-    <idea-version since-build="212.0"/>
+    <idea-version since-build="183" until-build="183.*"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html on how to target different products -->
     <!-- uncomment to enable plugin in all products -->
     <depends>com.intellij.modules.platform</depends>
     <depends optional="true" config-file="restkit-withJava.xml">com.intellij.modules.java</depends>
     <depends optional="true" config-file="restkit-withKotlin.xml">org.jetbrains.kotlin</depends>
-    <depends optional="true" config-file="restkit-withMicroservices.xml">com.intellij.modules.microservices</depends>
+<!--    <depends optional="true" config-file="restkit-withMicroservices.xml">com.intellij.modules.microservices</depends>-->
 
     <project-components>
         <!-- Add your project components here, better not use. -->
@@ -158,7 +158,7 @@
         <!-- <intentionAction> -->
         <!--     <className>io.github.newhoo.restkit.intention.JumpToTreeIntention</className> -->
         <!-- </intentionAction> -->
-        <iw.actionProvider implementation="io.github.newhoo.restkit.parameter.library.ParameterLibraryActionProvider"/>
+<!--        <iw.actionProvider implementation="io.github.newhoo.restkit.parameter.library.ParameterLibraryActionProvider"/>-->
         <!-- 在编辑器添加悬浮按钮 -->
         <!-- <editorFloatingToolbarProvider id="MyDefaultFloatingToolbarProvider" implementation="com.intellij.openapi.editor.toolbar.floating.DefaultFloatingToolbarProvider"/> -->
         <notificationGroup id="RESTKit.balloonGroup" displayType="BALLOON"/>

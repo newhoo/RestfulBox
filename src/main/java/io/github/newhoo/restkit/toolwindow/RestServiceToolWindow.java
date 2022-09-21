@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.ui.Splitter;
@@ -43,7 +44,7 @@ public class RestServiceToolWindow extends SimpleToolWindowPanel {
     private void initToolWindow() {
         // 设置ToolWindow的顶部工具条
         final ActionManager actionManager = ActionManager.getInstance();
-        ActionToolbar actionToolbar = actionManager.createActionToolbar(ActionPlaces.TOOLWINDOW_TOOLBAR_BAR,
+        ActionToolbar actionToolbar = actionManager.createActionToolbar("ActionPlaces.TOOLWINDOW_TOOLBAR_BAR",
                 (DefaultActionGroup) actionManager.getAction("RESTKit.NavigatorActionsToolbar"),
                 true);
         setToolbar(actionToolbar.getComponent());
@@ -61,7 +62,7 @@ public class RestServiceToolWindow extends SimpleToolWindowPanel {
         servicesContentPaneSplitter.setSecondComponent(new RestServiceClient(myProject));
         setContent(servicesContentPaneSplitter);
 
-        Content content = ApplicationManager.getApplication().getService(ContentFactory.class).createContent(this, "", false);
+        Content content = ServiceManager.getService(ContentFactory.class).createContent(this, "", false);
         ContentManager contentManager = myToolWindow.getContentManager();
         contentManager.addContent(content);
         contentManager.setSelectedContent(content, false);

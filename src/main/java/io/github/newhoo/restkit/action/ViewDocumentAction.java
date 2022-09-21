@@ -27,14 +27,14 @@ public class ViewDocumentAction extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        if (ActionPlaces.TOOLWINDOW_TOOLBAR_BAR.equals(e.getPlace())) {
+        if ("ActionPlaces.TOOLWINDOW_TOOLBAR_BAR".equals(e.getPlace())) {
             e.getPresentation().setIcon(AllIcons.Actions.Help);
         }
     }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        if (!ActionPlaces.TOOLWINDOW_TOOLBAR_BAR.equals(e.getPlace())) {
+        if (!"ActionPlaces.TOOLWINDOW_TOOLBAR_BAR".equals(e.getPlace())) {
             BrowserUtil.browse(GITHUB_URL);
             return;
         }

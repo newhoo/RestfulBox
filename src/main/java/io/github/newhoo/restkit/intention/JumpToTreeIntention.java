@@ -1,4 +1,4 @@
-//package io.github.newhoo.restkit.intention;
+package io.github.newhoo.restkit.intention;//package io.github.newhoo.restkit.intention;
 //
 //import com.intellij.codeInsight.intention.IntentionAction;
 //import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;

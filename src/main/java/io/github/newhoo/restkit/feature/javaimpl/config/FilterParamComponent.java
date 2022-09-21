@@ -1,6 +1,7 @@
 package io.github.newhoo.restkit.feature.javaimpl.config;
 
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
@@ -32,7 +33,7 @@ public class FilterParamComponent implements PersistentStateComponent<FilterPara
     ));
 
     public static FilterParamComponent getInstance(Project project) {
-        return project.getService(FilterParamComponent.class);
+        return ServiceManager.getService(project, FilterParamComponent.class);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package io.github.newhoo.restkit.config;
 
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
@@ -21,7 +22,7 @@ public class CommonSettingComponent implements PersistentStateComponent<CommonSe
     private final CommonSetting commonSetting = new CommonSetting();
 
     public static CommonSettingComponent getInstance(Project project) {
-        return project.getService(CommonSettingComponent.class);
+        return ServiceManager.getService(project, CommonSettingComponent.class);
     }
 
     @NotNull

@@ -1,19 +1,14 @@
 package io.github.newhoo.restkit.navigation;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.IdeBundle;
 import com.intellij.ide.IdeEventQueue;
 import com.intellij.ide.actions.SearchEverywherePsiRenderer;
-import com.intellij.ide.actions.searcheverywhere.FoundItemDescriptor;
 import com.intellij.ide.actions.searcheverywhere.PersistentSearchEverywhereContributorFilter;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereContributor;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereContributorFactory;
-import com.intellij.ide.actions.searcheverywhere.SearchEverywhereFiltersAction;
+import com.intellij.ide.actions.searcheverywhere.SearchEverywhereContributorFilter;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereUI;
-import com.intellij.ide.actions.searcheverywhere.WeightedSearchEverywhereContributor;
 import com.intellij.idea.ActionsBundle;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
@@ -27,9 +22,7 @@ import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.ui.ColoredListCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
-import com.intellij.util.Processor;
 import com.intellij.util.PsiNavigateUtil;
-import com.intellij.util.TextWithIcon;
 import com.intellij.util.ui.UIUtil;
 import io.github.newhoo.restkit.common.HttpMethod;
 import io.github.newhoo.restkit.common.PsiRestItem;
@@ -50,10 +43,10 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * RestSearchEverywhereContributor
@@ -61,7 +54,7 @@ import java.util.Set;
  * @author huzunrong
  * @since 1.0.8
  */
-public class RestSearchEverywhereContributor implements WeightedSearchEverywhereContributor<RestItem> {
+public class RestSearchEverywhereContributor implements SearchEverywhereContributor<RestItem> {
 
     private final AnActionEvent actionEvent;
     private final Project myProject;
@@ -93,30 +86,30 @@ public class RestSearchEverywhereContributor implements WeightedSearchEverywhere
         return "URL";
     }
 
+    @Nullable
+    @Override
+    public String includeNonProjectItemsText() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Object getDataForItem(@NotNull Object element, @NotNull String dataId) {
+        return null;
+    }
+
     @Override
     public int getSortWeight() {
         return 800;
     }
 
-    @Nullable
     @Override
-    public String getAdvertisement() {
-        return DumbService.isDumb(myProject) ? IdeBundle.message("dumb.mode.results.might.be.incomplete") : null;
-    }
-
-    @NotNull
-    @Override
-    public List<AnAction> getActions(@NotNull Runnable onChanged) {
-        return Collections.singletonList(new SearchEverywhereFiltersAction<>(myFilter, onChanged));
-    }
-
-    @Override
-    public boolean processSelectedItem(@NotNull RestItem selected, int modifiers, @NotNull String searchText) {
+    public boolean processSelectedItem(@NotNull Object selected, int modifiers, @NotNull String searchText) {
         if (selected instanceof PsiRestItem) {
             PsiNavigateUtil.navigate(((PsiRestItem) selected).getPsiElement());
-        } else {
+        } else if (selected instanceof RestItem) {
             RestToolWindowFactory.getRestServiceToolWindow(myProject, restServiceToolWindow -> {
-                restServiceToolWindow.navigateToTree(selected.getUrl(), ObjectUtils.defaultIfNull(selected.getMethod(), HttpMethod.GET).name(), selected.getModuleName());
+                restServiceToolWindow.navigateToTree(((RestItem) selected).getUrl(), ObjectUtils.defaultIfNull(((RestItem) selected).getMethod(), HttpMethod.GET).name(), ((RestItem) selected).getModuleName());
             });
         }
         return true;
@@ -124,8 +117,8 @@ public class RestSearchEverywhereContributor implements WeightedSearchEverywhere
 
     @NotNull
     @Override
-    public ListCellRenderer<Object> getElementsRenderer() {
-        return new SearchEverywherePsiRenderer(this) {
+    public ListCellRenderer<Object> getElementsRenderer(@NotNull JList<?> list) {
+        return new SearchEverywherePsiRenderer(list) {
 
             private JList list = null;
             private final KeyAdapter keyAdapter = new KeyAdapter() {
@@ -171,7 +164,8 @@ public class RestSearchEverywhereContributor implements WeightedSearchEverywhere
                 Color bgColor = UIUtil.getListBackground();
                 TextAttributes attributes = getNavigationItemAttributes(value);
                 SimpleTextAttributes nameAttributes = attributes != null ? SimpleTextAttributes.fromTextAttributes(attributes) : null;
-                if (nameAttributes == null) nameAttributes = new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, fgColor);
+                if (nameAttributes == null)
+                    nameAttributes = new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, fgColor);
 
                 ItemMatchers itemMatchers = getItemMatchers(list, value);
                 RestItem item = (RestItem) value;
@@ -199,26 +193,15 @@ public class RestSearchEverywhereContributor implements WeightedSearchEverywhere
                 return true;
             }
 
-            @Nullable
-            @Override
-            protected TextWithIcon getItemLocation(Object value) {
-                if (showModule && value instanceof RestItem) {
-                    return new TextWithIcon(((RestItem) value).getModuleName(), AllIcons.Nodes.Module);
-                }
-                return super.getItemLocation(value);
-            }
+//            @Nullable
+//            @Override
+//            protected TextWithIcon getItemLocation(Object value) {
+//                if (showModule && value instanceof RestItem) {
+//                    return new TextWithIcon(((RestItem) value).getModuleName(), AllIcons.Nodes.Module);
+//                }
+//                return super.getItemLocation(value);
+//            }
         };
-    }
-
-    @Nullable
-    @Override
-    public Object getDataForItem(@NotNull RestItem element, @NotNull String dataId) {
-        return null;
-    }
-
-    @Override
-    public boolean isEmptyPatternSupported() {
-        return true;
     }
 
     @Override
@@ -232,13 +215,8 @@ public class RestSearchEverywhereContributor implements WeightedSearchEverywhere
     }
 
     @Override
-    public boolean isDumbAware() {
-        return DumbService.isDumb(myProject);
-    }
-
-    @Override
-    public void fetchWeightedElements(@NotNull String pattern, @NotNull ProgressIndicator progressIndicator, @NotNull Processor<? super FoundItemDescriptor<RestItem>> consumer) {
-        if (isDumbAware() || !shouldProvideElements(pattern)) {
+    public void fetchElements(@NotNull String pattern, boolean everywhere, @Nullable SearchEverywhereContributorFilter<RestItem> filter, @NotNull ProgressIndicator progressIndicator, @NotNull Function<Object, Boolean> consumer) {
+        if (DumbService.isDumb(myProject) || !shouldProvideElements(pattern)) {
             return;
         }
 
@@ -257,7 +235,7 @@ public class RestSearchEverywhereContributor implements WeightedSearchEverywhere
             for (RestItem restItem : navItemList) {
                 if (selectAll || httpMethodSet.contains(restItem.getMethod())) {
                     if (matcher.matches(restItem.getUrl()) || matcher.matches(restItem.getDescription())) {
-                        if (!consumer.process(new FoundItemDescriptor<>(restItem, 0))) {
+                        if (!consumer.apply(restItem)) {
                             return;
                         }
                     }
@@ -265,6 +243,7 @@ public class RestSearchEverywhereContributor implements WeightedSearchEverywhere
             }
         }
     }
+
 
     /**
      * 判断是否应该返回列表元素
@@ -276,7 +255,7 @@ public class RestSearchEverywhereContributor implements WeightedSearchEverywhere
         SearchEverywhereManager seManager = SearchEverywhereManager.getInstance(myProject);
         if (seManager.isShown()) {
             // 非URL Tab, 也只有ALL Tab
-            if (!getSearchProviderId().equals(seManager.getSelectedTabID())) {
+            if (!getSearchProviderId().equals(seManager.getShownContributorID())) {
                 if (StringUtils.isEmpty(StringUtils.trimToNull(pattern))) {
                     shouldProvideElements = false;
                 }
@@ -297,6 +276,17 @@ public class RestSearchEverywhereContributor implements WeightedSearchEverywhere
         @Override
         public SearchEverywhereContributor<RestItem> createContributor(@NotNull AnActionEvent initEvent) {
             return new RestSearchEverywhereContributor(initEvent);
+        }
+
+        @Nullable
+        @Override
+        public SearchEverywhereContributorFilter<RestItem> createFilter(AnActionEvent initEvent) {
+//            PersistentSearchEverywhereContributorFilter<HttpMethod> myFilter = new PersistentSearchEverywhereContributorFilter<>(
+//                    Arrays.asList(HttpMethod.values()), HttpMethodFilterConfiguration.getInstance(initEvent.getRequiredData(CommonDataKeys.PROJECT)),
+//                    Enum::name, httpMethod -> null
+//            );
+//            return myFilter;
+            return null;
         }
     }
 }

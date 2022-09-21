@@ -14,7 +14,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.Strings;
 import com.intellij.openapi.vfs.VirtualFile;
 import io.github.newhoo.restkit.util.ToolkitUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -57,7 +56,7 @@ public class SelectUploadFileAction extends AnAction {
             if (lines[i].contains(":") && lines[i].contains(HTTP_FILE_PREFIX)) {
                 String actionText = (i + 1) + "-" + lines[i];
                 int finalI = i;
-                actions.add(new AnAction(() -> actionText) {
+                actions.add(new AnAction(actionText) {
                     @Override
                     public void actionPerformed(@NotNull AnActionEvent e1) {
                         innerActionPerformed(editor, project, lines, finalI);
@@ -89,7 +88,7 @@ public class SelectUploadFileAction extends AnAction {
 
             String line = lines[lineIndex];
             lines[lineIndex] = line.substring(0, line.indexOf(":")) + ": " + ToolkitUtil.getUploadFileDescriptor(filepath);
-            String newParamText = Strings.join(lines, s -> s, "\n");
+            String newParamText = StringUtils.join(lines, "\n");
 
             Document doc = editor.getDocument();
             WriteCommandAction.runWriteCommandAction(project, () -> {

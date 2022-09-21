@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.newhoo.restkit'
-version '2.1.0'
+version '2.1.0-2018.3'
 
 sourceCompatibility = 1.8
 
@@ -20,13 +20,13 @@ dependencies {
 }
 
 intellij {
-    version '2021.2'
-    type 'IU'
+    version '2018.3'
+//    type 'IU'
 //    localPath '/Applications/IntelliJ IDEA.app/Contents'
 
     pluginName 'RESTKit'
     updateSinceUntilBuild false
     downloadSources = true
-    plugins = ['java', 'Kotlin']
+    plugins = ['Kotlin']
     sandboxDirectory = "${rootProject.rootDir}/idea-sandbox"
 }

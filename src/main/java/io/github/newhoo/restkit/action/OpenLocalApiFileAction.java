@@ -41,7 +41,7 @@ public class OpenLocalApiFileAction extends DumbAwareAction {
         if (project == null) return;
 
         CommonSetting setting = CommonSettingComponent.getInstance(project).getState();
-        VirtualFile file = LocalFileSystem.getInstance().refreshAndFindFileByNioFile(Paths.get(setting.getApiFilePath()));
+        VirtualFile file = LocalFileSystem.getInstance().refreshAndFindFileByPath(setting.getApiFilePath());
         if (file != null) {
             VfsUtil.markDirtyAndRefresh(true, false, false, file);
             FileEditorManager.getInstance(project).openFile(file, true);

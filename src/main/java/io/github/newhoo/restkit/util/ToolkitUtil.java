@@ -1,6 +1,5 @@
 package io.github.newhoo.restkit.util;
 
-import com.intellij.openapi.util.text.Strings;
 import io.github.newhoo.restkit.common.KV;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -59,7 +58,7 @@ public class ToolkitUtil {
             }
         }
         if (!encodeQueryParams.isEmpty()) {
-            return Strings.join(encodeQueryParams, "&");
+            return StringUtils.join(encodeQueryParams, "&");
         }
         return queryParams;
     }

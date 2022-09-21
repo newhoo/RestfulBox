@@ -29,7 +29,7 @@ public class JsonUtils {
         if (!isValidJson(str)) {
             return str;
         }
-        JsonElement parse = JsonParser.parseString(str);
+        JsonElement parse = new JsonParser().parse(str);
         return GSON.toJson(parse);
     }
 

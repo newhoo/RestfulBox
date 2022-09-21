@@ -355,7 +355,7 @@ public class HttpUtils {
         Header fileHeader = response.getFirstHeader("Content-Disposition");
         if (fileHeader != null) {
             String filename = Arrays.stream(fileHeader.getElements())
-                                    .filter(e -> StringUtils.startsWith(e.getName(), "attachment"))
+                                    //.filter(e -> StringUtils.startsWith(e.getName(), "attachment"))
                                     .map(e -> e.getParameterByName("filename"))
                                     .filter(Objects::nonNull)
                                     .map(NameValuePair::getValue)

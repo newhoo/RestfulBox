@@ -1,6 +1,7 @@
 package io.github.newhoo.restkit.i18n;
 
 import com.intellij.AbstractBundle;
+import com.intellij.CommonBundle;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -28,6 +29,6 @@ public class RestBundle {
     }
 
     public static String message(String key, Object... params) {
-        return AbstractBundle.message(RESOURCE_BUNDLE, key, params).trim();
+        return CommonBundle.message(RESOURCE_BUNDLE, key, params).trim();
     }
 }

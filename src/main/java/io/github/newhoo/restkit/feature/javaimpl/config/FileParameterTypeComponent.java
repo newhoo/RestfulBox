@@ -1,6 +1,7 @@
 package io.github.newhoo.restkit.feature.javaimpl.config;
 
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
@@ -28,7 +29,7 @@ public class FileParameterTypeComponent implements PersistentStateComponent<File
     ));
 
     public static FileParameterTypeComponent getInstance(Project project) {
-        return project.getService(FileParameterTypeComponent.class);
+        return ServiceManager.getService(project, FileParameterTypeComponent.class);
     }
 
     @Override

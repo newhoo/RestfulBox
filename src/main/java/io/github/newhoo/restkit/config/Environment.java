@@ -1,5 +1,6 @@
 package io.github.newhoo.restkit.config;
 
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import io.github.newhoo.restkit.classloader.DynamicLoader;
 import io.github.newhoo.restkit.common.BKV;
@@ -35,7 +36,7 @@ public class Environment {
     private String script;
 
     public static Environment getInstance(Project project) {
-        return project.getService(EnvironmentComponent.class).getState();
+        return ServiceManager.getService(project, EnvironmentComponent.class).getState();
     }
 
     public String getCurrentEnv() {
