@@ -67,7 +67,7 @@ public class RestServiceToolWindow extends SimpleToolWindowPanel {
         contentManager.setSelectedContent(content, false);
 
         // update tree
-        scheduleUpdateTree();
+        IdeaUtils.runWhenProjectIsReady(myProject, () -> restServiceTree.updateTree(null));
     }
 
     /**
