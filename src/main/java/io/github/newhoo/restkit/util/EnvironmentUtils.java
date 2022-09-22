@@ -149,7 +149,7 @@ public class EnvironmentUtils {
 
         Environment setting = Environment.getInstance(project);
         Map<String, String> env = setting.getCurrentEnabledEnvMap();
-        Map<String, Method> scriptMethodMap = (StringUtils.startsWith(original, "{{$") && StringUtils.endsWith(original, "$}}")) ? setting.getScriptMethodMap() : Collections.emptyMap();
+        Map<String, Method> scriptMethodMap = (StringUtils.contains(original, "{{$") && StringUtils.contains(original, "$}}")) ? setting.getScriptMethodMap() : Collections.emptyMap();
         Matcher matcher = PLACEHOLDER_PATTERN.matcher(original);
         while (matcher.find()) {
             String group = matcher.group(1);

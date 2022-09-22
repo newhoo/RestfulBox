@@ -1,18 +1,16 @@
 package io.github.newhoo.restkit.config;
 
 import com.intellij.openapi.project.Project;
-import io.github.newhoo.restkit.classloader.DynamicLoader;
 import io.github.newhoo.restkit.common.BKV;
 import io.github.newhoo.restkit.common.EnvList;
 import io.github.newhoo.restkit.common.KV;
+import io.github.newhoo.restkit.util.ScriptUtils;
 import lombok.Data;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -88,28 +86,7 @@ public class Environment {
         return list;
     }
 
-    private static final List<String> ignoreMethods = Arrays.asList("wait", "wait", "wait", "equals", "toString", "hashCode", "getClass", "notify", "notifyAll");
-
     public Map<String, Method> getScriptMethodMap() {
-        String script = getScript();
-        if (StringUtils.isEmpty(script)) {
-            return Collections.emptyMap();
-        }
-        script = script.substring(script.indexOf("{") + 1, script.length() - 1);
-
-        String classContainer = "public class RestKitScript {{{script}}}";
-        String scriptClass = classContainer.replace("{{script}}", script);
-
-        try {
-            Map<String, byte[]> bytecode = DynamicLoader.compile("RestKitScript.java", scriptClass);
-            DynamicLoader.MemoryClassLoader classLoader = new DynamicLoader.MemoryClassLoader(bytecode);
-            Class<?> clazz = classLoader.loadClass("RestKitScript");
-            return Arrays.stream(clazz.getMethods())
-                         .filter(m -> !ignoreMethods.contains(m.getName()) && m.getModifiers() == (Modifier.STATIC | Modifier.PUBLIC))
-                         .collect(Collectors.toMap(Method::getName, m -> m));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return Collections.emptyMap();
+        return ScriptUtils.getScriptMethodMapFromJava(script);
     }
 }
