@@ -31,6 +31,8 @@ public class CommonSetting {
     private boolean enableParameterLibrary = true;
     private boolean enableParameterLibraryShortcut = true;
     private boolean enableMethodLineMarker = true;
+    private boolean enablePreRequestScript = true;
+    private boolean enablePostRequestScript = true;
     private String preRequestScriptPath = "";
     private String postRequestScriptPath = "";
     private String apiFilePath = "";
@@ -42,6 +44,8 @@ public class CommonSetting {
                 || displayTreeListUsingApiDesc != modifiedSetting.isDisplayTreeListUsingApiDesc()
                 || enableParameterLibrary != modifiedSetting.isEnableParameterLibrary()
                 || enableMethodLineMarker != modifiedSetting.isEnableMethodLineMarker()
+                || enablePreRequestScript != modifiedSetting.isEnablePreRequestScript()
+                || enablePostRequestScript != modifiedSetting.isEnablePostRequestScript()
                 || !StringUtils.equals(preRequestScriptPath, modifiedSetting.getPreRequestScriptPath())
                 || !StringUtils.equals(postRequestScriptPath, modifiedSetting.getPostRequestScriptPath())
                 || !StringUtils.equals(apiFilePath, modifiedSetting.getApiFilePath())

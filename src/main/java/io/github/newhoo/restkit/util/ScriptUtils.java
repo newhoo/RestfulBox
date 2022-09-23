@@ -5,6 +5,7 @@ import com.intellij.openapi.project.Project;
 import groovy.lang.GroovyClassLoader;
 import io.github.newhoo.restkit.common.Request;
 import io.github.newhoo.restkit.common.Response;
+import io.github.newhoo.restkit.config.CommonSetting;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.Environment;
 import lombok.experimental.UtilityClass;
@@ -30,8 +31,9 @@ public class ScriptUtils {
     public static final Logger LOG = Logger.getInstance(ScriptUtils.class);
 
     public static void handlePreRequestScript(Request request, Project project) throws Exception {
-        String scriptPath = CommonSettingComponent.getInstance(project).getState().getPreRequestScriptPath();
-        if (StringUtils.isNotEmpty(scriptPath) && Files.exists(Paths.get(scriptPath))) {
+        CommonSetting setting = CommonSettingComponent.getInstance(project).getState();
+        String scriptPath = setting.getPreRequestScriptPath();
+        if (setting.isEnablePreRequestScript() && StringUtils.isNotEmpty(scriptPath) && Files.exists(Paths.get(scriptPath))) {
             Map<String, String> environmentMap = Environment.getInstance(project).getCurrentEnabledEnvMap();
 
             ScriptEngine se = getScriptEngine();
@@ -43,8 +45,9 @@ public class ScriptUtils {
     }
 
     public static void handlePostRequestScript(Request request, Response response, Project project) throws Exception {
-        String scriptPath = CommonSettingComponent.getInstance(project).getState().getPostRequestScriptPath();
-        if (StringUtils.isNotEmpty(scriptPath) && Files.exists(Paths.get(scriptPath))) {
+        CommonSetting setting = CommonSettingComponent.getInstance(project).getState();
+        String scriptPath = setting.getPostRequestScriptPath();
+        if (setting.isEnablePostRequestScript() && StringUtils.isNotEmpty(scriptPath) && Files.exists(Paths.get(scriptPath))) {
             Map<String, String> environmentMap = Environment.getInstance(project).getCurrentEnabledEnvMap();
 
             ScriptEngine se = getScriptEngine();

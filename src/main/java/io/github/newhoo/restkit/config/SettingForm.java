@@ -55,11 +55,11 @@ public class SettingForm {
 
     private JPanel requestPanel;
     private JCheckBox saveRequestLogCheckBox;
+    private JCheckBox preRequestScriptCheckbox;
     private JPanel preRequestScriptPanel;
-    private JLabel preRequestScriptLabel;
     private TextFieldWithBrowseButton preRequestScriptPathTextField;
+    private JCheckBox postRequestScriptCheckbox;
     private JPanel postRequestScriptPanel;
-    private JLabel postRequestScriptLabel;
     private TextFieldWithBrowseButton postRequestScriptPathTextField;
 
     private JPanel otherPanel;
@@ -133,8 +133,8 @@ public class SettingForm {
         enableParameterLibraryCheckBox.addItemListener(e -> {
             enableParameterLibraryCheckBox.setText("Enable parameter library (need reopen project)");
         });
-        addScriptLabelListener(preRequestScriptLabel, preRequestScriptPathTextField, "Pre-request Script.js", PRE_REQUEST_SCRIPT);
-        addScriptLabelListener(postRequestScriptLabel, postRequestScriptPathTextField, "Post-request Script.js", POST_REQUEST_SCRIPT);
+        addScriptLabelListener(preRequestScriptCheckbox, preRequestScriptPathTextField, "Pre-request Script.js", PRE_REQUEST_SCRIPT);
+        addScriptLabelListener(postRequestScriptCheckbox, postRequestScriptPathTextField, "Post-request Script.js", POST_REQUEST_SCRIPT);
         apiFilePathLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -155,11 +155,11 @@ public class SettingForm {
         });
     }
 
-    private void addScriptLabelListener(JLabel scriptLabel, TextFieldWithBrowseButton scriptPathTextField, String scriptName, String defaultContent) {
-        scriptLabel.addMouseListener(new MouseAdapter() {
+    private void addScriptLabelListener(JCheckBox scriptCheckBox, TextFieldWithBrowseButton scriptPathTextField, String scriptName, String defaultContent) {
+        scriptCheckBox.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2 && StringUtils.isEmpty(scriptPathTextField.getText())) {
+                if (e.getClickCount() == 2 && StringUtils.isEmpty(scriptPathTextField.getText()) && !project.isDefault()) {
                     String scriptPath = FileUtils.getRestDirectory(project) + scriptName;
                     scriptPathTextField.setText(scriptPath);
                     if (!Files.exists(Paths.get(scriptPath))) {
@@ -186,6 +186,8 @@ public class SettingForm {
         commonSetting.setEnableMethodLineMarker(enableMethodLineMarkerCheckBox.isSelected());
 
         commonSetting.setSaveRequestLog(saveRequestLogCheckBox.isSelected());
+        commonSetting.setEnablePreRequestScript(preRequestScriptCheckbox.isSelected());
+        commonSetting.setEnablePostRequestScript(postRequestScriptCheckbox.isSelected());
         commonSetting.setPreRequestScriptPath(preRequestScriptPathTextField.getText().trim());
         commonSetting.setPostRequestScriptPath(postRequestScriptPathTextField.getText().trim());
 
@@ -209,6 +211,8 @@ public class SettingForm {
         enableMethodLineMarkerCheckBox.setSelected(commonSetting.isEnableMethodLineMarker());
 
         saveRequestLogCheckBox.setSelected(commonSetting.isSaveRequestLog());
+        preRequestScriptCheckbox.setSelected(commonSetting.isEnablePreRequestScript());
+        postRequestScriptCheckbox.setSelected(commonSetting.isEnablePostRequestScript());
         preRequestScriptPathTextField.setText(FileUtil.toSystemDependentName(commonSetting.getPreRequestScriptPath()));
         postRequestScriptPathTextField.setText(FileUtil.toSystemDependentName(commonSetting.getPostRequestScriptPath()));
 
