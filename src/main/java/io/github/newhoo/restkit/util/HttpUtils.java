@@ -63,6 +63,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_DOWNLOAD_FILEPATH_PREFIX;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_DOWNLOAD_DIRECTORY;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_PREFIX;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD;
@@ -105,7 +106,7 @@ public class HttpUtils {
             // 判断下载文件
             File downloadFile = downloadFile(req, response);
             if (downloadFile != null) {
-                return new RequestInfo(req, new io.github.newhoo.restkit.restful.http.HttpResponse(response, downloadFile.getPath()), hostAddress, (System.currentTimeMillis() - startTs));
+                return new RequestInfo(req, new io.github.newhoo.restkit.restful.http.HttpResponse(response, HTTP_DOWNLOAD_FILEPATH_PREFIX + downloadFile.getPath()), hostAddress, (System.currentTimeMillis() - startTs));
             }
             String result = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
             // unicode 转码
@@ -351,16 +352,26 @@ public class HttpUtils {
     }
 
     private static File downloadFile(io.github.newhoo.restkit.restful.http.HttpRequest req, CloseableHttpResponse response) throws IOException {
+        String filename = null;
         //Content-Disposition: attachment; filename="2d8e6de174899729ccd12f41230a5510.webp"; filename*=utf-8''2d8e6de174899729ccd12f41230a5510.webp
         Header fileHeader = response.getFirstHeader("Content-Disposition");
         if (fileHeader != null) {
-            String filename = Arrays.stream(fileHeader.getElements())
-                                    //.filter(e -> StringUtils.startsWith(e.getName(), "attachment"))
-                                    .map(e -> e.getParameterByName("filename"))
-                                    .filter(Objects::nonNull)
-                                    .map(NameValuePair::getValue)
-                                    .findFirst()
-                                    .orElse("noname_file");
+            filename = Arrays.stream(fileHeader.getElements())
+                             .map(e -> e.getParameterByName("filename"))
+                             .filter(Objects::nonNull)
+                             .map(NameValuePair::getValue)
+                             .findFirst()
+                             .filter(StringUtils::isNotEmpty)
+                             .orElse("noname_file");
+        } else if ("application/octet-stream".equals(response.getFirstHeader("Content-Type").getValue())) {
+            String url = req.getUrl();
+            if (StringUtils.isEmpty(url) || StringUtils.endsWith(url, "/")) {
+                filename = "noname_file";
+            } else {
+                filename = url.substring(url.lastIndexOf('/') + 1);
+            }
+        }
+        if (StringUtils.isNotEmpty(filename)) {
             String downloadDirectory = req.getConfig().get(HTTP_FILE_DOWNLOAD_DIRECTORY);
             if (!StringUtils.endsWith(downloadDirectory, "/")) {
                 downloadDirectory += "/";

@@ -23,6 +23,7 @@ public class RestConstant {
     public static final String HTTP_FILE_POSTFIX = "]";
     public static final String HTTP_FILE_DEFAULT_DESCRIPTOR = "file@[filepath]";
     public static final String HTTP_FILE_DOWNLOAD_DIRECTORY = "downloadDirectory";
+    public static final String HTTP_DOWNLOAD_FILEPATH_PREFIX = "file:";
     public static final String HTTP_BASE_URL = "baseUrl";
     public static final String HTTP_BASE_URL_PLACEHOLDER = PLACEHOLDER_BASE_URL;
     public static final String HTTP_BASE_URL_DEFAULT = "http://localhost:8080";

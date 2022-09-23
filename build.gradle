@@ -16,8 +16,8 @@ repositories {
 
 dependencies {
     implementation 'org.openjdk.nashorn:nashorn-core:15.4'
-    compileOnly 'org.projectlombok:lombok:1.18.22'
-    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
 intellij {

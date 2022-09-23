@@ -266,10 +266,12 @@
             <action id="Menu.P12GenerateAction" class="io.github.newhoo.restkit.toolwindow.action.editor.P12GenerateAction" text="Add P12 Cert" icon="AllIcons.General.Add"/>
             <reference id="BasicEditorPopupMenu"/>
         </group>
-            <action id="Menu.SelectUploadFileAction" class="io.github.newhoo.restkit.toolwindow.action.editor.SelectUploadFileAction" text="Select Upload File" icon="AllIcons.Nodes.UpLevel">
-                <!-- 浮动按钮 -->
-                 <add-to-group group-id="EditorContextBarMenu" anchor="last"/>
-            </action>
+        <action id="Menu.SelectUploadFileAction" class="io.github.newhoo.restkit.toolwindow.action.editor.SelectUploadFileAction" text="Select Upload File" icon="AllIcons.Nodes.UpLevel">
+            <add-to-group group-id="EditorContextBarMenu" anchor="last"/>
+        </action>
+        <action id="Menu.ShowDownloadFileAction" class="io.github.newhoo.restkit.toolwindow.action.editor.ShowDownloadFileAction" text="Show File" icon="AllIcons.Actions.MenuOpen">
+            <add-to-group group-id="EditorContextBarMenu" anchor="last"/>
+        </action>
     </actions>
 
 </idea-plugin>
