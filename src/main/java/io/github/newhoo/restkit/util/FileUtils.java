@@ -46,6 +46,10 @@ public class FileUtils {
         return getRestDirectory(project) + "apifile.json";
     }
 
+    public static String getDownloadDirectory(Project project) {
+        return getRestDirectory(project) + "files";
+    }
+
     public static String getRestDirectory(Project project) {
         return project.getBasePath() + "/" + DIRECTORY_STORE_FOLDER + "/restkit/";
     }

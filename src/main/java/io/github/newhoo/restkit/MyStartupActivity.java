@@ -47,7 +47,7 @@ public class MyStartupActivity implements StartupActivity {
         }
         HttpSetting httpSetting = HttpSettingComponent.getInstance(project).getState();
         if (StringUtils.isEmpty(httpSetting.getDownloadDirectory())) {
-            httpSetting.setDownloadDirectory(FileUtils.getRestDirectory(project));
+            httpSetting.setDownloadDirectory(FileUtils.getDownloadDirectory(project));
         }
 
         PropertiesComponent fromSetting = PropertiesComponent.getInstance(project);

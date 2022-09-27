@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL_DEFAULT;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL_PLACEHOLDER;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_DOWNLOAD_FILEPATH_PREFIX;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_DOWNLOAD_DIRECTORY;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD_PLACEHOLDER;
@@ -64,7 +65,7 @@ public class HttpClient implements RestClient {
         int timeout = HttpSettingComponent.getInstance(project).getState().getRequestTimeout();
         // 默认最大设置60s
         if (timeout <= 0) {
-            timeout = 60000;
+            timeout = 30000;
         }
         List<KV> list = new LinkedList<>();
         list.add(new KV(HTTP_BASE_URL, HTTP_BASE_URL_PLACEHOLDER));
@@ -177,8 +178,7 @@ public class HttpClient implements RestClient {
             if (StringUtils.isNotEmpty(respHeader)) {
                 sb.append(respHeader).append("\n");
             }
-            Header fileHeader = response.getOriginal().getFirstHeader("Content-Disposition");
-            if (fileHeader != null) {
+            if (StringUtils.startsWith(response.getBody(), HTTP_DOWNLOAD_FILEPATH_PREFIX)) {
                 sb.append("\n").append("[file stream ...]").append("\n");
             } else if (StringUtils.isNotEmpty(response.getBody0())) {
                 // 替换response内容\r\n的\r
@@ -241,7 +241,9 @@ public class HttpClient implements RestClient {
             if (StringUtils.isNotEmpty(respHeader)) {
                 sb.append(respHeader).append("\n");
             }
-            if (StringUtils.isNotEmpty(response.getBody())) {
+            if (StringUtils.startsWith(response.getBody(), HTTP_DOWNLOAD_FILEPATH_PREFIX)) {
+                sb.append("\n").append("[file stream ...]").append("\n");
+            } else if (StringUtils.isNotEmpty(response.getBody())) {
                 sb.append("\n").append(response.getBody()).append("\n");
             }
         }

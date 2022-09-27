@@ -12,6 +12,7 @@ import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -104,9 +105,9 @@ public class HttpUtils {
             String hostAddress = (String) context.getAttribute(HTTP_HOSTADDRESS);
 
             // 判断下载文件
-            File downloadFile = downloadFile(req, response);
+            File downloadFile = tryDownloadFile(req, response);
             if (downloadFile != null) {
-                return new RequestInfo(req, new io.github.newhoo.restkit.restful.http.HttpResponse(response, HTTP_DOWNLOAD_FILEPATH_PREFIX + downloadFile.getPath()), hostAddress, (System.currentTimeMillis() - startTs));
+                return new RequestInfo(req, new io.github.newhoo.restkit.restful.http.HttpResponse(response, HTTP_DOWNLOAD_FILEPATH_PREFIX + " " + downloadFile.getPath()), hostAddress, (System.currentTimeMillis() - startTs));
             }
             String result = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
             // unicode 转码
@@ -351,7 +352,21 @@ public class HttpUtils {
         }
     }
 
-    private static File downloadFile(io.github.newhoo.restkit.restful.http.HttpRequest req, CloseableHttpResponse response) throws IOException {
+    private static File tryDownloadFile(io.github.newhoo.restkit.restful.http.HttpRequest req, CloseableHttpResponse response) throws IOException {
+        try {
+            return doDownloadFile(req, response);
+        } catch (IOException e) {
+            throw e;
+        } catch (Exception e) {
+            LOG.warn("download file ex: " + e);
+            return null;
+        }
+    }
+
+    private static File doDownloadFile(io.github.newhoo.restkit.restful.http.HttpRequest req, CloseableHttpResponse response) throws IOException {
+        if (response.getStatusLine() == null || response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+            return null;
+        }
         String filename = null;
         //Content-Disposition: attachment; filename="2d8e6de174899729ccd12f41230a5510.webp"; filename*=utf-8''2d8e6de174899729ccd12f41230a5510.webp
         Header fileHeader = response.getFirstHeader("Content-Disposition");
@@ -363,12 +378,19 @@ public class HttpUtils {
                              .findFirst()
                              .filter(StringUtils::isNotEmpty)
                              .orElse("noname_file");
-        } else if ("application/octet-stream".equals(response.getFirstHeader("Content-Type").getValue())) {
+        } else if (response.getFirstHeader("Content-Type") != null && StringUtils.contains(response.getFirstHeader("Content-Type").getValue(), "application/octet-stream")) {
             String url = req.getUrl();
             if (StringUtils.isEmpty(url) || StringUtils.endsWith(url, "/")) {
                 filename = "noname_file";
             } else {
                 filename = url.substring(url.lastIndexOf('/') + 1);
+                if (filename.contains("?")) {
+                    filename = filename.substring(0, filename.indexOf("?"));
+                }
+                if (StringUtils.startsWith(filename, "{") && StringUtils.endsWith(filename, "}")) {
+                    String substring = filename.substring(1, filename.length() - 1);
+                    filename = req.getParams().getOrDefault(substring, substring);
+                }
             }
         }
         if (StringUtils.isNotEmpty(filename)) {
@@ -377,6 +399,10 @@ public class HttpUtils {
                 downloadDirectory += "/";
             }
             File file = new File(downloadDirectory + System.currentTimeMillis() + "_" + filename);
+            File dir = file.getParentFile();
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
             if (!file.exists()) {
                 file.createNewFile();
             }
