@@ -65,7 +65,7 @@ public class HttpClient implements RestClient {
         int timeout = HttpSettingComponent.getInstance(project).getState().getRequestTimeout();
         // 默认最大设置60s
         if (timeout <= 0) {
-            timeout = 30000;
+            timeout = 60000;
         }
         List<KV> list = new LinkedList<>();
         list.add(new KV(HTTP_BASE_URL, HTTP_BASE_URL_PLACEHOLDER));
