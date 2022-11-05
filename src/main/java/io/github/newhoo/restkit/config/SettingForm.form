@@ -80,7 +80,7 @@
             </constraints>
             <properties>
               <enabled value="true"/>
-              <text value="Local store path: "/>
+              <text value="Api local store path: "/>
             </properties>
           </component>
           <grid id="d6191" binding="apiFilePathPanel" layout-manager="BorderLayout" hgap="0" vgap="0">

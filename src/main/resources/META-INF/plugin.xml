@@ -36,7 +36,8 @@
     <change-notes><![CDATA[
         2.1.2
         <ul>
-            <li>fix bugs.</li>
+            <li>support Config tab parameter.</li>
+            <li>Optimize & Fix bugs.</li>
         </ul>
 
         2.1.1
@@ -206,10 +207,10 @@
         <!-- Tools menu -->
         <group id="RESTKit.ToolsMenuGroup" text="_RESTKit" popup="true" icon="/icons/service.png">
             <add-to-group group-id="ToolsMenu"/>
-            <action id="RESTKit.OpenPreScriptAction" class="io.github.newhoo.restkit.action.OpenPreScriptAction" text="Open PreScript in Editor"/>
-            <action id="RESTKit.OpenPostScriptAction" class="io.github.newhoo.restkit.action.OpenPostScriptAction" text="Open PostScript in Editor"/>
-            <action id="RESTKit.OpenRequestLogAction" class="io.github.newhoo.restkit.action.OpenRequestLogAction" text="Open Request Log in Editor"/>
-            <action id="RESTKit.OpenLocalApiFileAction" class="io.github.newhoo.restkit.action.OpenLocalApiFileAction" text="Open Local Api File in Editor"/>
+            <action id="RESTKit.OpenRequestLogAction" class="io.github.newhoo.restkit.action.OpenRequestLogAction" text="Open Request Log"/>
+            <action id="RESTKit.OpenPreScriptAction" class="io.github.newhoo.restkit.action.OpenPreScriptAction" text="Open PreScript"/>
+            <action id="RESTKit.OpenPostScriptAction" class="io.github.newhoo.restkit.action.OpenPostScriptAction" text="Open PostScript"/>
+            <action id="RESTKit.OpenLocalApiFileAction" class="io.github.newhoo.restkit.action.OpenLocalApiFileAction" text="Open Local Api File"/>
             <action id="RESTKit.ViewDocument" class="io.github.newhoo.restkit.action.ViewDocumentAction" text="View Document"/>
         </group>
 
@@ -224,6 +225,12 @@
             <action id="RESTKit.ExpandAllAction" class="io.github.newhoo.restkit.toolwindow.action.toolbar.ExpandAllAction" text="Expand All" icon="AllIcons.Actions.Expandall"/>
             <action id="RESTKit.CollapseAllAction" class="io.github.newhoo.restkit.toolwindow.action.toolbar.CollapseAllAction" text="Collapse All" icon="AllIcons.Actions.Collapseall"/>
             <separator/>
+            <group id="RESTKit.ShowToolsMenu.Group" text="_Show Tools" icon="AllIcons.Toolwindows.ToolWindowStructure" popup="true">
+                <reference id="RESTKit.OpenRequestLogAction"/>
+                <reference id="RESTKit.OpenPreScriptAction"/>
+                <reference id="RESTKit.OpenPostScriptAction"/>
+                <reference id="RESTKit.OpenLocalApiFileAction"/>
+            </group>
             <group id="RESTKit.ShowSetting.Group" text="_Show Settings" icon="AllIcons.General.Settings" popup="true">
                 <action id="RESTKit.ShowCommonSetting" class="io.github.newhoo.restkit.toolwindow.action.toolbar.ShowCommonSettingAction" text="Common Setting"/>
                 <action id="RESTKit.ShowEnvironmentSetting" class="io.github.newhoo.restkit.toolwindow.action.toolbar.ShowEnvironmentSettingAction" text="Environment Setting"/>
@@ -270,6 +277,15 @@
             <reference id="Menu.CopyCurlAction"/>
             <action id="Menu.P12GenerateAction" class="io.github.newhoo.restkit.toolwindow.action.editor.P12GenerateAction" text="Add P12 Cert" icon="AllIcons.General.Add"/>
             <reference id="BasicEditorPopupMenu"/>
+        </group>
+        <group id="RESTKit.EditorContextMenu.HeadersTab">
+            <reference id="RESTKit.EditorContextMenu"/>
+        </group>
+        <group id="RESTKit.EditorContextMenu.ParamsTab">
+            <reference id="RESTKit.EditorContextMenu"/>
+        </group>
+        <group id="RESTKit.EditorContextMenu.BodyTab">
+            <reference id="RESTKit.EditorContextMenu"/>
         </group>
         <action id="Menu.SelectUploadFileAction" class="io.github.newhoo.restkit.toolwindow.action.editor.SelectUploadFileAction" text="Select Upload File" icon="AllIcons.Nodes.UpLevel">
             <add-to-group group-id="EditorContextBarMenu" anchor="last"/>

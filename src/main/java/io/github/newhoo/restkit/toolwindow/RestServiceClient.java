@@ -113,6 +113,9 @@ public class RestServiceClient extends JPanel implements DataProvider {
             public void update(String editor, String content) {
                 String titleAt = tabbedPane.getTitleAt(tabbedPane.getSelectedIndex());
                 switch (titleAt) {
+                    case "Config":
+                        setEditorText(requestConfigEditor, content, project);
+                        break;
                     case "Headers":
                         setEditorText(requestHeaderEditor, content, project);
                         break;
@@ -174,17 +177,17 @@ public class RestServiceClient extends JPanel implements DataProvider {
             setConfig(Collections.singletonList(new KV(PROTOCOL, PROTOCOL_HTTP)));
         });
         AppUIUtil.invokeOnEdt(() -> {
-            requestHeaderEditor = createEditor("Headers", PlainTextLanguage.INSTANCE, null, "RESTKit.EditorContextMenu", project);
+            requestHeaderEditor = createEditor("Headers", PlainTextLanguage.INSTANCE, null, "RESTKit.EditorContextMenu.HeadersTab", project);
             tabbedPane.addTab("Headers", requestHeaderEditor.getComponent());
             requestHeaderEditor.getComponent().setBorder(BorderFactory.createEmptyBorder());
         });
         AppUIUtil.invokeOnEdt(() -> {
-            requestParamEditor = createEditor("Params", PlainTextLanguage.INSTANCE, null, "RESTKit.EditorContextMenu", project);
+            requestParamEditor = createEditor("Params", PlainTextLanguage.INSTANCE, null, "RESTKit.EditorContextMenu.ParamsTab", project);
             tabbedPane.addTab("Params", requestParamEditor.getComponent());
             requestParamEditor.getComponent().setBorder(BorderFactory.createEmptyBorder());
         });
         AppUIUtil.invokeOnEdt(() -> {
-            requestBodyEditor = createEditor("Body", JsonLanguage.INSTANCE, null, "RESTKit.EditorContextMenu", project);
+            requestBodyEditor = createEditor("Body", JsonLanguage.INSTANCE, null, "RESTKit.EditorContextMenu.BodyTab", project);
             tabbedPane.addTab("Body", requestBodyEditor.getComponent());
             requestBodyEditor.getComponent().setBorder(BorderFactory.createEmptyBorder());
         });

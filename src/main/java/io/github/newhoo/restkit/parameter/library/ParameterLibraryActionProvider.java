@@ -42,7 +42,7 @@ public class ParameterLibraryActionProvider implements InspectionWidgetActionPro
             return null;
         }
         String editorDoc = editor.getDocument().toString().replace("\\", "/");
-        if (StringUtils.containsAny(editorDoc, "/Headers", "/Params", "/Body")) {
+        if (StringUtils.containsAny(editorDoc, "/Config", "/Headers", "/Params", "/Body")) {
             ParameterLibrary parameterLibrary = ParameterLibrary.getInstance(project);
             AnAction saveParameterAction = new SaveParameterAction(editor, parameterLibrary);
             AnAction showParameterAction = new ShowParameterAction(editor, parameterLibrary);
