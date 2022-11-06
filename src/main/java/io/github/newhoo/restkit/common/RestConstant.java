@@ -29,9 +29,7 @@ public class RestConstant {
     public static final String HTTP_BASE_URL_DEFAULT = "http://localhost:8080";
     public static final String HTTP_TIMEOUT = "timeout";
     public static final String HTTP_P12_PATH = "p12Path";
-    public static final String HTTP_P12_PATH_PLACEHOLDER = "{{p12Path}}";
     public static final String HTTP_P12_PASSWD = "p12Passwd";
-    public static final String HTTP_P12_PASSWD_PLACEHOLDER = "{{p12Passwd}}";
 
     public static final String PRE_REQUEST_SCRIPT =
             "// You can use custom preset object request and environment, attributes are:\n" +

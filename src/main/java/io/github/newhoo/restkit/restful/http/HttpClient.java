@@ -7,8 +7,9 @@ import io.github.newhoo.restkit.common.Request;
 import io.github.newhoo.restkit.common.RequestInfo;
 import io.github.newhoo.restkit.common.RestClientData;
 import io.github.newhoo.restkit.common.RestItem;
-import io.github.newhoo.restkit.config.Environment;
 import io.github.newhoo.restkit.config.HttpSettingComponent;
+import io.github.newhoo.restkit.config.certificate.Certificate;
+import io.github.newhoo.restkit.config.certificate.CertificateComponent;
 import io.github.newhoo.restkit.restful.RestClient;
 import io.github.newhoo.restkit.restful.ep.RestClientProvider;
 import io.github.newhoo.restkit.util.FileUtils;
@@ -37,10 +38,9 @@ import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL_PLACEHO
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_DOWNLOAD_FILEPATH_PREFIX;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_DOWNLOAD_DIRECTORY;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD;
-import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD_PLACEHOLDER;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PATH;
-import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PATH_PLACEHOLDER;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_TIMEOUT;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_URL_HTTPS;
 import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
 
 /**
@@ -70,15 +70,6 @@ public class HttpClient implements RestClient {
         List<KV> list = new LinkedList<>();
         list.add(new KV(HTTP_BASE_URL, HTTP_BASE_URL_PLACEHOLDER));
         list.add(new KV(HTTP_TIMEOUT, String.valueOf(timeout)));
-
-        Map<String, String> env = Environment.getInstance(project).getCurrentEnabledEnvMap();
-        String p12Path = env.get(HTTP_P12_PATH);
-        String p12Passwd = env.get(HTTP_P12_PASSWD);
-        // 双向认证
-        if (!StringUtils.isAnyEmpty(p12Path, p12Passwd)) {
-            list.add(new KV(HTTP_P12_PATH, HTTP_P12_PATH_PLACEHOLDER));
-            list.add(new KV(HTTP_P12_PASSWD, HTTP_P12_PASSWD_PLACEHOLDER));
-        }
         return list;
     }
 
@@ -94,13 +85,6 @@ public class HttpClient implements RestClient {
             url = StringUtils.defaultIfEmpty(config.get(HTTP_BASE_URL), HTTP_BASE_URL_DEFAULT) + url;
             // 环境变量未设置【baseUrl】时强行替换为localhost:8080
             url = url.replace(HTTP_BASE_URL_PLACEHOLDER, HTTP_BASE_URL_DEFAULT);
-        }
-        // 移除未设置的证书
-        if (HTTP_P12_PATH_PLACEHOLDER.equals(config.get(HTTP_P12_PATH))) {
-            config.remove(HTTP_P12_PATH);
-        }
-        if (HTTP_P12_PASSWD_PLACEHOLDER.equals(config.get(HTTP_P12_PASSWD))) {
-            config.remove(HTTP_P12_PASSWD);
         }
 
         HttpRequest request = new HttpRequest();
@@ -121,6 +105,18 @@ public class HttpClient implements RestClient {
             downloadDirectory = FileUtils.getRestDirectory(project);
         }
         request.getConfig().put(HTTP_FILE_DOWNLOAD_DIRECTORY, downloadDirectory);
+
+        // 设置证书
+        String url = request.getUrl();
+        if (StringUtils.startsWith(url, HTTP_URL_HTTPS)) {
+            url = url.substring(8);
+            String host = url.contains("/") ? url.substring(0, url.indexOf("/")) : url;
+            Certificate cert = CertificateComponent.getInstance().getEnabledCertificate(host);
+            if (cert != null) {
+                request.getConfig().put(HTTP_P12_PATH, cert.getPfxFile());
+                request.getConfig().put(HTTP_P12_PASSWD, cert.getPassphrase());
+            }
+        }
         return HttpUtils.request((HttpRequest) request);
     }
 

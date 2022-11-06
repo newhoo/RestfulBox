@@ -155,6 +155,7 @@
         <!-- Add your extensions here -->
         <toolWindow id="RESTKit" factoryClass="io.github.newhoo.restkit.toolwindow.RestToolWindowFactory" anchor="right" icon="/icons/service.png" secondary="false"/>
         <postStartupActivity implementation="io.github.newhoo.restkit.MyStartupActivity"/>
+        <applicationService serviceImplementation="io.github.newhoo.restkit.config.certificate.CertificateComponent"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.EnvironmentComponent"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.CommonSettingComponent"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.HttpSettingComponent"/>
@@ -163,6 +164,7 @@
         <projectConfigurable id="RESTKit.SettingConfigurable" instance="io.github.newhoo.restkit.config.SettingConfigurable">
             <configurable instance="io.github.newhoo.restkit.config.HttpSettingConfigurable" displayName="HTTP"/>
             <configurable instance="io.github.newhoo.restkit.config.EnvironmentConfigurable" displayName="Environment"/>
+            <configurable instance="io.github.newhoo.restkit.config.certificate.CertificateConfigurable" displayName="Certificate"/>
         </projectConfigurable>
         <searchEverywhereContributor implementation="io.github.newhoo.restkit.navigation.RestSearchEverywhereContributor$Factory"/>
         <!-- 有些多余了 -->
@@ -275,7 +277,6 @@
         <group id="RESTKit.EditorContextMenu.ConfigTab">
             <reference id="Menu.SaveLocalApiAction"/>
             <reference id="Menu.CopyCurlAction"/>
-            <action id="Menu.P12GenerateAction" class="io.github.newhoo.restkit.toolwindow.action.editor.P12GenerateAction" text="Add P12 Cert" icon="AllIcons.General.Add"/>
             <reference id="BasicEditorPopupMenu"/>
         </group>
         <group id="RESTKit.EditorContextMenu.HeadersTab">

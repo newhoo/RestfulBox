@@ -12,6 +12,8 @@ import io.github.newhoo.restkit.common.RestClientApiInfo;
 import io.github.newhoo.restkit.common.RestDataKey;
 import io.github.newhoo.restkit.config.HttpSetting;
 import io.github.newhoo.restkit.config.HttpSettingComponent;
+import io.github.newhoo.restkit.config.certificate.Certificate;
+import io.github.newhoo.restkit.config.certificate.CertificateComponent;
 import io.github.newhoo.restkit.util.EnvironmentUtils;
 import io.github.newhoo.restkit.util.IdeaUtils;
 import io.github.newhoo.restkit.util.NotifierUtils;
@@ -29,8 +31,6 @@ import java.util.stream.Collectors;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL_DEFAULT;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL_PLACEHOLDER;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_PREFIX;
-import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD;
-import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PATH;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_URL_HTTP;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_URL_HTTPS;
 import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL;
@@ -128,9 +128,13 @@ public class CopyCurlAction extends AnAction {
 
         String p12Path = null, p12Passwd = null;
         if (url.startsWith(HTTP_URL_HTTPS)) {
-            Map<String, String> configMap = ToolkitUtil.textToModifiableMap(EnvironmentUtils.handlePlaceholderVariable(apiInfo.getConfig(), project));
-            p12Path = configMap.get(HTTP_P12_PATH);
-            p12Passwd = configMap.get(HTTP_P12_PASSWD);
+            String tmpUrl = url.substring(8);
+            String host = tmpUrl.contains("/") ? tmpUrl.substring(0, tmpUrl.indexOf("/")) : tmpUrl;
+            Certificate cert = CertificateComponent.getInstance().getEnabledCertificate(host);
+            if (cert != null) {
+                p12Path = cert.getPfxFile();
+                p12Passwd = cert.getPassphrase();
+            }
         }
 
 

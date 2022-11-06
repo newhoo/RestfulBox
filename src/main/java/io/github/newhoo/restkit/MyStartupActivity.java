@@ -10,6 +10,8 @@ import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.Environment;
 import io.github.newhoo.restkit.config.HttpSetting;
 import io.github.newhoo.restkit.config.HttpSettingComponent;
+import io.github.newhoo.restkit.config.certificate.Certificate;
+import io.github.newhoo.restkit.config.certificate.CertificateComponent;
 import io.github.newhoo.restkit.util.EnvironmentUtils;
 import io.github.newhoo.restkit.util.FileUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -17,9 +19,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PATH;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_URL_HTTPS;
 
 /**
  * 项目打开后的后台任务：合并旧版本的配置
@@ -32,6 +40,7 @@ public class MyStartupActivity implements StartupActivity {
     private static final String KEY_REQUEST_ENV_LIST = "RESTKit.envList";
     private static final String KEY_REQUEST_SCRIPT = "RESTKit.script";
     private static final String KEY_REQUEST_SYNC = "RESTKit.sync";
+    private static final String KEY_P12_SYNC = "RESTKit.p12.sync";
 
     @Override
     public void runActivity(@NotNull Project project) {
@@ -50,6 +59,34 @@ public class MyStartupActivity implements StartupActivity {
             httpSetting.setDownloadDirectory(FileUtils.getDownloadDirectory(project));
         }
 
+        // 同步p12证书
+        PropertiesComponent oldSetting = PropertiesComponent.getInstance(project);
+        if (!oldSetting.getBoolean(KEY_P12_SYNC)) {
+            List<Certificate> certificates = CertificateComponent.getInstance().getCertificates();
+            List<EnvList> envLists = Environment.getInstance(project).getEnvList();
+            for (EnvList env : envLists) {
+                List<BKV> items = env.getItems();
+                Map<String, BKV> map = items.stream().collect(Collectors.toMap(BKV::getKey, o -> o, (o1, o2) -> o1));
+                BKV baseUrlKV = map.get(HTTP_BASE_URL);
+                BKV p12KV = map.get(HTTP_P12_PATH);
+                if (baseUrlKV != null && p12KV != null && StringUtils.startsWith(baseUrlKV.getValue(), HTTP_URL_HTTPS)) {
+                    BKV p12PassKV = map.get(HTTP_P12_PASSWD);
+                    String url = baseUrlKV.getValue().substring(8);
+                    String host = url.contains("/") ? url.substring(0, url.indexOf("/")) : url;
+                    if (certificates.stream().noneMatch(e -> host.equals(e.getHost()))) {
+                        Certificate cert = new Certificate();
+                        cert.setEnable(p12KV.getEnabled());
+                        cert.setHost(host);
+                        cert.setPfxFile(p12KV.getValue());
+                        cert.setPassphrase(p12PassKV != null ? p12PassKV.getValue() : "");
+                        certificates.add(cert);
+                    }
+                }
+            }
+            oldSetting.setValue(KEY_P12_SYNC, true);
+        }
+
+        // 兼容旧版本版本
         PropertiesComponent fromSetting = PropertiesComponent.getInstance(project);
         if (!fromSetting.getBoolean(KEY_REQUEST_SYNC)) {
             Environment toSetting = Environment.getInstance(project);

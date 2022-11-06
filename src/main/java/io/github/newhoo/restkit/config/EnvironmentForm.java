@@ -157,7 +157,7 @@ public class EnvironmentForm {
 
     private JPanel createToolbarPanel(KeyValueTableModel model) {
         JBTable jbTable = new JBTable(model);
-        jbTable.getColumnModel().getColumn(0).setMaxWidth(40);
+        jbTable.getColumnModel().getColumn(0).setMaxWidth(60);
         ToolbarDecorator decorationToolbar = ToolbarDecorator.createDecorator(jbTable);
 
         decorationToolbar.setAddAction(button -> {

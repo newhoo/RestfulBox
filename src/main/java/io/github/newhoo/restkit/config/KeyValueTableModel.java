@@ -16,7 +16,7 @@ public class KeyValueTableModel extends AbstractTableModel implements EditableMo
 
     public List<Object[]> list = new ArrayList<>();
 
-    private String[] head = {"", "KEY", "VALUE"};
+    private String[] head = {"ENABLE", "KEY", "VALUE"};
 
     private Class<?>[] typeArray = {Boolean.class, Object.class, Object.class};
 
@@ -36,6 +36,11 @@ public class KeyValueTableModel extends AbstractTableModel implements EditableMo
     }
 
     @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return typeArray[columnIndex];
+    }
+
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         return list.get(rowIndex)[columnIndex];
     }
@@ -44,11 +49,6 @@ public class KeyValueTableModel extends AbstractTableModel implements EditableMo
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         list.get(rowIndex)[columnIndex] = aValue;
         fireTableCellUpdated(rowIndex, columnIndex);
-    }
-
-    @Override
-    public Class<?> getColumnClass(int columnIndex) {
-        return typeArray[columnIndex];
     }
 
     @Override
