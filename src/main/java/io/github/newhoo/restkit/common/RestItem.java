@@ -34,8 +34,16 @@ public class RestItem {
 
     // other info
 
+    /** dataSource */
+    private String dataSource = "";
+
+    /** project */
+    private String project = "";
+
     /** module name, as group */
     private String moduleName;
+
+    private String packageName = "default";
 
     /** name that the api item from. e.g. Local for Local api store */
     private String framework;
