@@ -4,8 +4,13 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiArrayInitializerMemberValue;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiPolyadicExpression;
 import com.intellij.psi.PsiReferenceExpression;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,9 +72,12 @@ public class PsiAnnotationHelper {
 
     @NotNull
     public static List<String> getAnnotationAttributeValues(PsiAnnotation annotation, String attr) {
-        PsiAnnotationMemberValue value = annotation.findDeclaredAttributeValue(attr);
-
         List<String> values = new ArrayList<>();
+        PsiAnnotationMemberValue value = annotation.findDeclaredAttributeValue(attr);
+        if (value == null) {
+            return values;
+        }
+
         //只有注解
         //一个值 class com.intellij.psi.impl.source.tree.java.PsiLiteralExpressionImpl
         //多个值  class com.intellij.psi.impl.source.tree.java.PsiArrayInitializerMemberValueImpl
@@ -85,6 +93,24 @@ public class PsiAnnotationHelper {
             for (PsiAnnotationMemberValue initializer : initializers) {
                 values.add(initializer.getText().replaceAll("\"", ""));
             }
+        } else if (value instanceof PsiPolyadicExpression) {
+            String s = "";
+            for (PsiElement child : value.getChildren()) {
+                if (child instanceof PsiLiteralExpression) {
+                    s += ((PsiLiteralExpression) child).getValue().toString();
+                    continue;
+                }
+                PsiFile containingFile = child.getContainingFile();
+                if (child instanceof PsiReferenceExpression && containingFile instanceof PsiJavaFile) {
+                    PsiClass aClass = ((PsiJavaFile) containingFile).getClasses()[0];
+                    for (PsiField field : aClass.getFields()) {
+                        if (child.getText().endsWith(field.getName())) {
+                            s += field.computeConstantValue();
+                        }
+                    }
+                }
+            }
+            values.add(s);
         }
 
         return values;
