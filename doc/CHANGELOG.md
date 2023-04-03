@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 3.0.0
+
+https://plugins.jetbrains.com/plugin/14723-restfulbox/versions/stable/277327
+
+- Optimize & Fix bugs.
+- New UI.
+- Premium(paid): Support multi level service tree.
+- Premium(paid): Support custom dataSource, view service items crossing projects.
+
+- 细节优化，解决一些遗留问题.
+- 新UI支持.
+- 高级功能(付费): 支持多层级service tree.
+- 高级功能(付费): 新增数据源，跨项目访问其他项目接口，提供扩展点对接三方平台/数据库.
+
+_由于国内某些同类付费插件大量抄袭了本插件功能，且参差不齐，因此3.0之后的源码不再开放，如有插件开发的问题（不限于技术问题），可以在本GitHub地址提问。_
+
 ## 2.0.8
 
 - Support ssl.
