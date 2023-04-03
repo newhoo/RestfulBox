@@ -146,11 +146,11 @@ _由于国内某些同类付费插件大量抄袭了本插件功能，且参差�
 
 ## 1.0.1
 
-- print request logs to file (path: $PROJECT_PATH$/.idea/restkit/*.log);
+- print request logs to file (path: `$PROJECT_PATH$/.idea/restkit/*.log`);
 - parse header from springmvc annotation.
 - support copying current Environment(can use to rename if you want).
 
-- 请求日志输出到文件（path: $PROJECT_PATH$/.idea/restkit/*.log）;
+- 请求日志输出到文件（path: `$PROJECT_PATH$/.idea/restkit/*.log`）;
 - 解析header (已验证java语言);
 - 支持复制当前环境变量（可间接重命名）。
 

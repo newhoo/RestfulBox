@@ -42,6 +42,7 @@
 - [中文文档-Github](doc/zh_CN/目录.md)
 - [中文文档-语雀](https://www.yuque.com/newhoo/restkit)
 - [Document-Github](doc/en/README.md)
+- [CHANGELOG](doc/CHANGELOG.md)
 
 ## 联系 & 反馈
 如果你觉得本插件不错，请赏个好评吧，同时也欢迎提供宝贵的建议。🌟 Star

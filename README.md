@@ -40,6 +40,7 @@ This plugin is committed to enhancing development efficiency with useful feature
 - [Document-Github](doc/en/README.md)
 - [中文文档-Github](doc/zh_CN/目录.md)
 - [中文文档-语雀](https://www.yuque.com/newhoo/restkit)
+- [CHANGELOG](doc/CHANGELOG.md)
 
 ## Contact & Feedback
 [Issues](https://github.com/newhoo/RESTKit/issues) | [Email](mailto:huzunrong@foxmail.com) | [Jetbrains Previews](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
