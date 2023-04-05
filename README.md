@@ -4,7 +4,7 @@
 
 [简体中文](./README.zh_CN.md) | [Github](https://github.com/newhoo/RESTKit) | [Gitee](https://gitee.com/newhoo/RESTKit) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
 
-This plugin is committed to enhancing development efficiency with useful features. From the initial RestfulToolkit and joined common functions of Postman, rich and complete features can greatly improve the efficiency of IDEA development. Free to share with everyone, not for commercial purposes. If you find any problems, please give me feedback. Former name: RESTKit.
+This plugin is committed to enhancing development efficiency with useful features. From the initial RestfulToolkit and joined common functions of Postman, rich and complete features can greatly improve the efficiency of IDEA development. Former name: RESTKit.
 
 ## Features ([3.0 Upgrade Guide](doc/zh_CN/快速入门/3.0升级指南.md))
 - More supported jetbrains ides.
@@ -38,18 +38,21 @@ This plugin is committed to enhancing development efficiency with useful feature
 
 ## Document
 - [Document-Github](doc/en/README.md)
-- [中文文档-Github](doc/zh_CN/目录.md)
-- [中文文档-语雀](https://www.yuque.com/newhoo/restkit)
+- [中文文档-Github](doc/zh_CN/目录.md)  [Gitee](https://gitee.com/newhoo/RESTKit#%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
 - [CHANGELOG](doc/CHANGELOG.md)
 
 ## Contact & Feedback
-[Issues](https://github.com/newhoo/RESTKit/issues) | [Email](mailto:huzunrong@foxmail.com) | [Jetbrains Previews](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
+If you find any problems with this plugin, please give me feedback. If it helps, star for it! :star2:
+
+:fire: **_If you want to experience the subscription feature more fully, i will provide 3 months of free use at a time. If you need, provide your [jetbrains account](https://account.jetbrains.com/profile-details) to me by email!_**
+
+[Issues](https://github.com/newhoo/RESTKit/issues) | [Email](mailto:huzunrong@foxmail.com) | [Ratings & Previews](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
 
 > Note  
 > Please provide necessary information when you feedback: IDEA version, plugin version, exception content, recreation way(if can), desire, and etc.
 
 
 ## Sponsor
-If this plugin helps, you can take me a cup of coffee as you want. Thanks!
+You can take me a cup of coffee as you want. Thanks!
 
 ![pay](doc/en/images/pay.png)

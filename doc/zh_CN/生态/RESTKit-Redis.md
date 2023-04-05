@@ -26,23 +26,23 @@
 
 安装完成后，在`RESTKit`插件设置中启用，填写相关配置。
 
-![](vx_images/56363215262765.png)
+![](images/56363215262765.png)
 
 配置redis服务器地址和项目名称，用于存储API。若发送redis命令时未指定redis地址，会使用此地址。
 
-![](vx_images/147393215254952.png)
+![](images/147393215254952.png)
 
 ### 保存api到redis
 
-![](vx_images/233953215241649.png)
+![](images/233953215241649.png)
 
 ### 保存redis命令
 
-![](vx_images/335563215235863.png)
+![](images/335563215235863.png)
 
 ### 发送redis命令
 
-![](vx_images/422273215251864.png)
+![](images/422273215251864.png)
 
 UI说明：
 

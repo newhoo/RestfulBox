@@ -4,7 +4,7 @@
 
 [Github](https://github.com/newhoo/RESTKit) | [Gitee](https://gitee.com/newhoo/RESTKit) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
 
-This plugin is committed to enhancing development efficiency with useful features. From the initial RestfulToolkit and joined common functions of Postman, rich and complete features can greatly improve the efficiency of IDEA development. Free to share with everyone, not for commercial purposes. If you find any problems, please give me feedback. Former name: RESTKit.
+This plugin is committed to enhancing development efficiency with useful features. From the initial RestfulToolkit and joined common functions of Postman, rich and complete features can greatly improve the efficiency of IDEA development. Former name: RESTKit.
 
 ## Features
 - More supported jetbrains ides.
@@ -443,11 +443,15 @@ Click【Copy as Curl】at any editor's right menu in the http client.
 ![](images/copy_as_curl.png)
 
 #### Quick Tools
-Path: <kbd>Tools</kbd> > <kbd>RESTKit</kbd>
+Path: <kbd>Plugin Toolbar</kbd> > <kbd>Show Tools</kbd>
 
 ![](images/tools.png)
 
 ## Contact & Feedback
+If you find any problems with this plugin, please give me feedback. If it helps, star for it! :star2:
+
+:fire: **_If you want to experience the subscription feature more fully, i will provide 3 months of free use at a time. If you need, provide your [jetbrains account](https://account.jetbrains.com/profile-details) to me by email!_**
+
 [Issues](https://github.com/newhoo/RESTKit/issues) | [Email](mailto:huzunrong@foxmail.com) | [Ratings & Previews](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
 
 > Note  
@@ -455,6 +459,6 @@ Path: <kbd>Tools</kbd> > <kbd>RESTKit</kbd>
 
 
 ## Sponsor
-If this plugin helps, you can take me a cup of coffee as you want. Thanks!
+You can take me a cup of coffee as you want. Thanks!
 
 ![pay](images/pay.png)

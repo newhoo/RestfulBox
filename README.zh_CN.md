@@ -39,13 +39,15 @@
 - [x] Sqlite数据源：默认支持，支持存储插件的所有数据到数据库
 
 ## 使用文档
-- [中文文档-Github](doc/zh_CN/目录.md)
-- [中文文档-语雀](https://www.yuque.com/newhoo/restkit)
+- [中文文档-Github](doc/zh_CN/目录.md)  [Gitee](https://gitee.com/newhoo/RESTKit#%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
+- [中文文档-语雀(不推荐)](https://www.yuque.com/newhoo/restkit)
 - [Document-Github](doc/en/README.md)
 - [CHANGELOG](doc/CHANGELOG.md)
 
 ## 联系 & 反馈
-如果你觉得本插件不错，请赏个好评吧，同时也欢迎提供宝贵的建议。🌟 Star
+如果你觉得本插件不错，赏个好评吧，同时也欢迎提供宝贵的建议。:star2: 
+
+:fire: **_如果你想更加充分地体验订阅功能，作者免费赠送3个月使用。如有需要，可通过邮件联系作者，备注好需求和你的 [Jetbrains邮箱账号](https://account.jetbrains.com/profile-details) !!_**
 
 [Issues](https://github.com/newhoo/RESTKit/issues) | [Email](mailto:huzunrong@foxmail.com) | [Jetbrains评分](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
 

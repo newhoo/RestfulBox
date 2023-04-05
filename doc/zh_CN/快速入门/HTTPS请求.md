@@ -19,7 +19,7 @@ curl -X GET https://www.yourdomain.com/server-api/health -k
 #### 证书全局管理
 如图。双击单元格编辑内容；选中【PFX file】单元格，右键双击可选择文件。
 
-![](vx_images/553845514232195.png)
+![](images/553845514232195.png)
 
 #### 【Copy as Curl】示例
 ```bash
@@ -33,13 +33,13 @@ curl -X GET https://www.yourdomain.com/server-api/health -k --cert-type P12 --ce
 
 建议在环境变量中配置变量`p12Path`和`p12Passwd`，如未配置，则https请求时会视为单向认证。一般会自动生成，也可通过右键菜单添加。
 
-![](vx_images/142015614250238.png)
+![](images/142015614250238.png)
 
 #### 环境变量
 `p12Path`：client客户端证书位置，本地绝对路径，p12类型
 `p12Passwd`：client p12证书访问密码
 
-![](vx_images/272085614255993.png)
+![](images/272085614255993.png)
 
 #### 【Copy as Curl】示例
 ```bash
