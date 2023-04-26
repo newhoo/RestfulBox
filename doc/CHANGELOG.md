@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 3.0.1
+
+[3.0 Upgrade Guide - 3.0升级指南](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/3.0%E5%8D%87%E7%BA%A7%E6%8C%87%E5%8D%97.md)
+
+- Optimize & Fix bugs.
+- Support parsing constants in springmvc mappings.
+- Support MySQL datasource.
+- Optimize document.
+
+- 修复bug.
+- 支持解析springmvc mapping中的常量.
+- 支持MySQL数据源.
+- 更新文档.
+
 ## 3.0.0
 
 https://plugins.jetbrains.com/plugin/14723-restfulbox/versions/stable/277327
