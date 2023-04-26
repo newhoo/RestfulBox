@@ -7,24 +7,25 @@
 This plugin is committed to enhancing development efficiency with useful features. From the initial RestfulToolkit and joined common functions of Postman, rich and complete features can greatly improve the efficiency of IDEA development. Former name: RESTKit.
 
 ## Features ([3.0 Upgrade Guide](doc/zh_CN/快速入门/3.0升级指南.md))
-- More supported jetbrains ides.
-- Restful service automatic scanning and display.
+- [x] More supported jetbrains ides.
+- [x] Restful service automatic scanning and display.
   - Support searching service in native Search Everywhere. ( use: <kbd>Ctrl \\</kbd> or <kbd>Ctrl Alt N</kbd> )
   - Show restful service structure in tool window.
+  - View services in different IDE and project.
   - Service and Method jump to each other.
-- Powerful request client：
+- [x] Powerful request client：
+  - Multi-protocol: support http by default.
   - Custom parameter format, support placeholder variable, formatted JSON.
   - Environment variable：define/manage/use/export/import, support preset function and script function.
   - Global header：can use with Environment, also support preset function and script function.
   - Parameter library：support display/save/delete in Headers/Params/Body tab.
-  - Multi-protocol: supported multiple protocol.
   - Request script：support pre-request and post-script script.
-  - Request info display: such as HTTP packet.
-- Request log：save multi-protocol request log such as HTTP packet format.
-- Plugin extension：through this, you can try your great ideas.
-- Language & Framework：
-  - Support api local store and Sqlite datasource by default.
+  - Display request info like http packet, and save to log file.
+- [x] Language & Framework：
+  - Support services using local store by default.
   - Support Spring MVC / SpringBoot with java and kotlin in idea by default.
+- [x] Datasource: Support multiple data sources. Local/Cloud/Custom.
+- [x] Plugin extension: through this, you can try your great ideas.
 
 
 ## Ecology
@@ -32,9 +33,10 @@ This plugin is committed to enhancing development efficiency with useful feature
 - [x] Spring MVC: supported by default. Support Java and Kotlin implement.
 - [x] Jax-Rs: supported by plugin. See [RESTKit-JAX-RS](https://github.com/newhoo/RESTKit-JAX-RS)
 - [x] Dubbo: supported by plugin. See [RESTKit-Dubbo](https://github.com/newhoo/RESTKit-Dubbo). Support scanning and sending request.
-- [x] Redis: supported by plugin. See [RESTKit-Redis](https://github.com/newhoo/RESTKit-Redis). Support store api to redis and sending simple redis command.
-- [x] Local Store: supported by default. Support store api to local file.
+- [x] Redis: supported by plugin. See [RESTKit-Redis](https://github.com/newhoo/RESTKit-Redis). Support store services to redis and sending simple redis command.
+- [x] Local Store: supported by default. Support store services to local file.
 - [x] Sqlite Datasource: supported by default. Support store all data to sqlite.
+- [x] MySQL Datasource: supported from 3.0.1. Support store all data to MySQL.
 
 ## Document
 - [Document-Github](doc/en/README.md)
