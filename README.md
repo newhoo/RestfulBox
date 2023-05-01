@@ -39,6 +39,9 @@ This plugin is committed to enhancing development efficiency with useful feature
 - [x] MySQL Datasource: supported from 3.0.1. Support store all data to MySQL.
 
 ## Document
+
+Due to limited time, Chinese documents are more comprehensive. Please visit as needed ~
+
 - [Document-Github](doc/en/README.md)
 - [中文文档-Github](doc/zh_CN/目录.md)  [Gitee](https://gitee.com/newhoo/RESTKit#%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
 - [CHANGELOG](doc/CHANGELOG.md)
