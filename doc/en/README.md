@@ -1,6 +1,6 @@
 <a href="https://plugins.jetbrains.com/plugin/14723-restkit">![bg](images/bg2.png)</a>
 
-## a powerful toolkit for restful services development.
+## Powerful toolkit for restful services development.
 
 [Github](https://github.com/newhoo/RESTKit) | [Gitee](https://gitee.com/newhoo/RESTKit) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
 

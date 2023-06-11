@@ -1,6 +1,6 @@
 <a href="https://plugins.jetbrains.com/plugin/14723-restkit">![bg](doc/en/images/bg2.png)</a>
 
-## a powerful toolkit for restful services development.
+## Powerful toolkit for restful services development.
 
 [简体中文](./README.zh_CN.md) | [Github](https://github.com/newhoo/RESTKit) | [Gitee](https://gitee.com/newhoo/RESTKit) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
 
@@ -30,17 +30,25 @@ This plugin is committed to enhancing development efficiency with useful feature
 
 ## Ecology
 
-- [x] Spring MVC: supported by default. Support Java and Kotlin implement.
-- [x] Jax-Rs: supported by plugin. See [RESTKit-JAX-RS](https://github.com/newhoo/RESTKit-JAX-RS)
-- [x] Dubbo: supported by plugin. See [RESTKit-Dubbo](https://github.com/newhoo/RESTKit-Dubbo). Support scanning and sending request.
-- [x] Redis: supported by plugin. See [RESTKit-Redis](https://github.com/newhoo/RESTKit-Redis). Support store services to redis and sending simple redis command.
-- [x] Local Store: supported by default. Support store services to local file.
-- [x] Sqlite Datasource: supported by default. Support store all data to sqlite.
-- [x] MySQL Datasource: supported from 3.0.1. Support store all data to MySQL.
+- Scanning Type
+  - [x] Spring MVC: supported by default. Support Java and Kotlin implement.
+  - [x] Jax-Rs: supported by plugin. See [RESTKit-JAX-RS](https://github.com/newhoo/RESTKit-JAX-RS)
+  - [x] Dubbo: supported by plugin. See [RESTKit-Dubbo](https://github.com/newhoo/RESTKit-Dubbo). Support scanning and sending dubbo request.
+  - [x] Solon: supported by plugin. See [RestfulBox-Solon](https://github.com/newhoo/RestfulBox-Solon). Support scanning and sending http request.
+- Storage Type (Suggest using datasource instead)
+  - [x] Redis: supported by plugin. See [RESTKit-Redis](https://github.com/newhoo/RESTKit-Redis). Support store services to redis and sending simple redis command.
+  - [x] Local Store: supported by default. Support store services to local file.
+- Protocol
+  - [x] HTTP/HTTPS: supported by default.
+  - [x] DUBBO: see above.
+  - [x] Redis: see above.
+- Datasource (Support store all data to selected datasource)
+  - [x] Sqlite Datasource: supported by default from 3.0.0.
+  - [x] MySQL Datasource: supported by default from 3.0.1.
 
 ## Document
 
-Due to limited time, Chinese documents are more comprehensive. Please visit as needed ~
+**_Due to limited time, Chinese documents are more comprehensive. Please visit as needed ~_**
 
 - [Document-Github](doc/en/README.md)
 - [中文文档-Github](doc/zh_CN/目录.md)  [Gitee](https://gitee.com/newhoo/RESTKit#%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)

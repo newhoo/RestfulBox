@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 3.0.2
+
+- Optimize & Fix bugs.
+- All tab support saving content.
+
+- 修复bug.
+- 全部Tab支持保存内容.
+
 ## 3.0.1
 
 [3.0 Upgrade Guide - 3.0升级指南](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/3.0%E5%8D%87%E7%BA%A7%E6%8C%87%E5%8D%97.md)

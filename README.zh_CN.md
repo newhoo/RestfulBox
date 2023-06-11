@@ -29,14 +29,23 @@
 - [x] 插件扩展：提供多个扩展点，便于自定义需求的实现
 
 ## 生态
+
 通过公开的扩展点，可以轻松实现一些自定义需求，具体参考生态章节。当前已支持：
-- [x] Spring MVC：默认支持，支持Java and Kotlin实现
-- [x] Jax-Rs：通过插件支持，见 RESTKit-JAX-RS
-- [x] Dubbo：通过插件支持，见 RESTKit-Dubbo ，支持扫描和请求发送
-- [x] Redis：通过插件支持，见 RESTKit-Redis ，支持存储API到redis和简单的redis命令发送
-- [x] Local Store：默认支持，支持存储API到本地文件
-- [x] Sqlite数据源：默认支持，支持存储插件的所有数据到数据库
-- [x] MySQL数据源：3.0.1开始支持，支持存储插件的所有数据到数据库
+- 扫描类型
+  - [x] Spring MVC：默认支持，支持Java and Kotlin实现
+  - [x] Jax-Rs：通过插件支持，见 [RESTKit-JAX-RS](https://github.com/huzunrong/RESTKit-JAX-RS)
+  - [x] Dubbo：通过插件支持，见 [RESTKit-Dubbo](https://github.com/newhoo/RESTKit-Dubbo) ，支持扫描和发送请求
+  - [x] Solon：通过插件支持，见 [RestfulBox-Solon](https://github.com/newhoo/RestfulBox-Solon) ，支持扫描和请求发送
+- 存储类型（建议使用数据源）
+  - [x] Redis：通过插件支持，见 [RESTKit-Redis](https://github.com/newhoo/RESTKit-Redis) ，支持存储API到redis和简单的redis命令发送
+  - [x] Local Store：默认支持，支持存储API到本地文件
+- 协议类型
+  - [x] HTTP/HTTPS：默认支持
+  - [x] DUBBO：同上
+  - [x] Redis：同上
+- 数据源（支持存储插件的所有数据到数据库）
+  - [x] Sqlite数据源：默认3.0.0开始支持
+  - [x] MySQL数据源：默认3.0.1开始支持
 
 ## 使用文档
 - [中文文档-Github](doc/zh_CN/目录.md)  [Gitee](https://gitee.com/newhoo/RESTKit#%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
