@@ -8,7 +8,7 @@
 - Support to minify json content.
 - Support to set environment variables in pre-request and post-request script.
 - Fix bugs (curl, parameter delete exception).
-<br/>
+
 - 优化高分辨率屏幕显示;
 - 优化全局文件目录设置;
 - 请求body支持环境变量;
