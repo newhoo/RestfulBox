@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 3.0.3
+
+- Optimize high-resolution screen display.
+- Optimize file settings.
+- Support environment variable for request body.
+- Support to minify json content.
+- Support to set environment variables in pre-request and post-request script.
+- Fix bugs (curl, parameter delete exception).
+<br/>
+- 优化高分辨率屏幕显示;
+- 优化全局文件目录设置;
+- 请求body支持环境变量;
+- 支持压缩JSON;
+- 前置/后置脚本支持设置环境变量;
+- 修复bug (curl复制、参数库删除异常).
+
 ## 3.0.2
 
 - Optimize & Fix bugs.

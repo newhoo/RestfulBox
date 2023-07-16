@@ -171,7 +171,9 @@ KEY and VALUE are strings. VALUE supports reference variable such as:
 - Direct reference variable: reference to key-value of current group using `{{KEY}}`.
 - Built-in function variable: using `{{$functionName}}`. The default supplied variables are
   - `{{$timestamp}}`: current timestamp, ms.
-  - `{{$uuid}}`: generate UUID randomly.
+  - `{{$timestamp/3}}`: current timestamp, s.
+  - `{{$uuid}}`: generate UUID randomly, 36 chars.
+  - `{{$uuid-}}`: generate UUID without `-` randomly, 32 chars.
 - Script variable: click <kbd>Script Variable</kbd> button and edit content in dialog. Using `{{$methodName$}}`. Only Java language is supported, see rules in the comment, no third-party library supported.
 
 ```java
