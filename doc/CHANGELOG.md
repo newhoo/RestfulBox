@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 3.1.0
+
+- Fix bugs.
+- Premium: Support displaying or sending multiple requests at the same time.
+
+- 修复bug；
+- 高级功能: 新增支持展示多个请求面板, 可同时发起多个请求；
+
 ## 3.0.3
 
 - Optimize high-resolution screen display.

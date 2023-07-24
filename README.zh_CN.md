@@ -11,10 +11,11 @@
 - [x] 支持更多的jetbrains产品，不仅仅是idea
 - [x] Restful服务自动扫描、展示、跳转和导入导出
   - 原生Search Everywhere支持restful URL搜索 (<kbd>Ctrl \\</kbd> or <kbd>Ctrl Alt N</kbd>)
-  - 窗口显示多层级 Services tree
   - 跨IDE跨项目浏览所有服务
+  - 窗口显示多层级 Services tree
   - URL和Method相互跳转
 - [x] 强大好用的请求工具：
+  - 多标签：可同时展示、发起多个请求
   - 多协议：默认支持http，可扩展支持dubbo等
   - 自定义参数格式，支持占位符变量，JSON自动格式化
   - 环境变量：支持变量使用、管理及迁移，提供内置函数和脚本函数
@@ -25,7 +26,7 @@
 - [x] 语言和框架：
   - 默认支持存储服务到本地文件
   - idea默认支持 Spring 体系接口 (Spring MVC with Java or Kotlin)
-- [x] 数据源: 支持多种数据源存储数据，可本地可云端同步可定制
+- [x] 数据源: 支持多种数据源存储数据，更安全更可控，可本地可云端同步可定制
 - [x] 插件扩展：提供多个扩展点，便于自定义需求的实现
 
 ## 生态

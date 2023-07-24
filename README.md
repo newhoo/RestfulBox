@@ -10,10 +10,11 @@ This plugin is committed to enhancing development efficiency with useful feature
 - [x] More supported jetbrains ides.
 - [x] Restful service automatic scanning and display.
   - Support searching service in native Search Everywhere. ( use: <kbd>Ctrl \\</kbd> or <kbd>Ctrl Alt N</kbd> )
-  - Show restful service structure in tool window.
   - View services in different IDE and project.
+  - Show restful service structure in tool window.
   - Service and Method jump to each other.
-- [x] Powerful request client：
+- [x] Powerful request client:
+  - Multi-tab: support displaying and sending multiple requests at the same time.
   - Multi-protocol: support http by default.
   - Custom parameter format, support placeholder variable, formatted JSON.
   - Environment variable：define/manage/use/export/import, support preset function and script function.
@@ -21,7 +22,7 @@ This plugin is committed to enhancing development efficiency with useful feature
   - Parameter library：support display/save/delete in Headers/Params/Body tab.
   - Request script：support pre-request and post-script script.
   - Display request info like http packet, and save to log file.
-- [x] Language & Framework：
+- [x] Language & Framework:
   - Support services using local store by default.
   - Support Spring MVC / SpringBoot with java and kotlin in idea by default.
 - [x] Datasource: Support multiple data sources. Local/Cloud/Custom.
