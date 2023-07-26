@@ -60,7 +60,7 @@ Download source, go to source dir, run `./gradlew buildPlugin`. After this, you 
 ### RESTKit Tool Window
 Open project, find and open RESTKit at right window. RESTKit is composed of four parts: **toolbar**、**service tree**、**request client**.
 
-![tool window](images/tool_window.png)
+![tool window](images/tool_window_new.png)
 
 #### Toolbar
 - Refresh: refresh service list when updated.
@@ -72,14 +72,14 @@ Open project, find and open RESTKit at right window. RESTKit is composed of four
 - Setting：open setting view.
 - View document.
 
-![](images/toolbar.png)
+![](images/toolbar_new.png)
 
 #### Service Tree
 - Display services by module.
 - Navigate to source when double-clicking in the service list.
 - Show context menu when right clicking.
 
-![](images/tree.png)
+![](images/tree_new.png)
 
 #### HTTP Client
 - Environment: select the environment variable that has been added. preview current environment when hovering.
@@ -93,7 +93,7 @@ Open project, find and open RESTKit at right window. RESTKit is composed of four
 - Response tab: display response result. The content may be normal return, exception, or script return by the request script.
 - Info tab: display request with http packet format.
 
-![](images/request_client.png)
+![](images/request_client_new.png)
 
 
 ### Search URL

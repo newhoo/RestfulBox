@@ -3,10 +3,12 @@
 ## 3.1.0
 
 - Fix bugs.
-- Premium: Support displaying or sending multiple requests at the same time.
+- Premium: Support displaying or sending multiple requests at the same time. [see](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/%E7%AA%97%E5%8F%A3%E4%BB%8B%E7%BB%8D.md#request-client)
 
 - 修复bug；
-- 高级功能: 新增支持展示多个请求面板, 可同时发起多个请求；
+- 高级功能: 新增支持展示多个请求面板, 可同时发起多个请求；[详见](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/%E7%AA%97%E5%8F%A3%E4%BB%8B%E7%BB%8D.md#request-client)
+
+![](zh_CN/快速入门/images/169784614253607.png)
 
 ## 3.0.3
 
