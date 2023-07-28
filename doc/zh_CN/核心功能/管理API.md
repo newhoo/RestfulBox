@@ -32,10 +32,10 @@ API接口可分为多个类型：
 - **Protocol**: 支持的协议，默认提供http。可扩展，如dubbo
 - **Storage**: 存储API的方式（目的地）。可扩展，对应存储类型
 - **Project**：项目名，所属项目
-- **Module**: 模块名，所属分组
-- **Package**：包名，更新的分组
-- **Description**: 描述，建议简短明了
-- **Existed**: 是否已存在，根据method+url一起判断
+- **Module**: 模块名，属模块级别的分组
+- **Package**：包名，属包级别的分组
+- **Description**: 描述，建议简短明了。当树节点名称设置为显示描述时，即使用此字段。
+- **Existed**: 是否已存在，根据 method+url 一起判断
 
 ## 删除
 

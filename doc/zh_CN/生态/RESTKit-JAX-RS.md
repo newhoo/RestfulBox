@@ -1,6 +1,6 @@
 # RESTKit-JAX-RS插件
 
-**RESTKit-JAX-RS** 是[RESTKit](https://plugins.jetbrains.com/plugin/14723-restkit) 插件的扩展，用于为`RESTKit`(2.0.0开始) 提供Jax-Rs接口扫描支持。
+**RESTKit-JAX-RS** 是[RESTKit](https://plugins.jetbrains.com/plugin/14723-restkit) 的辅助插件，用于通过`RestfulBox`提供Jax-Rs接口扫描支持。
 
 [GitHub](https://github.com/newhoo/RESTKit-JAX-RS)｜[Jetbrains](https://plugins.jetbrains.com/plugin/17955-restkit-jax-rs)
 

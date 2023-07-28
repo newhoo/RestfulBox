@@ -49,21 +49,21 @@ This plugin is committed to enhancing development efficiency with useful feature
 
 ## Document
 
-**_Due to limited time, Chinese documents are more comprehensive. Please visit as needed ~_**
+_Due to limited time, Chinese documents are more comprehensive. Please visit as needed._
 
-- [Document-Github](doc/en/README.md)
-- [中文文档-Github](doc/zh_CN/目录.md)  [Gitee](https://gitee.com/newhoo/RESTKit#%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
+- [English Document](doc/en/README.md)
+- [中文文档-Github](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)  [Gitee](https://gitee.com/newhoo/RESTKit#%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
 - [CHANGELOG](doc/CHANGELOG.md)
 
 ## Contact & Feedback
 If you find any problems with this plugin, please give me feedback. If it helps, star for it! :star2:
 
-:fire: **_If you want to experience the subscription feature more fully, i will provide 3 months of free use at a time. If you need, provide your [jetbrains account](https://account.jetbrains.com/profile-details) to me by email!_**
+:fire: _If you want to experience the subscription feature more fully, i will provide 3 months of free use at a time. If you need, provide your [jetbrains account](https://account.jetbrains.com/profile-details) to me by email!_
 
 [Issues](https://github.com/newhoo/RESTKit/issues) | [Email](mailto:huzunrong@foxmail.com) | [Ratings & Previews](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
 
 > Note  
-> Please provide necessary information when you feedback: IDEA version, plugin version, exception content, recreation way(if can), desire, and etc.
+> Please provide necessary information when you feedback: IDEA version, plugin version, exception content, recreation way, desire, and etc.
 
 
 ## Sponsor

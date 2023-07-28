@@ -49,20 +49,21 @@
   - [x] MySQL数据源：默认3.0.1开始支持
 
 ## 使用文档
-- [中文文档-Github](doc/zh_CN/目录.md)  [Gitee](https://gitee.com/newhoo/RESTKit#%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
-- [中文文档-语雀(不推荐)](https://www.yuque.com/newhoo/restkit)
-- [Document-Github](doc/en/README.md)
+- [中文文档-Github](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)  [Gitee](https://gitee.com/newhoo/RESTKit#%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
+- [English Document](doc/en/README.md)
 - [CHANGELOG](doc/CHANGELOG.md)
 
-## 联系 & 反馈
-如果好用，不妨 Start 一下，同时也欢迎提供宝贵的建议。:star2: 
+## 关于插件
+该插件的所有功能源于我本人日常开发中的点点滴滴，且一直以来只有我一人维护，真的是为爱发电了。虽然`3.0`开始新增了付费订阅方式，但仅针对新增的一些高级功能，对于历史版本已有功能以及未来可能会补充的基本功能仍然免费使用。如果有需要，不妨支持一下，点亮小星星，同时也欢迎提供宝贵的建议。:star2:
+
+关于源码：由于国内某些同类付费插件大量抄袭了本插件功能（环境变量、前后置脚本等），且参差不齐，因此3.0之后的源码不再开放，本项目完整源码不作删减，如有插件开发的问题，欢迎交流。
 
 :fire: **_如果你想更加充分地体验订阅功能，作者免费赠送3个月使用。如有需要，可通过邮件联系作者，备注好需求和你的 [Jetbrains邮箱账号](https://account.jetbrains.com/profile-details) !!_**
 
 [Issues](https://github.com/newhoo/RESTKit/issues) | [Email](mailto:huzunrong@foxmail.com) | [Jetbrains评分](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
 
 > 注意  
-> 反馈时请务必附上必要信息：Idea版本、插件版本、异常内容、复现方式(如果有)、诉求等。
+> 反馈时请务必附上必要信息：Idea版本、插件版本、异常内容、复现方式、诉求等。
 
 
 ## 支持作者
