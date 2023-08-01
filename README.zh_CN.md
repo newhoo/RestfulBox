@@ -49,7 +49,7 @@
   - [x] MySQL数据源：默认3.0.1开始支持
 
 ## 使用文档
-- [中文文档-Github](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)  [Gitee](https://gitee.com/newhoo/RESTKit#%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
+- [中文文档-Github](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)  [Gitee](https://gitee.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)
 - [English Document](doc/en/README.md)
 - [CHANGELOG](doc/CHANGELOG.md)
 

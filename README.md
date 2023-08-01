@@ -52,7 +52,7 @@ This plugin is committed to enhancing development efficiency with useful feature
 _Due to limited time, Chinese documents are more comprehensive. Please visit as needed._
 
 - [English Document](doc/en/README.md)
-- [中文文档-Github](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)  [Gitee](https://gitee.com/newhoo/RESTKit#%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
+- [中文文档-Github](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)  [Gitee](https://gitee.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)
 - [CHANGELOG](doc/CHANGELOG.md)
 
 ## Contact & Feedback
