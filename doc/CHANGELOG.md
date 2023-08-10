@@ -1,5 +1,31 @@
 # CHANGELOG
 
+## 3.2.0
+
+- Optimize & Fix bugs.
+- Change UI configs from project level to global level.
+- Support exporting and importing parameters.
+- New project manager ui.
+
+- 修复bug，优化细节
+- 调整部分配置入口，UI配置升级为全局有效
+- 新增支持导出导入请求参数
+- 新增项目数据管理面板
+
+![](zh_CN/快速入门/images/1691681334145.png)
+
+![](zh_CN/核心功能/images/1691680441980.png)
+
+![](zh_CN/快速入门/images/1691681334146.png)
+
+![](zh_CN/快速入门/images/1691681334147.png)
+
+![](zh_CN/快速入门/images/1691681334148.png)
+
+## 3.1.1
+
+- Fix compatibility issue with IDE 2023.2
+
 ## 3.1.0
 
 - Fix bugs.

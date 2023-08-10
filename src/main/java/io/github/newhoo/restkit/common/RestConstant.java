@@ -31,6 +31,8 @@ public class RestConstant {
     public static final String HTTP_P12_PATH = "p12Path";
     public static final String HTTP_P12_PASSWD = "p12Passwd";
 
+    public static final String EDITOR_FILENAME_PREFIX = "RestfulBox-Editor:";
+
     public static final String PRE_REQUEST_SCRIPT =
             "// You can use custom preset object request and environment, attributes are:\n" +
             "// \n" +

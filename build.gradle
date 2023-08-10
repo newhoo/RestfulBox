@@ -1,12 +1,14 @@
 plugins {
-    id 'java'
-    id 'org.jetbrains.intellij' version '0.4.10'
+    id("java")
+    id('org.jetbrains.intellij') version '1.10.1'
 }
 
 group 'io.github.newhoo.restkit'
 version '2.1.2'
 
-sourceCompatibility = 1.8
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+}
 
 repositories {
     maven { url 'https://maven.aliyun.com/repository/public/' }
@@ -21,13 +23,12 @@ dependencies {
 }
 
 intellij {
-    version '2021.2'
-    type 'IU'
-//    localPath '/Applications/IntelliJ IDEA.app/Contents'
-
-    pluginName 'RESTKit'
-    updateSinceUntilBuild false
-    downloadSources = true
-    plugins = ['java', 'Kotlin']
-    sandboxDirectory = "${rootProject.rootDir}/idea-sandbox"
+    pluginName.set('RESTKit')
+    version.set('2023.2')
+    type.set("IU")
+    updateSinceUntilBuild.set(false)
+    downloadSources.set(true)
+    plugins.set(['java', 'Kotlin'])
+//    plugins.set('java, Kotlin'.split(',').map(String::trim).filter(String::isNotEmpty))
+    sandboxDir.set("${rootProject.rootDir}/idea-sandbox")
 }

@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static com.intellij.openapi.project.Project.DIRECTORY_STORE_FOLDER;
+import static io.github.newhoo.restkit.common.RestConstant.EDITOR_FILENAME_PREFIX;
 
 /**
  * IdeaUtil
@@ -117,7 +118,7 @@ public class IdeaUtils {
         if (StringUtils.isEmpty(text)) {
             text = "";
         }
-        PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(filename, language, text);
+        PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(EDITOR_FILENAME_PREFIX + filename, language, text);
         DaemonCodeAnalyzer daemonCodeAnalyzer = DaemonCodeAnalyzer.getInstance(project);
         daemonCodeAnalyzer.setImportHintsEnabled(psiFile, false);
         FileEditor fileEditor = TextEditorProvider.getInstance().createEditor(project, psiFile.getVirtualFile());

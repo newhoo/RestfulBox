@@ -8,8 +8,11 @@ import com.intellij.openapi.actionSystem.Separator;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.editor.markup.InspectionWidgetActionProvider;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.testFramework.LightVirtualFile;
 import io.github.newhoo.restkit.config.CommonSetting;
 import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.ParameterLibrary;
@@ -18,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+
+import static io.github.newhoo.restkit.common.RestConstant.EDITOR_FILENAME_PREFIX;
 
 /**
  * 利用监视动作提供参数库操作
@@ -37,27 +42,31 @@ public class ParameterLibraryActionProvider implements InspectionWidgetActionPro
         if (project == null || project.isDefault()) {
             return null;
         }
+        VirtualFile file = FileDocumentManager.getInstance().getFile(editor.getDocument());
+        if (!(file instanceof LightVirtualFile)) {
+            return null;
+        }
+        String fileName = file.getName();
+        if (!StringUtils.startsWith(fileName, EDITOR_FILENAME_PREFIX)) {
+            return null;
+        }
         CommonSetting setting = CommonSettingComponent.getInstance(project).getState();
         if (!setting.isEnableParameterLibrary()) {
             return null;
         }
-        String editorDoc = editor.getDocument().toString().replace("\\", "/");
-        if (StringUtils.containsAny(editorDoc, "/Config", "/Headers", "/Params", "/Body")) {
-            ParameterLibrary parameterLibrary = ParameterLibrary.getInstance(project);
-            AnAction saveParameterAction = new SaveParameterAction(editor, parameterLibrary);
-            AnAction showParameterAction = new ShowParameterAction(editor, parameterLibrary);
-            DefaultActionGroup defaultActionGroup = new DefaultActionGroup(saveParameterAction, showParameterAction);
+        ParameterLibrary parameterLibrary = ParameterLibrary.getInstance(project);
+        AnAction saveParameterAction = new SaveParameterAction(editor, parameterLibrary);
+        AnAction showParameterAction = new ShowParameterAction(editor, parameterLibrary);
+        DefaultActionGroup defaultActionGroup = new DefaultActionGroup(saveParameterAction, showParameterAction);
 
-            if (setting.isEnableParameterLibraryShortcut() && editor instanceof EditorImpl) {
-                JComponent editorComponent = ((EditorImpl) editor).getScrollPane();
-                saveParameterAction.registerCustomShortcutSet(new CustomShortcutSet(saveParameterShortcut), editorComponent);
-                showParameterAction.registerCustomShortcutSet(new CustomShortcutSet(showParameterShortcut), editorComponent);
-            }
-            if (StringUtils.contains(editorDoc, "/Body")) {
-                defaultActionGroup.add(Separator.create());
-            }
-            return defaultActionGroup;
+        if (setting.isEnableParameterLibraryShortcut() && editor instanceof EditorImpl) {
+            JComponent editorComponent = ((EditorImpl) editor).getScrollPane();
+            saveParameterAction.registerCustomShortcutSet(new CustomShortcutSet(saveParameterShortcut), editorComponent);
+            showParameterAction.registerCustomShortcutSet(new CustomShortcutSet(showParameterShortcut), editorComponent);
         }
-        return null;
+        if (StringUtils.containsAny(fileName, "Body", "Response")) {
+            defaultActionGroup.add(Separator.create());
+        }
+        return defaultActionGroup;
     }
 }

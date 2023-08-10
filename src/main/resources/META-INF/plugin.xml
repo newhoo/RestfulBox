@@ -161,7 +161,7 @@
         <projectService serviceImplementation="io.github.newhoo.restkit.config.HttpSettingComponent"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.ParameterLibrary"/>
         <projectService serviceImplementation="io.github.newhoo.restkit.config.HttpMethodFilterConfiguration"/>
-        <projectConfigurable id="RESTKit.SettingConfigurable" instance="io.github.newhoo.restkit.config.SettingConfigurable">
+        <projectConfigurable id="RESTKit.SettingConfigurable" instance="io.github.newhoo.restkit.config.SettingConfigurable" displayName="RESTKit">
             <configurable instance="io.github.newhoo.restkit.config.HttpSettingConfigurable" displayName="HTTP"/>
             <configurable instance="io.github.newhoo.restkit.config.EnvironmentConfigurable" displayName="Environment"/>
             <configurable instance="io.github.newhoo.restkit.config.certificate.CertificateConfigurable" displayName="Certificate"/>
