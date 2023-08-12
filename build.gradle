@@ -24,7 +24,7 @@ dependencies {
 
 intellij {
     pluginName.set('RESTKit')
-    version.set('2023.2')
+    version.set('2022.3')
     type.set("IU")
     updateSinceUntilBuild.set(false)
     downloadSources.set(true)
