@@ -5,20 +5,32 @@
 - Optimize & Fix bugs.
 - Change UI configs from project level to global level.
 - Support exporting and importing parameters.
+- Support displaying multi-level service tree and multiple request tabs with limit.
 - New project manager ui.
 
 - 修复bug，优化细节
 - 调整部分配置入口，UI配置升级为全局有效
 - 新增支持导出导入请求参数
+- 非订阅用户支持有限的多层级树节点展示和多请求面板
 - 新增项目数据管理面板
+
+其他说明：
+
+1、扫描框架设置入口迁移到 Toolbar
 
 ![](zh_CN/快速入门/images/1691681334145.png)
 
+2、请求参数导入导出入口：
+
 ![](zh_CN/核心功能/images/1691680441980.png)
+
+3、项目数据管理面板
 
 ![](zh_CN/快速入门/images/1691681334146.png)
 
 ![](zh_CN/快速入门/images/1691681334147.png)
+
+4、全局项目切换入口
 
 ![](zh_CN/快速入门/images/1691681334148.png)
 
