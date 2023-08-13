@@ -5,13 +5,13 @@
 - Optimize & Fix bugs.
 - Change UI configs from project level to global level.
 - Support exporting and importing parameters.
-- Support displaying multi-level service tree and multiple request tabs with limit.
+- Support displaying multi-level service tree and multiple request tabs with limit. All user can disable these in plugin setting.
 - New project manager ui.
 
 - 修复bug，优化细节
 - 调整部分配置入口，UI配置升级为全局有效
 - 新增支持导出导入请求参数
-- 非订阅用户支持有限的多层级树节点展示和多请求面板
+- 非订阅用户支持有限的多层级树节点展示和多请求面板，所有用户均可在设置中关闭
 - 新增项目数据管理面板
 
 其他说明：
@@ -33,6 +33,11 @@
 4、全局项目切换入口
 
 ![](zh_CN/快速入门/images/1691681334148.png)
+
+5、关闭多层级树节点展示和多请求面板
+
+![](zh_CN/快速入门/images/1691889605770.png)
+
 
 ## 3.1.1
 
