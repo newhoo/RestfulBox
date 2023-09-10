@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 3.2.1
+
+- Fix bugs: download file exception
+- Fix bugs: config lost bug.
+
+- 修复下载文件bug
+- 修复配置丢失bug
+- 非Windows用户可在 `registry` 中设置部分UI显示比例 `restkit.ui.scale`
+
+
 ## 3.2.0
 
 - Optimize & Fix bugs.
