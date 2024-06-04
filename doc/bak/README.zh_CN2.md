@@ -1,4 +1,4 @@
-<a href="https://plugins.jetbrains.com/plugin/14723-restkit">![bg](images/bg.png)</a>
+<a href="https://plugins.jetbrains.com/plugin/14723-restfulbox">![bg](images/bg.png)</a>
 
 ## 一套功能强大的 Restful 服务开发辅助工具集
 
@@ -7,7 +7,7 @@
 
 本插件致力于提升开发效率之作，只有实用常用的功能。源于最初版本的RestfulToolkit，同时加入Postman的常用功能，丰富且完善的功能能极大地提高Idea开发的效率。免费分享给大家使用，不用于商业用途。如有使用问题，请反馈于我。
 
-如果你觉得本插件不错，请赏个好评吧，同时也欢迎提供宝贵的建议。🌟 Star | [Ratings](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
+如果你觉得本插件不错，请赏个好评吧，同时也欢迎提供宝贵的建议。🌟 Star | [Ratings](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 
 ## 特性
 - 支持更多的jetbrains产品，不仅仅是idea
@@ -448,7 +448,7 @@ Url navigate to service tree.
 
 
 ## 联系 & 反馈
-[Issues](https://github.com/newhoo/RESTKit/issues) | [Email](mailto:huzunrong@foxmail.com) | [Ratings & Previews](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
+[Issues](https://github.com/newhoo/RESTKit/issues) | [Email](mailto:huzunrong@foxmail.com) | [Ratings & Previews](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 
 > 注意  
 > 反馈时请务必附上必要信息：Idea版本、插件版本、异常内容、复现方式(如果有)、诉求等。

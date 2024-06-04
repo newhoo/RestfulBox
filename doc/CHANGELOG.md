@@ -1,5 +1,59 @@
 # CHANGELOG
 
+## 4.0.0
+
+- Optimize two-way certificate management
+- Optimize api order
+- Add a useful toolbox
+- Add command palette
+- Add ability to open remote git without plugin <a href="https://plugins.jetbrains.com/plugin/14940-git-open">Git Open</a>
+- Add ability to manage jvm parameter in IDEA/Android Studio without plugin <a href="https://plugins.jetbrains.com/plugin/13204-jvm-parameter">Jvm Parameter</a>
+
+
+- 优化双向证书管理
+- 优化接口排序
+- 新增简体中文语言支持，在设置中切换后重启IDE
+- 新增便捷的工具箱
+- 新增命令中心
+- 新增自动识别并打开远程git仓库功能，可无需安装插件 <a href="https://plugins.jetbrains.com/plugin/14940-git-open">Git Open</a>
+- 新增Jvm启动参数管理(IDEA/Android Studio中可用)，可无需安装插件 <a href="https://plugins.jetbrains.com/plugin/13204-jvm-parameter">Jvm Parameter</a>
+
+
+
+## 3.4.1
+
+- Enable all installed restfulbox external plugin by default: [Supported Framework](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/%E9%85%8D%E7%BD%AE.md#%E6%94%AF%E6%8C%81%E7%9A%84%E6%89%AB%E6%8F%8F%E6%A1%86%E6%9E%B6);
+- Fix bugs
+
+- 默认启用所有安装的扫描插件：[支持的扫描框架](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/%E9%85%8D%E7%BD%AE.md#%E6%94%AF%E6%8C%81%E7%9A%84%E6%89%AB%E6%8F%8F%E6%A1%86%E6%9E%B6)
+- 修复已知问题
+
+
+## 3.4.0
+
+- Optimise searchEverywhere matching logic, disable description matching by default;
+- Can set dateFormat with project setting;
+
+- 优化searchEverywhere搜索接口, 默认禁用description匹配
+- 支持自定义时间格式: ProjectSetting
+
+![](zh_CN/核心功能/images/302504119254790.png)
+
+![](zh_CN/快速入门/images/1715007868752.png)
+
+
+## 3.3.1
+
+- fix exception in 2024.1;
+
+
+## 3.3.0
+
+- Fix bugs
+- Add Jax-RS api support(Java and kotlin) directly. Abandon RESTKit-JAX-RS plugin.
+- Update libs(9.4M)
+
+
 ## 3.2.1
 
 - Fix bugs: download file exception

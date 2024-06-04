@@ -1,17 +1,16 @@
-<a href="https://plugins.jetbrains.com/plugin/14723-restkit">![bg](doc/en/images/bg2.png)</a>
+<a href="https://plugins.jetbrains.com/plugin/14723-restfulbox">![bg](doc/en/images/bg2.png)</a>
 
 ## 一套功能强大的 Restful 服务开发辅助工具集
 
+[英文](./README.md) | [Github](https://github.com/newhoo/RestfulBox) | [Gitee](https://gitee.com/newhoo/RestfulBox) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 
-[英文](./README.md) | [Github](https://github.com/newhoo/RESTKit) | [Gitee](https://gitee.com/newhoo/RESTKit) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
+**RestfulBox**插件致力于提升开发效率，只有实用常用的功能。源于最初版本的RestfulToolkit，同时融入了常用工具的核心功能，丰富且完善的功能极大地提高了使用IDE开发的效率。
 
-**RestfulBox**插件致力于提升开发效率，只有实用常用的功能。源于最初版本的RestfulToolkit，同时融入了Postman的常用功能，丰富且完善的功能能极大地提高了Idea开发的效率。曾用名：RESTKit。
-
-## 特性 ([3.0升级指南](doc/zh_CN/快速入门/3.0升级指南.md))
+## 特性 ([4.0升级指南](doc/zh_CN/快速入门/4.0升级指南.md))
 - [x] 支持更多的jetbrains产品，不仅仅是idea
 - [x] Restful服务自动扫描、展示、跳转和导入导出
   - 原生Search Everywhere支持restful URL搜索 (<kbd>Ctrl \\</kbd> or <kbd>Ctrl Alt N</kbd>)
-  - 跨IDE跨项目浏览所有服务
+  - 跨IDE跨项目浏览所有服务接口
   - 窗口显示多层级 Services tree
   - URL和Method相互跳转
 - [x] 强大好用的请求工具：
@@ -24,18 +23,25 @@
   - 请求脚本：支持前置/后置请求脚本
   - 请求响应信息展示报文格式，支持保存到日志文件
 - [x] 语言和框架：
-  - 默认支持存储服务到本地文件
-  - idea默认支持 Spring 体系接口 (Spring MVC with Java or Kotlin)
+  - 默认支持存储服务接口到本地文件
+  - idea默认支持 SpringMvc 和 Jax-RS 体系接口 (Java and Kotlin)
 - [x] 数据源: 支持多种数据源存储数据，更安全更可控，可本地可云端同步可定制
 - [x] 插件扩展：提供多个扩展点，便于自定义需求的实现
+- [X] 拥有便捷的工具箱（时间转换、加解密、进制转换等）
+- [X] 独创命令中心，支持丰富的自定义命令
+- [X] 支持自动识别并打开远程git仓库
+- [X] 支持Jvm参数管理(IDEA/Android Studio中可用)
+- [X] 额外：便捷的IDE项目切换管理: <a href="https://github.com/newhoo/easy-open-project">Easy Open Project</a>
+- [X] 额外：自动输出mysql执行计划和原始日志: <a href="https://github.com/newhoo/mysql-explain">MySQL Explain</a>
+- [X] 额外：便捷的spring bean方法调用: <a href="https://github.com/newhoo/bean-invoker">Spring Bean Invoker</a>
 
 ## 生态
 
 通过公开的扩展点，可以轻松实现一些自定义需求，具体参考生态章节。当前已支持：
 - 扫描类型
   - [x] Spring MVC：默认支持，支持Java and Kotlin实现
-  - [x] Jax-Rs：通过插件支持，见 [RESTKit-JAX-RS](https://github.com/huzunrong/RESTKit-JAX-RS)
-  - [x] Dubbo：通过插件支持，见 [RESTKit-Dubbo](https://github.com/newhoo/RESTKit-Dubbo) ，支持扫描和发送请求
+  - [x] Jax-RS：从`3.3.0`开始默认支持，支持Java and Kotlin实现
+  - [x] Dubbo：通过插件支持，见 [RestfulBox-Dubbo](https://github.com/newhoo/RestfulBox-Dubbo) ，支持扫描和发送请求
   - [x] Solon：通过插件支持，见 [RestfulBox-Solon](https://github.com/newhoo/RestfulBox-Solon) ，支持扫描和请求发送
 - 存储类型（建议使用数据源）
   - [x] Redis：通过插件支持，见 [RESTKit-Redis](https://github.com/newhoo/RESTKit-Redis) ，支持存储API到redis和简单的redis命令发送
@@ -45,22 +51,20 @@
   - [x] DUBBO：同上
   - [x] Redis：同上
 - 数据源（支持存储插件的所有数据到数据库）
-  - [x] Sqlite数据源：默认3.0.0开始支持
-  - [x] MySQL数据源：默认3.0.1开始支持
+  - [x] Sqlite数据源：默认`3.0.0`开始支持
+  - [x] MySQL数据源：默认`3.0.1`开始支持
 
 ## 使用文档
-- [中文文档-Github](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)  [Gitee](https://gitee.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)
+- [中文文档-Github](https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)  [Gitee](https://gitee.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)
 - [English Document](doc/en/README.md)
 - [CHANGELOG](doc/CHANGELOG.md)
 
 ## 关于插件
-该插件的所有功能源于我本人日常开发中的点点滴滴，且一直以来只有我一人维护，真的是为爱发电了。虽然`3.0`开始新增了付费订阅方式，但仅针对新增的一些高级功能，对于历史版本已有功能以及未来可能会补充的基本功能仍然免费使用。如果有需要，不妨支持一下，点亮小星星，同时也欢迎提供宝贵的建议。:star2:
-
-关于源码：由于国内某些同类付费插件大量抄袭了本插件功能（环境变量、前后置脚本等），且参差不齐，因此3.0之后的源码选择性更新，如有插件开发的问题，欢迎交流。
+该插件的所有功能源于我本人日常开发中的点点滴滴，且一直以来只有我一人维护，真的是为爱发电了。虽然`3.0`开始新增了付费订阅方式，但仅针对新增的一些高级功能，对于历史版本已有功能以及未来可能会补充的基本功能仍然免费使用。希望各位大佬支持一下，点亮小星星，同时也欢迎提供宝贵的建议。:star2:
 
 :fire: **_如果你想更加充分地体验订阅功能，作者免费赠送3个月使用。如有需要，可通过邮件联系作者，备注好需求和你的 [Jetbrains邮箱账号](https://account.jetbrains.com/profile-details) !!_**
 
-[Issues](https://github.com/newhoo/RESTKit/issues) | [Email](mailto:huzunrong@foxmail.com) | [Jetbrains评分](https://plugins.jetbrains.com/plugin/14723-restkit/reviews)
+[Issues](https://github.com/newhoo/RestfulBox/issues) | [Email](mailto:huzunrong@foxmail.com) | [Jetbrains评分](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 
 > 注意  
 > 反馈时请务必附上必要信息：Idea版本、插件版本、异常内容、复现方式、诉求等。
