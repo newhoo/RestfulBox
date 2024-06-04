@@ -2,6 +2,8 @@
 
 ## 4.0.0
 
+[4.0 Upgrade Guide - 4.0升级指南](./zh_CN/快速入门/4.0升级指南.md)
+
 - Optimize two-way certificate management
 - Optimize api order
 - Add a useful toolbox
@@ -18,7 +20,11 @@
 - 新增自动识别并打开远程git仓库功能，可无需安装插件 <a href="https://plugins.jetbrains.com/plugin/14940-git-open">Git Open</a>
 - 新增Jvm启动参数管理(IDEA/Android Studio中可用)，可无需安装插件 <a href="https://plugins.jetbrains.com/plugin/13204-jvm-parameter">Jvm Parameter</a>
 
-
+关联文档：
+- [工具箱](zh_CN/核心功能/工具箱.md)
+- [命令中心](zh_CN/核心功能/命令中心.md)
+- [Git识别](zh_CN/核心功能/Git识别.md)
+- [Jvm参数管理](zh_CN/核心功能/Jvm参数管理.md)
 
 ## 3.4.1
 
@@ -143,7 +149,7 @@
 
 ## 3.0.1
 
-[3.0 Upgrade Guide - 3.0升级指南](https://github.com/newhoo/RESTKit/blob/main/doc/zh_CN/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/3.0%E5%8D%87%E7%BA%A7%E6%8C%87%E5%8D%97.md)
+[3.0 Upgrade Guide - 3.0升级指南](./zh_CN/快速入门/3.0升级指南.md)
 
 - Optimize & Fix bugs.
 - Support parsing constants in springmvc mappings.
