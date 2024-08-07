@@ -6,7 +6,7 @@
 
 This plugin is committed to enhancing development efficiency with useful features. From the initial RestfulToolkit and joined common core functions of dev tools, rich and complete features can greatly improve the efficiency of IDEA development.
 
-## Features ([4.0 Upgrade Guide](doc/zh_CN/快速入门/4.0升级指南.md))
+## Features ([5.0 Upgrade Guide](doc/zh_CN/快速入门/5.0升级指南.md))
 - [x] More supported jetbrains ides.
 - [x] Restful service automatic scanning and display.
   - Support searching service in native Search Everywhere. ( use: <kbd>Ctrl \\</kbd> )

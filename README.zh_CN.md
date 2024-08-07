@@ -6,7 +6,7 @@
 
 **RestfulBox**插件致力于提升开发效率，只有实用常用的功能。源于最初版本的RestfulToolkit，同时融入了常用工具的核心功能，丰富且完善的功能极大地提高了使用IDE开发的效率。
 
-## 特性 ([4.0升级指南](doc/zh_CN/快速入门/4.0升级指南.md))
+## 特性 ([5.0升级指南](doc/zh_CN/快速入门/5.0升级指南.md))
 - [x] 支持更多的jetbrains产品，不仅仅是idea
 - [x] Restful服务自动扫描、展示、跳转和导入导出
   - 原生Search Everywhere支持restful URL搜索 (<kbd>Ctrl \\</kbd> or <kbd>Ctrl Alt N</kbd>)
@@ -30,7 +30,7 @@
 - [X] 拥有便捷的工具箱（时间转换、加解密、进制转换等）
 - [X] 独创命令中心，支持丰富的自定义命令
 - [X] 支持自动识别并打开远程git仓库
-- [X] 支持Jvm参数管理(IDEA/Android Studio中可用)
+- [X] 支持运行时参数管理(IDEA/Android Studio中可用)
 - [X] 额外：便捷的IDE项目切换管理: <a href="https://github.com/newhoo/easy-open-project">Easy Open Project</a>
 - [X] 额外：自动输出mysql执行计划和原始日志: <a href="https://github.com/newhoo/mysql-explain">MySQL Explain</a>
 - [X] 额外：便捷的spring bean方法调用: <a href="https://github.com/newhoo/bean-invoker">Spring Bean Invoker</a>
