@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 5.0.0
+
+[5.0 Upgrade Guide - 5.0升级指南](./zh_CN/快速入门/5.0升级指南.md)
+
+- Comprehensive refactoring for user experience.
+- New: support api tag, which can be used for favorites.
+- New: Runtime environment variable management. Supporting Java and Golang.
+- New: Customizable replacement rules for unknown strings in api URLs.
+- New: Import and export functionality for apis (Markdown/OpenAPI/Postman/Apifox).
+
+
+- 全面重构，优化使用体验
+- 新增：接口标记支持，可作为收藏，亦支持过滤
+- 新增：运行环境变量管理，支持Java和Golang
+- 新增：扫描接口URL中的未知字符串支持自定义替换规则
+- 新增：接口导入导出（Markdown/OpenAPI/Postman/Apifox)
+
+
 ## 4.0.0
 
 [4.0 Upgrade Guide - 4.0升级指南](./zh_CN/快速入门/4.0升级指南.md)
@@ -24,7 +42,7 @@
 - [工具箱](zh_CN/核心功能/工具箱.md)
 - [命令中心](zh_CN/核心功能/命令中心.md)
 - [Git识别](zh_CN/核心功能/Git识别.md)
-- [Jvm参数管理](zh_CN/核心功能/Jvm参数管理.md)
+- [Jvm参数管理](zh_CN/核心功能/运行参数管理)
 
 ## 3.4.1
 

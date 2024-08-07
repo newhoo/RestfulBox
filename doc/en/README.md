@@ -372,9 +372,9 @@ if (statusCode != 200) {
 ### Plugin Extension
 RESTKit provided extension points from version `2.0.1`. It's very useful.
 
-- `io.github.newhoo.restkit.restful.ep.RestfulResolverProvider` you can scan restful apis for other framework.
+- `io.github.newhoo.restkit.open.ep.RestfulResolverProvider` you can scan restful apis for other framework.
 - `io.github.newhoo.restkit.restful.ep.LanguageResolverProvider` operation for special language
-- `io.github.newhoo.restkit.restful.ep.RestClientProvider` support custom request protocol from `2.0.3`.
+- `io.github.newhoo.restkit.open.ep.RestClientProvider` support custom request protocol from `2.0.3`.
 
 For example: 
 

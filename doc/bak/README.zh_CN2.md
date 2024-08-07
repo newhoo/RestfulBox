@@ -360,9 +360,9 @@ if (statusCode != 200) {
 
 ### 插件扩展
 RESTKit从`2.0.1`版本开始提供了扩展点:
-- `io.github.newhoo.restkit.restful.ep.RestfulResolverProvider` 自定义扫描restful接口。
+- `io.github.newhoo.restkit.open.ep.RestfulResolverProvider` 自定义扫描restful接口。
 - `io.github.newhoo.restkit.restful.ep.LanguageResolverProvider` 自定义语言相关的操作，具体参考源码说明。
-- `io.github.newhoo.restkit.restful.ep.RestClientProvider` 自定义请求协议，从`2.0.3`开始支持。
+- `io.github.newhoo.restkit.open.ep.RestClientProvider` 自定义请求协议，从`2.0.3`开始支持。
 
 使用示例：
 
