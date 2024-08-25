@@ -61,8 +61,6 @@
 - 优化searchEverywhere搜索接口, 默认禁用description匹配
 - 支持自定义时间格式: ProjectSetting
 
-![](zh_CN/核心功能/images/302504119254790.png)
-
 ![](zh_CN/快速入门/images/1715007868752.png)
 
 

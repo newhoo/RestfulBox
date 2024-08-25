@@ -6,13 +6,9 @@
 ## 二、上传文件
 支持`org.springframework.web.multipart.MultipartFile`参数识别。
 
-![](images/300105714247361.png)
+在 **Params编辑窗口** 中，文件参数表现为：`paramName: file@[filepath]`。选择参数上传，步骤如下图：
 
-在 **Params编辑窗口** 中，文件参数表现为：`paramName: file@[filepath]`，包含该格式参数后，会出现一个上传文件的按钮⬆️，点击即可选择要上传的文件。如包含多个文件，则按从上到下列表进行选择，如图：
-
-![](images/576115714240220.png)
-
-![](images/70515814259029.png)
+![img.png](images/1724578236844.png)
 
 同其他http请求一样，点击发送即可。在接口断点查看参数，如图：
 

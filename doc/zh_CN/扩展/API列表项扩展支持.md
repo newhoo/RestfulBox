@@ -9,9 +9,6 @@
 ```java
 /**
  * RestItemDetailProvider
- *
- * @author huzunrong
- * @since 3.0.0
  */
 public interface RestItemDetailProvider {
 
@@ -25,9 +22,6 @@ public interface RestItemDetailProvider {
 ```java
 /**
  * rest item detail extension point
- *
- * @author huzunrong
- * @since 3.0.0
  */
 public interface RestItemDetail {
 
@@ -38,13 +32,27 @@ public interface RestItemDetail {
     String getProtocol();
 
     /**
-     * tree list item icon
+     * 协议排序
+     */
+    default int getProtocolOrder() {
+        return 999;
+    }
+
+    /**
+     * tree node icon
      */
     @NotNull
     Icon getIcon(@NotNull RestItem restItem);
 
+    /**
+     * tree node name
+     *
+     * @param restItem
+     * @param useApiName see in the config
+     * @return not null or keep empty to use default logic
+     */
     @NotNull
-    default String getName(@NotNull RestItem restItem, boolean useApiDesc) {
+    default String getName(@NotNull RestItem restItem, boolean useApiName) {
         return "";
     }
 
@@ -56,6 +64,12 @@ public interface RestItemDetail {
      */
     default boolean handleDoubleClickOrEnter(@NotNull RestItem restItem, @NotNull Project project) {
         return false;
+    }
+
+    /**
+     * Jump to source
+     */
+    default void navigateToSource(@NotNull RestItem restItem, @NotNull Project project) {
     }
 }
 ```

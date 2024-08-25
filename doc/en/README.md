@@ -4,7 +4,7 @@
 
 [Github](https://github.com/newhoo/RestfulBox) | [Gitee](https://gitee.com/newhoo/RestfulBox) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 
-This plugin is committed to enhancing development efficiency with useful features. From the initial RestfulToolkit and joined common core functions of dev tools, rich and complete features can greatly improve the efficiency of IDEA development.
+This plugin is committed to enhancing development efficiency with useful features. Rich and complete features can greatly improve the efficiency of IDEA development.
 
 ## Features ([4.0 Upgrade Guide](../zh_CN/快速入门/4.0升级指南.md))
 - [x] More supported jetbrains ides.
@@ -373,7 +373,7 @@ if (statusCode != 200) {
 RESTKit provided extension points from version `2.0.1`. It's very useful.
 
 - `io.github.newhoo.restkit.open.ep.RestfulResolverProvider` you can scan restful apis for other framework.
-- `io.github.newhoo.restkit.restful.ep.LanguageResolverProvider` operation for special language
+- `io.github.newhoo.restkit.open.ep.LanguageResolverProvider` operation for special language
 - `io.github.newhoo.restkit.open.ep.RestClientProvider` support custom request protocol from `2.0.3`.
 
 For example: 

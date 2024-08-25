@@ -12,17 +12,15 @@
 
 打开后如图：
 
-![](images/99883919259684.png)
+![img.png](images/1724581954179.png)
 
 `3.4.0`开始默认不匹配description部分，需手动勾选匹配
 
-![](images/1715007558692.png)
+![img.png](images/1724582042342.png)
 
-可在设置中设置显示module/分组名称，效果如下图：
+可在设置中设置显示module/分组名称。
 
-![](images/302504119254790.png)
-
-在search everywhere中选中具体的URL后，按 `Option` 或 `Alt` 可跳转到service tree中对应的列表项。
+在search everywhere中选中具体的URL后，按 `Option` 或 `Alt` 可跳转到api tree中对应的列表项。
 
 ## Service tree支持idea自身的输入搜索
 
