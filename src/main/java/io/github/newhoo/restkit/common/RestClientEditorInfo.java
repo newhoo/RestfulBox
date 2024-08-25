@@ -8,8 +8,11 @@ import lombok.Data;
  * @author huzunrong
  * @since 1.0.8
  */
+@NotProguard
 @Data
 public class RestClientEditorInfo {
+
+    private String project;
 
     private String method;
 

@@ -2,6 +2,8 @@
 
     <extensions defaultExtensionNs="io.github.newhoo.restkit">
         <languageResolver implementation="io.github.newhoo.restkit.feature.javaimpl.language.KotlinLanguageResolver$KotlinLanguageResolverProvider"/>
+        <restfulResolver implementation="io.github.newhoo.restkit.feature.javaimpl.spring.SpringKotlinResolver$SpringKotlinRequestResolverProvider"/>
+        <restfulResolver implementation="io.github.newhoo.restkit.feature.javaimpl.jaxrs.JaxrsKotlinJavaResolver$JaxrsKotlinResolverProvider"/>
     </extensions>
 
 </idea-plugin>

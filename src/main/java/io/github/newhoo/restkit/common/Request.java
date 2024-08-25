@@ -11,6 +11,7 @@ import java.util.Map;
  * @author huzunrong
  * @since 2.0.0
  */
+@NotProguard
 @Data
 public class Request {
 

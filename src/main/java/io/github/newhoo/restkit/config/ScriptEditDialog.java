@@ -10,13 +10,13 @@ import com.intellij.ui.components.JBPanel;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.util.ui.JBUI;
+import io.github.newhoo.restkit.i18n.RestBundle;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.util.function.Consumer;
 
-import static io.github.newhoo.restkit.common.RestConstant.DEFAULT_SCRIPT_CONTENT;
 import static io.github.newhoo.restkit.util.IdeaUtils.createEditor;
 import static io.github.newhoo.restkit.util.IdeaUtils.getEditorText;
 
@@ -41,7 +41,7 @@ public class ScriptEditDialog extends DialogWrapper {
         this.newScriptConsumer = newScriptConsumer;
         this.scriptContent = scriptContent;
 
-        setTitle("Edit RESTKit Script");
+        setTitle("[RestfulBox] " + RestBundle.message("toolkit.config.request.environment.script.dialog.title"));
         setSize(800, 800);
         init();
     }
@@ -51,12 +51,26 @@ public class ScriptEditDialog extends DialogWrapper {
         JPanel contentPanel = new JBPanel<>();
         contentPanel.setLayout(new GridLayoutManager(2, 1, JBUI.insets(0, 0, 0, 0), 4, 4));
 
-        contentPanel.add(new JBLabel("Add script method using java (method signature should be like \"public static String xxx()\"):"),
+        contentPanel.add(new JBLabel(RestBundle.message("toolkit.config.request.environment.script.dialog.desc")),
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_SOUTHEAST, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_GROW | GridConstraints.SIZEPOLICY_CAN_SHRINK, GridConstraints.SIZEPOLICY_FIXED,
                         null, null, null));
 
-        String scriptText = StringUtils.isNotEmpty(scriptContent) ? scriptContent : DEFAULT_SCRIPT_CONTENT;
+        final String DEFAULT_SCRIPT_CONTENT =
+                "public class RestKitScript {\n" +
+                        "\n" +
+                        "    /**\n" +
+                        "     * Your script method, no param, method name must from {{$methodName$}}.\n" +
+                        "     * Use pre-request script can be more powerful.\n" +
+                        "     *\n" +
+                        "     * @return return value should be String\n" +
+                        "     */\n" +
+                        "    public static String methodName() {\n" +
+                        "        return \"\";\n" +
+                        "    }\n" +
+                        "\n" +
+                        "}";
+        String scriptText = StringUtils.defaultIfEmpty(scriptContent, DEFAULT_SCRIPT_CONTENT);
         Language language = project.isDefault()
                 ? PlainTextLanguage.INSTANCE
                 : ObjectUtils.defaultIfNull(Language.findLanguageByID("JAVA"), PlainTextLanguage.INSTANCE);

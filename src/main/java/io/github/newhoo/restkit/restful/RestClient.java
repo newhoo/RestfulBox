@@ -2,6 +2,7 @@ package io.github.newhoo.restkit.restful;
 
 import com.intellij.openapi.project.Project;
 import io.github.newhoo.restkit.common.KV;
+import io.github.newhoo.restkit.common.NotProguard;
 import io.github.newhoo.restkit.common.Request;
 import io.github.newhoo.restkit.common.RequestInfo;
 import io.github.newhoo.restkit.common.RestClientData;
@@ -16,6 +17,7 @@ import java.util.List;
  * @author huzunrong
  * @since 2.0.3
  */
+@NotProguard
 public interface RestClient {
 
     /**

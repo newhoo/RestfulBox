@@ -1,5 +1,0 @@
-<idea-plugin>
-    <extensions defaultExtensionNs="com.intellij">
-<!--        <microservices.urlInlayAction implementation="io.github.newhoo.restkit.feature.microservice.OpenInHttpUrlInlayAction"/>-->
-    </extensions>
-</idea-plugin>

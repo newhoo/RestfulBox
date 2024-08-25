@@ -1,6 +1,14 @@
 package io.github.newhoo.restkit.util;
 
+import com.intellij.openapi.project.Project;
+import io.github.newhoo.restkit.common.NotProguard;
+import io.github.newhoo.restkit.config.RequestSetting;
+import io.github.newhoo.restkit.datasource.DataSourceHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * TypeUtils
@@ -8,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * @author huzunrong
  * @since 1.0.0
  */
+@NotProguard
 public final class TypeUtils {
 
     public static boolean isArray(String type) {
@@ -115,7 +124,7 @@ public final class TypeUtils {
     }
 
     @NotNull
-    public static Object getExampleValue(String parameterType, boolean isRandom) {
+    public static Object getExampleValue(String parameterType, Project project) {
         if (parameterType.isEmpty()) {
             return "";
         }
@@ -130,12 +139,24 @@ public final class TypeUtils {
             case "char":
                 return 'a';
             case "String":
-                return isRandom ? "str" : "";
+                return "";
             case "Date":
             case "Timestamp":
             case "LocalDate":
             case "LocalDateTime":
-                return System.currentTimeMillis();
+                RequestSetting setting = DataSourceHelper.getDataSource().selectRequestSetting(project.getName(), project);
+                String defaultDateFormat = setting.getDefaultDateFormat();
+                if (StringUtils.isEmpty(defaultDateFormat) || "timestamp(ms)".equals(defaultDateFormat)) {
+                    return System.currentTimeMillis();
+                } else if ("timestamp(s)".equals(defaultDateFormat)) {
+                    return System.currentTimeMillis() / 1000;
+                }
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(defaultDateFormat);
+                    return dateFormat.format(new Date());
+                } catch (Exception e) {
+                    return System.currentTimeMillis();
+                }
             case "short":
             case "Short":
             case "int":

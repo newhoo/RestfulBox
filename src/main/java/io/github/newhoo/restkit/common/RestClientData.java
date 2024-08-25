@@ -10,8 +10,11 @@ import java.util.Map;
  * @author huzunrong
  * @since 2.0.0
  */
+@NotProguard
 @Data
 public class RestClientData {
+
+    private String project;
 
     private String url;
     private String method;

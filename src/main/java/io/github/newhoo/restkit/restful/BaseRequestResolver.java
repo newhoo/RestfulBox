@@ -4,8 +4,9 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
+import io.github.newhoo.restkit.common.NotProguard;
 import io.github.newhoo.restkit.common.RestItem;
-import io.github.newhoo.restkit.config.CommonSettingComponent;
+import io.github.newhoo.restkit.config.ConfigHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -18,16 +19,18 @@ import java.util.stream.Collectors;
  *
  * @author huzunrong
  */
+@NotProguard
 public abstract class BaseRequestResolver implements RequestResolver {
 
     @NotNull
     @Override
     public List<RestItem> findRestItemInProject(@NotNull Project project) {
-        boolean scanServiceWithLib = CommonSettingComponent.getInstance(project).getState().isScanServiceWithLib();
+        boolean scanServiceWithLib = ConfigHelper.getCommonSetting(project).isScanServiceWithLib();
         Module[] modules = ModuleManager.getInstance(project).getModules();
         return Arrays.stream(modules)
                      .map(module -> findRestItemListInModule(module, getModuleScope(module, scanServiceWithLib)))
                      .flatMap(Collection::stream)
+                     .peek(e -> e.setProject(project.getName()))
                      .collect(Collectors.toList());
     }
 

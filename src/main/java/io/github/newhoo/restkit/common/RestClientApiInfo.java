@@ -6,8 +6,13 @@ import lombok.Data;
  * @author huzunrong
  * @since 1.0.8
  */
+@NotProguard
 @Data
 public class RestClientApiInfo {
+
+    private String project;
+
+    private String currentEnv;
 
     private String url;
 

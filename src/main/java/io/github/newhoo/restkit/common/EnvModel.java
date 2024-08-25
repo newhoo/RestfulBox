@@ -1,6 +1,6 @@
 package io.github.newhoo.restkit.common;
 
-import io.github.newhoo.restkit.config.KeyValueTableModel;
+import io.github.newhoo.restkit.config.KeyValueModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -16,5 +16,5 @@ public class EnvModel {
 
     private String env;
 
-    private KeyValueTableModel model;
+    private KeyValueModel model;
 }

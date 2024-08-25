@@ -3,6 +3,7 @@ package io.github.newhoo.restkit.restful;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import io.github.newhoo.restkit.common.KV;
+import io.github.newhoo.restkit.common.NotProguard;
 import io.github.newhoo.restkit.common.PsiRestItem;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +17,7 @@ import java.util.Set;
  * @author huzunrong
  * @since 2.0.2
  */
+@NotProguard
 public interface ParamResolver {
 
     /**

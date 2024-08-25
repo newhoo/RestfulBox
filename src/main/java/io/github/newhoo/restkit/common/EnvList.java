@@ -12,6 +12,7 @@ import java.util.List;
  * @author huzunrong
  * @since 1.0.8
  */
+@NotProguard
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

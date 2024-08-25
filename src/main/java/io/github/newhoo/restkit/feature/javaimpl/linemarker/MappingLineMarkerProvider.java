@@ -4,11 +4,10 @@ import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.psi.PsiElement;
-import io.github.newhoo.restkit.common.ToolkitIcons;
-import io.github.newhoo.restkit.config.CommonSettingComponent;
+import io.github.newhoo.restkit.config.ConfigHelper;
 import io.github.newhoo.restkit.i18n.RestBundle;
-import io.github.newhoo.restkit.restful.LanguageHelper;
-import io.github.newhoo.restkit.toolwindow.RestToolWindowFactory;
+import io.github.newhoo.restkit.restful.RequestHelper;
+import io.github.newhoo.restkit.toolwindow.ToolWindowHelper;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -22,16 +21,11 @@ public class MappingLineMarkerProvider implements LineMarkerProvider {
 
     @Override
     public LineMarkerInfo<?> getLineMarkerInfo(@NotNull PsiElement element) {
-        if (LanguageHelper.canGenerateLineMarker(element)
-                && CommonSettingComponent.getInstance(element.getProject()).getState().isEnableMethodLineMarker()) {
-            return new LineMarkerInfo<>(element, element.getTextRange(), ToolkitIcons.REQUEST,
-                    psiElement -> RestBundle.message("toolkit.navigate.text"),
-                    (e, elt) -> {
-                        RestToolWindowFactory.getRestServiceToolWindow(elt.getProject(), restServiceToolWindow -> {
-                            restServiceToolWindow.navigateToTree(elt.getParent(), () -> LanguageHelper.generateRestItem(element));
-                        });
-                    },
-                    GutterIconRenderer.Alignment.LEFT, () -> RestBundle.message("toolkit.config.name"));
+        if (ConfigHelper.getGlobalSetting().isEnableMethodLineMarker() && RequestHelper.canGenerateLineMarker(element)) {
+            return new LineMarkerInfo<>(element, element.getTextRange(), ConfigHelper.NAVIGATE_ICON,
+                                        psiElement -> RestBundle.message("toolkit.navigate.text"),
+                                        (e, elt) -> ToolWindowHelper.navigateToTree(elt.getParent(), () -> RequestHelper.generateRestItem(element)),
+                                        GutterIconRenderer.Alignment.LEFT, () -> RestBundle.message("toolkit.name"));
         }
         return null;
     }

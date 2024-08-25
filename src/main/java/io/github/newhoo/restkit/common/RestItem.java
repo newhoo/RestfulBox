@@ -11,10 +11,17 @@ import java.util.List;
 /**
  * Restful Api Item
  */
+@NotProguard
 @Data
 @ToString(doNotUseGetters = true)
 @EqualsAndHashCode(doNotUseGetters = true)
 public class RestItem {
+
+    /** id */
+    private String id = "";
+
+    /** protocol */
+    private String protocol = "http";
 
     private String url;
     private HttpMethod method;
@@ -32,30 +39,33 @@ public class RestItem {
     private String description;
 
 
-    // other info
-
-    /** dataSource */
-    private String dataSource = "";
-
     /** project */
     private String project = "";
 
-    /** module name, as group */
+    /** module name */
     private String moduleName;
 
+    /** package name */
     private String packageName = "default";
-
-    /** name that the api item from. e.g. Local for Local api store */
-    private String framework;
-
-    /** protocol */
-    private String protocol = "http";
-
-    /** id, reserve */
-    private String id = "";
 
     /** timestamp */
     private long ts = System.currentTimeMillis();
+
+    // other info
+
+    /** from ==> dataSource, do not save to datasource */
+    private String dataSource = "";
+
+    /** from ==> name that the api item from. e.g. Local for Local api store */
+    private String framework;
+
+    /**
+     * sync to datasource flag:
+     * 1 - sync to datasource
+     * 0 - other way to datasource
+     */
+    private boolean syncFlag = true;
+
 
     /**
      * Please do not call this constructor. It's called by deserialization framework such as io.github.newhoo.restkit.config.LocalApiLibrary
@@ -104,5 +114,25 @@ public class RestItem {
      */
     public boolean canDelete() {
         return true;
+    }
+
+    public RestItem copy() {
+        RestItem restItem = new RestItem();
+        restItem.setUrl(getUrl());
+        restItem.setMethod(getMethod());
+        restItem.setHeaders(getHeaders());
+        restItem.setParams(getParams());
+        restItem.setBodyJson(getBodyJson());
+        restItem.setDescription(getDescription());
+        restItem.setDataSource(getDataSource());
+        restItem.setProject(getProject());
+        restItem.setModuleName(getModuleName());
+        restItem.setPackageName(getPackageName());
+        restItem.setFramework(getFramework());
+        restItem.setProtocol(getProtocol());
+        restItem.setId(getId());
+        restItem.setTs(getTs());
+        restItem.setSyncFlag(isSyncFlag());
+        return restItem;
     }
 }

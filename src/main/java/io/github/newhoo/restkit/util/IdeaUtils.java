@@ -7,7 +7,6 @@ import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.EditorSettings;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -18,22 +17,16 @@ import com.intellij.openapi.fileTypes.PlainTextLanguage;
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.util.Disposer;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
+import com.intellij.ui.AppUIUtil;
 import com.intellij.util.DisposeAwareRunnable;
+import io.github.newhoo.restkit.common.NotProguard;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.datatransfer.StringSelection;
-import java.io.File;
-import java.io.IOException;
-
-import static com.intellij.openapi.project.Project.DIRECTORY_STORE_FOLDER;
-import static io.github.newhoo.restkit.common.RestConstant.EDITOR_FILENAME_PREFIX;
 
 /**
  * IdeaUtil
@@ -41,6 +34,7 @@ import static io.github.newhoo.restkit.common.RestConstant.EDITOR_FILENAME_PREFI
  * @author huzunrong
  * @since 1.0.0
  */
+@NotProguard
 public class IdeaUtils {
 
     public static void copyToClipboard(String content) {
@@ -49,7 +43,7 @@ public class IdeaUtils {
         }
     }
 
-    public static void runWhenInitialized(final Project project, final Runnable r) {
+    /*public static void runWhenInitialized(final Project project, final Runnable r) {
 
         if (project.isDisposed()) {
             return;
@@ -65,14 +59,22 @@ public class IdeaUtils {
             return;
         }
 
-/*        System.out.println((DumbService.getInstance(project).isDumb()));
+*//*        System.out.println((DumbService.getInstance(project).isDumb()));
         if (DumbService.getInstance(project).isDumb()) {
 //            return;
             runWhenInitialized(project,r);
-        }*/
+        }*//*
 //        runDumbAware(project, r);
         invokeLater(project, r);
 //        ApplicationManager.getApplication().invokeAndWait(r);
+    }*/
+
+    public static void run(Runnable runnable) {
+        ApplicationManager.getApplication().executeOnPooledThread(runnable);
+    }
+
+    public static void invokeOnEdt(Runnable runnable) {
+        AppUIUtil.invokeOnEdt(runnable);
     }
 
     public static void runWhenProjectIsReady(final Project project, final Runnable runnable) {
@@ -118,7 +120,7 @@ public class IdeaUtils {
         if (StringUtils.isEmpty(text)) {
             text = "";
         }
-        PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(EDITOR_FILENAME_PREFIX + filename, language, text);
+        PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(filename, language, text);
         DaemonCodeAnalyzer daemonCodeAnalyzer = DaemonCodeAnalyzer.getInstance(project);
         daemonCodeAnalyzer.setImportHintsEnabled(psiFile, false);
         FileEditor fileEditor = TextEditorProvider.getInstance().createEditor(project, psiFile.getVirtualFile());
@@ -140,19 +142,19 @@ public class IdeaUtils {
         return fileEditor;
     }
 
-    public static Editor createEditor(String filename, Project project) {
-        final File file = new File(project.getBasePath() + "/" + DIRECTORY_STORE_FOLDER + "/" + filename);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        final VirtualFile fileByIoFile = LocalFileSystem.getInstance().findFileByIoFile(file);
-        // fileByIoFile.setCharset(StandardCharsets.UTF_8);
-        return EditorFactory.getInstance().createEditor(FileDocumentManager.getInstance().getCachedDocument(fileByIoFile));
-    }
+//    public static Editor createEditor(String filename, Project project) {
+//        final File file = new File(project.getBasePath() + "/" + DIRECTORY_STORE_FOLDER + "/" + filename);
+//        if (!file.exists()) {
+//            try {
+//                file.createNewFile();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        final VirtualFile fileByIoFile = LocalFileSystem.getInstance().findFileByIoFile(file);
+//        // fileByIoFile.setCharset(StandardCharsets.UTF_8);
+//        return EditorFactory.getInstance().createEditor(FileDocumentManager.getInstance().getCachedDocument(fileByIoFile));
+//    }
 
     public static String getEditorText(FileEditor editor) {
         Document doc = FileDocumentManager.getInstance().getCachedDocument(editor.getFile());
@@ -164,7 +166,7 @@ public class IdeaUtils {
             return;
         }
         // FIX: Wrong line separators: '... 2.0//EN\">\r\n<html>\r\n...'
-        text = StringUtils.replace(text, "\r\n", "\n");
+        text = StringUtils.replace(text, "\r", "");
         if (StringUtils.endsWith(text, "\n")) {
             text = text.substring(0, text.length() - 1);
         }
@@ -173,6 +175,14 @@ public class IdeaUtils {
             Document doc = FileDocumentManager.getInstance().getCachedDocument(editor.getFile());
             doc.setText(docText);
         });
+    }
+
+    public static boolean isNewUI() {
+        try {
+            return com.intellij.openapi.util.registry.Registry.is("ide.experimental.ui");
+        } catch (Exception e) {
+            return true;
+        }
     }
 
 //    public static void appendEditorText(Editor editor, String text, Project project) {

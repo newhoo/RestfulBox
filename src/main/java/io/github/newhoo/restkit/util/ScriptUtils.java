@@ -5,9 +5,9 @@ import com.intellij.openapi.project.Project;
 import groovy.lang.GroovyClassLoader;
 import io.github.newhoo.restkit.common.Request;
 import io.github.newhoo.restkit.common.Response;
-import io.github.newhoo.restkit.config.CommonSetting;
-import io.github.newhoo.restkit.config.CommonSettingComponent;
 import io.github.newhoo.restkit.config.Environment;
+import io.github.newhoo.restkit.config.RequestSetting;
+import io.github.newhoo.restkit.datasource.DataSourceHelper;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
@@ -22,40 +22,66 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static io.github.newhoo.restkit.config.SettingListener.ENV_UPDATE;
+
 @UtilityClass
 public class ScriptUtils {
-    public static final Logger LOG = Logger.getInstance(ScriptUtils.class);
+    private static final Logger LOG = Logger.getInstance(ScriptUtils.class);
 
-    public static void handlePreRequestScript(Request request, Project project) throws Exception {
-        CommonSetting setting = CommonSettingComponent.getInstance(project).getState();
-        String scriptPath = setting.getPreRequestScriptPath();
-        if (setting.isEnablePreRequestScript() && StringUtils.isNotEmpty(scriptPath) && Files.exists(Paths.get(scriptPath))) {
-            Map<String, String> environmentMap = Environment.getInstance(project).getCurrentEnabledEnvMap();
-
+    public static void handlePreRequestScript(Request request, RequestSetting setting, String currentEnv, Environment environment, Project project) throws Exception {
+        if (!setting.isEnablePreRequestScript()) {
+            return;
+        }
+        String scriptPath = FileUtils.expandUserHome(setting.getPreRequestScriptPath());
+        if (StringUtils.isNotEmpty(scriptPath) && Files.exists(Paths.get(scriptPath))) {
+            Map<String, String> currentEnabledEnvMap = environment.getEnabledEnvMap(currentEnv);
+            Map<String, String> scriptEnvMap = new HashMap<>(currentEnabledEnvMap);
             ScriptEngine se = getScriptEngine();
             Bindings bindings = se.createBindings();
             bindings.put("request", request);
-            bindings.put("environment", environmentMap);
+            bindings.put("environment", scriptEnvMap);
             se.eval(new FileReader(scriptPath), bindings);
+
+            updateCurrentEnabledEnvMap(currentEnv, currentEnabledEnvMap, scriptEnvMap, environment, project);
         }
     }
 
-    public static void handlePostRequestScript(Request request, Response response, Project project) throws Exception {
-        CommonSetting setting = CommonSettingComponent.getInstance(project).getState();
-        String scriptPath = setting.getPostRequestScriptPath();
-        if (setting.isEnablePostRequestScript() && StringUtils.isNotEmpty(scriptPath) && Files.exists(Paths.get(scriptPath))) {
-            Map<String, String> environmentMap = Environment.getInstance(project).getCurrentEnabledEnvMap();
-
+    public static void handlePostRequestScript(Request request, Response response, RequestSetting setting, String currentEnv, Environment environment, Project project) throws Exception {
+        if (!setting.isEnablePostRequestScript()) {
+            return;
+        }
+        String scriptPath = FileUtils.expandUserHome(setting.getPostRequestScriptPath());
+        if (StringUtils.isNotEmpty(scriptPath) && Files.exists(Paths.get(scriptPath))) {
+            Map<String, String> currentEnabledEnvMap = environment.getEnabledEnvMap(currentEnv);
+            Map<String, String> scriptEnvMap = new HashMap<>(currentEnabledEnvMap);
             ScriptEngine se = getScriptEngine();
             Bindings bindings = se.createBindings();
             bindings.put("request", request);
             bindings.put("response", response);
-            bindings.put("environment", environmentMap);
+            bindings.put("environment", scriptEnvMap);
             se.eval(new FileReader(scriptPath), bindings);
+
+            updateCurrentEnabledEnvMap(currentEnv, currentEnabledEnvMap, scriptEnvMap, environment, project);
+        }
+    }
+
+    private static void updateCurrentEnabledEnvMap(String currentEnv, Map<String, String> currentEnabledEnvMap, Map<String, String> scriptEnvMap, Environment environment, Project project) {
+        if (StringUtils.isEmpty(currentEnv)) {
+            return;
+        }
+        try {
+            if (!currentEnabledEnvMap.equals(scriptEnvMap)) {
+                environment.updateEnabledEnvMap(currentEnv, scriptEnvMap);
+                DataSourceHelper.getDataSource().syncEnvironment(environment, project);
+                project.getMessageBus().syncPublisher(ENV_UPDATE).changeEnv(environment.getProject());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -79,7 +105,7 @@ public class ScriptUtils {
                          .filter(m -> !ignoreMethods.contains(m.getName()) && m.getModifiers() == (Modifier.STATIC | Modifier.PUBLIC))
                          .collect(Collectors.toMap(Method::getName, m -> m));
         } catch (Throwable t) {
-            LOG.error("script variable error: " + t);
+            LOG.error("script variable error: " + t.toString(), t);
         }
         return Collections.emptyMap();
     }

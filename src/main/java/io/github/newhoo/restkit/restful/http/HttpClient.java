@@ -7,9 +7,10 @@ import io.github.newhoo.restkit.common.Request;
 import io.github.newhoo.restkit.common.RequestInfo;
 import io.github.newhoo.restkit.common.RestClientData;
 import io.github.newhoo.restkit.common.RestItem;
-import io.github.newhoo.restkit.config.HttpSettingComponent;
+import io.github.newhoo.restkit.config.RequestSetting;
 import io.github.newhoo.restkit.config.certificate.Certificate;
-import io.github.newhoo.restkit.config.certificate.CertificateComponent;
+import io.github.newhoo.restkit.datasource.DataSource;
+import io.github.newhoo.restkit.datasource.DataSourceHelper;
 import io.github.newhoo.restkit.restful.RestClient;
 import io.github.newhoo.restkit.restful.ep.RestClientProvider;
 import io.github.newhoo.restkit.util.FileUtils;
@@ -35,10 +36,13 @@ import java.util.stream.Collectors;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL_DEFAULT;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_BASE_URL_PLACEHOLDER;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_DEFAULT_TIMEOUT;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_DOWNLOAD_FILEPATH_PREFIX;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_DOWNLOAD_DIRECTORY;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_CONTENT;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PATH;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_PROJECT;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_TIMEOUT;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_URL_HTTPS;
 import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
@@ -62,10 +66,11 @@ public class HttpClient implements RestClient {
 
     @Override
     public List<KV> getConfig(@NotNull RestItem restItem, @NotNull Project project) {
-        int timeout = HttpSettingComponent.getInstance(project).getState().getRequestTimeout();
-        // 默认最大设置60s
+        RequestSetting setting = DataSourceHelper.getDataSource().selectRequestSetting(restItem.getProject(), project);
+        int timeout = setting.getRequestTimeout();
+        // 默认最大设置30s
         if (timeout <= 0) {
-            timeout = 60000;
+            timeout = HTTP_DEFAULT_TIMEOUT;
         }
         List<KV> list = new LinkedList<>();
         list.add(new KV(HTTP_BASE_URL, HTTP_BASE_URL_PLACEHOLDER));
@@ -77,6 +82,7 @@ public class HttpClient implements RestClient {
     @Override
     public Request createRequest(RestClientData restClientData, Project project) {
         Map<String, String> config = restClientData.getConfig();
+        config.putIfAbsent(HTTP_PROJECT, restClientData.getProject());
         String url = StringUtils.defaultString(restClientData.getUrl());
         if (!url.contains("://")) {
             if (!url.startsWith("/")) {
@@ -100,20 +106,23 @@ public class HttpClient implements RestClient {
     @NotNull
     @Override
     public RequestInfo sendRequest(Request request, Project project) {
-        String downloadDirectory = HttpSettingComponent.getInstance(project).getState().getDownloadDirectory();
+        DataSource dataSource = DataSourceHelper.getDataSource();
+        RequestSetting setting = dataSource.selectRequestSetting(request.getConfig().get(HTTP_PROJECT), project);
+        String downloadDirectory = setting.getDownloadDirectory();
         if (StringUtils.isEmpty(downloadDirectory)) {
-            downloadDirectory = FileUtils.getRestDirectory(project);
+            downloadDirectory = FileUtils.getDownloadDirectory(project);
         }
-        request.getConfig().put(HTTP_FILE_DOWNLOAD_DIRECTORY, downloadDirectory);
+        request.getConfig().put(HTTP_FILE_DOWNLOAD_DIRECTORY, FileUtils.expandUserHome(downloadDirectory));
 
         // 设置证书
         String url = request.getUrl();
         if (StringUtils.startsWith(url, HTTP_URL_HTTPS)) {
             url = url.substring(8);
             String host = url.contains("/") ? url.substring(0, url.indexOf("/")) : url;
-            Certificate cert = CertificateComponent.getInstance().getEnabledCertificate(host);
+            Certificate cert = dataSource.selectEnabledCertificate(host, project);
             if (cert != null) {
-                request.getConfig().put(HTTP_P12_PATH, cert.getPfxFile());
+                request.getConfig().put(HTTP_P12_PATH, FileUtils.expandUserHome(cert.getPfxFile()));
+                request.getConfig().put(HTTP_P12_CONTENT, cert.getPfxFileContent());
                 request.getConfig().put(HTTP_P12_PASSWD, cert.getPassphrase());
             }
         }

@@ -14,6 +14,7 @@ import java.util.List;
  *
  * @author huzunrong
  */
+@NotProguard
 @Getter
 public class PsiRestItem extends RestItem {
 

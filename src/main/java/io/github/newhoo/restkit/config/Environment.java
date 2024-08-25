@@ -1,21 +1,21 @@
 package io.github.newhoo.restkit.config;
 
-import com.intellij.openapi.project.Project;
 import io.github.newhoo.restkit.common.BKV;
 import io.github.newhoo.restkit.common.EnvList;
-import io.github.newhoo.restkit.common.KV;
+import io.github.newhoo.restkit.common.NotProguard;
 import io.github.newhoo.restkit.util.ScriptUtils;
 import lombok.Data;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -24,30 +24,33 @@ import java.util.stream.Collectors;
  * @author huzunrong
  * @since 1.0
  */
+@NotProguard
 @Data
 public class Environment {
 
-    private String currentEnv;
+    private String project;
     private List<EnvList> envList = Collections.emptyList();
     private List<BKV> globalHeaderList = Collections.emptyList();
     private String script;
-
-    public static Environment getInstance(Project project) {
-        return project.getService(EnvironmentComponent.class).getState();
-    }
 
     public String getCurrentEnv() {
         if (CollectionUtils.isEmpty(envList)) {
             return "";
         }
+        String currentEnv = ConfigHelper.getGlobalSetting().getProjectCurrentEnvMap().get(project);
         Optional<EnvList> first = envList.stream()
                                          .filter(envList -> envList.getEnv().equals(currentEnv))
                                          .findFirst();
         if (first.isPresent()) {
             return currentEnv;
         }
-        currentEnv = envList.get(0).getEnv();
-        return currentEnv;
+        String env = envList.get(0).getEnv();
+        ConfigHelper.getGlobalSetting().getProjectCurrentEnvMap().put(project, env);
+        return env;
+    }
+
+    public void setCurrentEnv(String currentEnv) {
+        ConfigHelper.getGlobalSetting().getProjectCurrentEnvMap().put(project, currentEnv);
     }
 
     public List<String> getEnvKeys() {
@@ -56,8 +59,8 @@ public class Environment {
                 : envList.stream().map(EnvList::getEnv).distinct().collect(Collectors.toList());
     }
 
-    public Map<String, String> getCurrentEnabledEnvMap() {
-        if (CollectionUtils.isEmpty(envList)) {
+    public Map<String, String> getEnabledEnvMap(String currentEnv) {
+        if (StringUtils.isEmpty(currentEnv) || CollectionUtils.isEmpty(envList)) {
             return Collections.emptyMap();
         }
         Map<String, String> map = new LinkedHashMap<>(8);
@@ -72,18 +75,30 @@ public class Environment {
         return map;
     }
 
-    public List<KV> getEnabledGlobalHeader() {
-        if (CollectionUtils.isEmpty(globalHeaderList)) {
-            return Collections.emptyList();
+    public void updateEnabledEnvMap(String currentEnv, Map<String, String> newEnvMap) {
+//        String currentEnv = GlobalSettingComponent.getInstance().getState().getProjectCurrentEnvMap().get(project);
+        Optional<EnvList> first = envList.stream()
+                                         .filter(envList -> envList.getEnv().equals(currentEnv))
+                                         .findFirst();
+        if (first.isEmpty()) {
+            return;
         }
-        List<KV> list = new ArrayList<>();
-
-        for (BKV bkv : globalHeaderList) {
-            if (bkv.getEnabled() && StringUtils.isNotBlank(bkv.getKey())) {
-                list.add(new KV(bkv.getKey(), bkv.getValue()));
+        EnvList list = first.get();
+        if (ObjectUtils.isEmpty(newEnvMap)) {
+            list.getItems().removeIf(BKV::getEnabled);
+            return;
+        }
+        for (Map.Entry<String, String> entry : newEnvMap.entrySet()) {
+            AtomicReference<Boolean> flag = new AtomicReference<>(true);
+            list.getItems().stream().filter(BKV::getEnabled).filter(item -> entry.getKey().equals(item.getKey())).forEach(item -> {
+                item.setValue(StringUtils.defaultString(entry.getValue()));
+                flag.set(false);
+            });
+            if (flag.get()) {
+                BKV bkv = new BKV(true, entry.getKey(), StringUtils.defaultString(entry.getValue()));
+                list.getItems().add(bkv);
             }
         }
-        return list;
     }
 
     public Map<String, Method> getScriptMethodMap() {

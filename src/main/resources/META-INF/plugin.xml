@@ -1,204 +1,127 @@
 <idea-plugin>
     <id>io.github.newhoo.restkit</id>
-    <name>RESTKit</name>
+    <name>RestfulBox</name>
     <!--  <version>2.0.5</version>-->
-    <vendor email="huzunrong@foxmail.com" url="https://github.com/newhoo/RESTKit">RESTKit</vendor>
+    <vendor email="huzunrong@foxmail.com" url="https://github.com/newhoo/RestfulBox">huzunrong</vendor>
 
     <description><![CDATA[
+    <p><a href="https://github.com/newhoo/RestfulBox">Github</a> | <a href="https://gitee.com/newhoo/RestfulBox">Gitee</a> | <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/4.0%E5%8D%87%E7%BA%A7%E6%8C%87%E5%8D%97.md">4.0 Upgrade Guide - 4.0升级指南</a></p>
+
     <p>Another powerful toolkit for restful service development.</p>
-
     <ul>
-        <li>Restful service automatic scanning, display, searching and navigation.</li>
-        <li>Powerful request client supported multiple protocol, environment variable, parameter library and request script.</li>
-        <li>Plugin extension point helps scanning custom restful services from other frameworks.</li>
-        <li>Support Spring MVC / SpringBoot with java and kotlin for idea by default.</li>
-        <li>Support more jetbrains ides, and provide api local storage by default.</li>
+        <li>Restful service automatic scanning, display, searching, navigation and view services in different IDE and project.</li>
+        <li>Powerful request client supported multiple client, protocol, environment variable, parameter library and request script.</li>
+        <li>Support more jetbrains ides, and support Spring MVC / Jax-RS with Java and kotlin for idea by default.</li>
+        <li>Plugin extension point helps scanning custom restful apis from other frameworks.</li>
+        <li>Support multiple data sources. Local, Cloud, Custom.</li>
+        <li>Have a convenient toolbox (Time conversion, Encryption & Decryption and etc.)</li>
+        <li>Original command center, support rich custom commands.</li>
+        <li>Support finding and opening of remote git repositories automatically.</li>
+        <li>Support manage jvm parameters for IDEA/Android Studio.</li>
+        <li>Extra: switch project conveniently: <a href="https://github.com/newhoo/easy-open-project">Easy Open Project</a></li>
+        <li>Extra: auto execute mysql explain: <a href="https://github.com/newhoo/mysql-explain">MySQL Explain</a></li>
+        <li>Extra: invoke spring bean method conveniently: <a href="https://github.com/newhoo/bean-invoker">Spring Bean Invoker</a></li>
     </ul>
-
-    <br/>
 
     <p>一套功能强大的 Restful 服务开发辅助工具集</p>
-
     <ul>
-        <li>Restful服务自动扫描、展示、跳转、导出和导入；</li>
-        <li>强大好用的请求工具，支持多协议、环境变量、参数库和请求脚本；</li>
-        <li>提供多个扩展点，用户可实现其他框架和协议的接口扫描及请求发送；</li>
-        <li>idea默认支持Spring MVC(Java or Kotlin)；</li>
-        <li>支持更多的jetbrains产品，不仅仅是idea，且默认支持保存接口；</li>
+        <li>Restful服务自动扫描、搜索、跳转、导出和导入，跨项目跨IDE浏览服务</li>
+        <li>强大好用的请求工具，支持多客户端、多协议、环境变量、参数库和请求脚本</li>
+        <li>支持更多的jetbrains产品，idea默认支持Spring MVC/Jax-RS(Java or Kotlin)</li>
+        <li>提供多个扩展点，用户可实现其他框架和协议的接口扫描及发送请求</li>
+        <li>支持多种数据源存储数据，可本地，可云端同步，可定制</li>
+        <li>拥有便捷的工具箱（时间转换、加解密、进制转换等）</li>
+        <li>独创命令中心，支持丰富的自定义命令</li>
+        <li>支持自动识别并打开远程Git仓库</li>
+        <li>支持Jvm参数管理(IDEA/Android Studio中可用)</li>
+        <li>额外：便捷的IDE项目切换管理: <a href="https://github.com/newhoo/easy-open-project">Easy Open Project</a></li>
+        <li>额外：自动输出mysql执行计划和原始日志: <a href="https://github.com/newhoo/mysql-explain">MySQL Explain</a></li>
+        <li>额外：便捷的spring bean方法调用: <a href="https://github.com/newhoo/bean-invoker">Spring Bean Invoker</a></li>
     </ul>
 
-    <a href="https://github.com/newhoo/RESTKit">Github</a> | <a href="https://gitee.com/newhoo/RESTKit">Gitee</a> | <a href="https://www.yuque.com/newhoo/restkit">Yuque(语雀)</a>
-    <br/>
-
-    <img src="https://s3.bmp.ovh/imgs/2022/03/29/8b2aa43c50d0db03.png" />
     ]]></description>
 
     <change-notes><![CDATA[
-        2.1.2
+        <p><a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/4.0%E5%8D%87%E7%BA%A7%E6%8C%87%E5%8D%97.md">4.0 Upgrade Guide - 4.0升级指南</a> | <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/CHANGELOG.md">CHANGELOG - 更新日志</a></p>
+        4.0.0
         <ul>
-            <li>support Config tab parameter.</li>
-            <li>Optimize & Fix bugs.</li>
+            <li>Optimize two-way certificate management</li>
+            <li>Optimize api order</li>
+            <li>Add a useful toolbox</li>
+            <li>Add command palette</li>
+            <li>Add ability to open remote git without plugin <a href="https://plugins.jetbrains.com/plugin/14940-git-open">Git Open</a></li>
+            <li>Add ability to manage jvm parameter in IDEA/Android Studio without plugin <a href="https://plugins.jetbrains.com/plugin/13204-jvm-parameter">Jvm Parameter</a></li>
         </ul>
-
-        2.1.1
         <ul>
-            <li>fix bugs.</li>
-        </ul>
-
-        2.1.0
-        <ul>
-            <li>fix bugs.</li>
-        </ul>
-
-        2.0.9
-        <ul>
-            <li>fix bugs.</li>
-        </ul>
-
-        2.0.8
-        <ul>
-            <li>Support ssl.</li>
-            <li>Optimize http request, support upload/download file.</li>
-            <li>Optimize curl.</li>
-            <br/>
-            <li>支持SSL（单项认证和双向认证）</li>
-            <li>优化http请求，支持上传下载文件</li>
-            <li>优化复制curl</li>
-        </ul>
-
-        2.0.6
-        <ul>
-            <li>fix bugs with 2022.2.</li>
-        </ul>
-
-        2.0.5
-        <ul>
-            <li>Add icon for springmvc mapping methods. Enable [Jump to tree using method line marker] in the setting.</li>
-            <li>Remove jump to tree intention.</li>
-            <br/>
-            <li>添加图标，支持springmvc方法快速生成请求，在设置中启用【Jump to tree using method line marker】</li>
-            <li>移除上下文菜单中的跳转到树窗口</li>
-        </ul>
-        <img src = 'https://s3.bmp.ovh/imgs/2022/04/10/3481cea48dae9d12.png' />
-        <br/>
-
-        2.0.4
-        <ul>
-            <li>Optimize details.</li>
-            <br/>
-            <li>优化细节</li>
-        </ul>
-
-        2.0.3
-        <ul>
-            <li>support api group by file name.</li>
-            <li>support rest client ep.</li>
-            <li>fix bugs.</li>
-            <br/>
-            <li>扫描的API支持按文件名显示分组.</li>
-            <li>发送请求提供扩展点，即将提供Dubbo服务支持.</li>
-        </ul>
-
-        2.0.2
-        <ul>
-            <li>more powerful api local store, support synchronization in different IDE.</li>
-            <li>fix bugs.</li>
-            <br/>
-            <li>API本地存储升级，支持跨IDE同步.</li>
-        </ul>
-
-        2.0.1
-        <ul>
-            <li>support more jetbrains ides.</li>
-            <li>support api local storage, export and import by default.</li>
-            <li>most particular optimization.</li>
-            <br/>
-            <li>支持更多的jetbrains产品</li>
-            <li>默认支持API本地存储/导出/导入</li>
-            <li>大量细节优化</li>
-        </ul>
-
-        2.0.0
-        <ul>
-            <li>add extension for scanning restful services from other web framework.</li>
-            <li>support some common config.</li>
-            <li>support pre-request and post-request script.</li>
-            <br/>
-            <li>提供扩展点，支持自定义web框架中的接口扫描与展示</li>
-            <li>增加一些通用配置</li>
-            <li>支持请求前置/后置脚本</li>
+            <li>优化双向证书管理</li>
+            <li>优化接口排序</li>
+            <li>新增简体中文语言支持，在设置中切换后重启IDE</li>
+            <li>新增便捷的工具箱</li>
+            <li>新增命令中心</li>
+            <li>新增自动识别并打开远程git仓库功能，可无需安装插件 <a href="https://plugins.jetbrains.com/plugin/14940-git-open">Git Open</a></li>
+            <li>新增Jvm启动参数管理(IDEA/Android Studio中可用)，可无需安装插件 <a href="https://plugins.jetbrains.com/plugin/13204-jvm-parameter">Jvm Parameter</a></li>
         </ul>
     ]]>
     </change-notes>
 
+    <product-descriptor code="PRESTKIT" release-date="20240603" release-version="000040" optional="true"/>
+
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <!--    until-build="202.*"-->
-    <idea-version since-build="212.0"/>
+    <idea-version since-build="233.6"/>
+<!--    <idea-version since-build="213.0" until-build="233.*"/>-->
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html on how to target different products -->
     <!-- uncomment to enable plugin in all products -->
     <depends>com.intellij.modules.platform</depends>
     <depends optional="true" config-file="restkit-withJava.xml">com.intellij.modules.java</depends>
     <depends optional="true" config-file="restkit-withKotlin.xml">org.jetbrains.kotlin</depends>
-    <depends optional="true" config-file="restkit-withMicroservices.xml">com.intellij.modules.microservices</depends>
-
-    <project-components>
-        <!-- Add your project components here, better not use. -->
-    </project-components>
-
-    <application-components>
-        <!-- Add your application components here -->
-    </application-components>
-
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <toolWindow id="RESTKit" factoryClass="io.github.newhoo.restkit.toolwindow.RestToolWindowFactory" anchor="right" icon="/icons/service.png" secondary="false"/>
-        <postStartupActivity implementation="io.github.newhoo.restkit.MyStartupActivity"/>
-        <applicationService serviceImplementation="io.github.newhoo.restkit.config.certificate.CertificateComponent"/>
-        <projectService serviceImplementation="io.github.newhoo.restkit.config.EnvironmentComponent"/>
-        <projectService serviceImplementation="io.github.newhoo.restkit.config.CommonSettingComponent"/>
-        <projectService serviceImplementation="io.github.newhoo.restkit.config.HttpSettingComponent"/>
-        <projectService serviceImplementation="io.github.newhoo.restkit.config.ParameterLibrary"/>
-        <projectService serviceImplementation="io.github.newhoo.restkit.config.HttpMethodFilterConfiguration"/>
-        <projectConfigurable id="RESTKit.SettingConfigurable" instance="io.github.newhoo.restkit.config.SettingConfigurable" displayName="RESTKit">
-            <configurable instance="io.github.newhoo.restkit.config.HttpSettingConfigurable" displayName="HTTP"/>
-            <configurable instance="io.github.newhoo.restkit.config.EnvironmentConfigurable" displayName="Environment"/>
-            <configurable instance="io.github.newhoo.restkit.config.certificate.CertificateConfigurable" displayName="Certificate"/>
-        </projectConfigurable>
-        <searchEverywhereContributor implementation="io.github.newhoo.restkit.navigation.RestSearchEverywhereContributor$Factory"/>
-        <!-- 有些多余了 -->
-        <!-- <intentionAction> -->
-        <!--     <className>io.github.newhoo.restkit.intention.JumpToTreeIntention</className> -->
-        <!-- </intentionAction> -->
-        <iw.actionProvider implementation="io.github.newhoo.restkit.parameter.library.ParameterLibraryActionProvider"/>
+        <toolWindow id="RestfulBox" factoryClass="io.github.newhoo.restkit.toolwindow.RestToolWindowFactory" icon="/icons/service.svg" anchor="right" secondary="false"/>
+<!--        <postStartupActivity implementation="io.github.newhoo.restkit.MyStartupActivity"/>-->
+
+        <applicationConfigurable id="RESTKit.SettingConfigurable" displayName="RestfulBox" instance="io.github.newhoo.restkit.config.global.GlobalSettingConfigurable" groupId="root"/>
+        <projectConfigurable id="RESTKit.RequestConfigurable" displayName="Request Setting" instance="io.github.newhoo.restkit.config.request.RequestConfigurable" parentId="RESTKit.SettingConfigurable" groupWeight="100"/>
+        <applicationConfigurable id="RESTKit.CertificateConfigurable" displayName="Certificate" instance="io.github.newhoo.restkit.config.certificate.CertificateConfigurable" parentId="RESTKit.SettingConfigurable" groupWeight="90"/>
+
+        <applicationService serviceImplementation="io.github.newhoo.restkit.config.global.GlobalSettingComponent"/>
+        <projectService serviceImplementation="io.github.newhoo.restkit.config.ide.CommonSettingComponent"/>
+
+        <searchEverywhereContributor implementation="io.github.newhoo.restkit.navigation.RestApiSearchEverywhereContributor$Factory"/>
+
+        <iw.actionProvider implementation="io.github.newhoo.restkit.toolwindow.parameter.library.ParameterLibraryActionProvider"/>
         <!-- 在编辑器添加悬浮按钮 -->
         <!-- <editorFloatingToolbarProvider id="MyDefaultFloatingToolbarProvider" implementation="com.intellij.openapi.editor.toolbar.floating.DefaultFloatingToolbarProvider"/> -->
         <notificationGroup id="RESTKit.balloonGroup" displayType="BALLOON"/>
+        <registryKey key="restkit.mode.debug" defaultValue="false" description="Show debug detail."/>
+        <registryKey key="restkit.localApi.enable" defaultValue="true" description="Enable local api."/>
     </extensions>
 
     <extensionPoints>
         <extensionPoint name="restfulResolver" interface="io.github.newhoo.restkit.restful.ep.RestfulResolverProvider" dynamic="true"/>
         <extensionPoint name="languageResolver" interface="io.github.newhoo.restkit.restful.ep.LanguageResolverProvider" dynamic="true"/>
         <extensionPoint name="restClient" interface="io.github.newhoo.restkit.restful.ep.RestClientProvider" dynamic="true"/>
+        <extensionPoint name="restItemDetail" interface="io.github.newhoo.restkit.restful.ep.RestItemDetailProvider" dynamic="true"/>
+        <extensionPoint name="datasource" interface="io.github.newhoo.restkit.datasource.ep.DataSourceProvider" dynamic="true"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="io.github.newhoo.restkit">
         <restfulResolver implementation="io.github.newhoo.restkit.restful.local.LocalRequestResolver$FileResolverProvider"/>
         <restClient implementation="io.github.newhoo.restkit.restful.http.HttpClient$HttpClientProvider"/>
+        <restItemDetail implementation="io.github.newhoo.restkit.restful.detail.HttpRestItemDetail$HttpRestItemDetailProvider"/>
+        <datasource implementation="io.github.newhoo.restkit.datasource.ide.IdeDataSource$IdeDataSourceProvider"/>
     </extensions>
 
     <actions>
         <!-- Main editor popup menu / 右键菜单 -->
         <group id="RESTKit.EditorPopupMenu.Group" text="_Restful Tool" popup="false">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <action id="RESTKit.ConvertClassToJSONAction" class="io.github.newhoo.restkit.action.ConvertClassToJSONAction"
-                    text="Convert to JSON" description="Convert to JSON">
-            </action>
+            <action id="RESTKit.ConvertClassToJSONAction" class="io.github.newhoo.restkit.action.ConvertClassToJSONAction" text="Convert to JSON"/>
         </group>
 
         <!-- search everywhere -->
-        <action id="RESTKit.MyRestUrlSearchEverywhereAction" class="io.github.newhoo.restkit.navigation.RestSearchEverywhereAction"
+        <action id="RESTKit.RestApiSearchEverywhereAction" class="io.github.newhoo.restkit.navigation.RestApiSearchEverywhereContributor$RestApiSearchEverywhereAction"
                 text="Search URLs"
                 icon="AllIcons.Actions.Find">
             <keyboard-shortcut keymap="$default" first-keystroke="control BACK_SLASH"/>
@@ -206,56 +129,54 @@
             <!-- <add-to-group group-id="GoToTargetEx"/> -->
         </action>
 
-        <!-- Tools menu -->
-        <group id="RESTKit.ToolsMenuGroup" text="_RESTKit" popup="true" icon="/icons/service.png">
-            <add-to-group group-id="ToolsMenu"/>
-            <action id="RESTKit.OpenRequestLogAction" class="io.github.newhoo.restkit.action.OpenRequestLogAction" text="Open Request Log"/>
-            <action id="RESTKit.OpenPreScriptAction" class="io.github.newhoo.restkit.action.OpenPreScriptAction" text="Open PreScript"/>
-            <action id="RESTKit.OpenPostScriptAction" class="io.github.newhoo.restkit.action.OpenPostScriptAction" text="Open PostScript"/>
-            <action id="RESTKit.OpenLocalApiFileAction" class="io.github.newhoo.restkit.action.OpenLocalApiFileAction" text="Open Local Api File"/>
-            <action id="RESTKit.ViewDocument" class="io.github.newhoo.restkit.action.ViewDocumentAction" text="View Document"/>
-        </group>
-
         <!-- ToolWindow toolbar menu -->
         <group id="RESTKit.NavigatorActionsToolbar">
-            <action id="RESTKit.RefreshServices" class="io.github.newhoo.restkit.toolwindow.action.toolbar.RefreshProjectAction" text="Refresh URL List" icon="AllIcons.Actions.Refresh"/>
+            <action id="RESTKit.RefreshServices" class="io.github.newhoo.restkit.toolwindow.toolbar.RefreshProjectAction" text="Refresh URL List" icon="AllIcons.Actions.Refresh"/>
+            <!--  icon="io.github.newhoo.restkit.common.ToolkitIcons.SYNC_DATA_SOURCE" -->
+            <action id="RESTKit.SyncToDataSourceAction" class="io.github.newhoo.restkit.toolwindow.toolbar.SyncToDataSourceAction" text="Sync Apis to DataSource"/>
             <separator/>
-            <reference id="RESTKit.MyRestUrlSearchEverywhereAction"/>
-            <action id="RESTKit.MethodFilterAction" class="io.github.newhoo.restkit.toolwindow.action.toolbar.HttpMethodFilterAction" text="Method Filter" icon="AllIcons.General.Filter"/>
-            <action id="RESTKit.EnableLibraryAction" class="io.github.newhoo.restkit.toolwindow.action.toolbar.EnableLibraryAction" text="Enable Library Scanning" icon="AllIcons.ObjectBrowser.ShowLibraryContents"/>
-            <separator/>
-            <action id="RESTKit.ExpandAllAction" class="io.github.newhoo.restkit.toolwindow.action.toolbar.ExpandAllAction" text="Expand All" icon="AllIcons.Actions.Expandall"/>
-            <action id="RESTKit.CollapseAllAction" class="io.github.newhoo.restkit.toolwindow.action.toolbar.CollapseAllAction" text="Collapse All" icon="AllIcons.Actions.Collapseall"/>
+            <reference id="RESTKit.RestApiSearchEverywhereAction"/>
+            <action id="RESTKit.MethodFilterAction" class="io.github.newhoo.restkit.toolwindow.toolbar.HttpMethodFilterAction" text="Method Filter" icon="AllIcons.General.Filter"/>
+            <action id="RESTKit.SupportFrameworkFilterAction" class="io.github.newhoo.restkit.toolwindow.toolbar.SupportFrameworkFilterAction" text="Supported Framework Filter" icon="AllIcons.Actions.ListFiles"/>
+            <action id="RESTKit.EnableLibraryAction" class="io.github.newhoo.restkit.toolwindow.toolbar.EnableLibraryAction" text="Enable Library Scanning" icon="AllIcons.ObjectBrowser.ShowLibraryContents"/>
+            <!-- <separator/> -->
+            <action id="RESTKit.ExpandAllAction" class="io.github.newhoo.restkit.toolwindow.toolbar.ExpandAllAction" text="Expand All" icon="AllIcons.Actions.Expandall"/>
+            <action id="RESTKit.CollapseAllAction" class="io.github.newhoo.restkit.toolwindow.toolbar.CollapseAllAction" text="Collapse All" icon="AllIcons.Actions.Collapseall"/>
             <separator/>
             <group id="RESTKit.ShowToolsMenu.Group" text="_Show Tools" icon="AllIcons.Toolwindows.ToolWindowStructure" popup="true">
-                <reference id="RESTKit.OpenRequestLogAction"/>
-                <reference id="RESTKit.OpenPreScriptAction"/>
-                <reference id="RESTKit.OpenPostScriptAction"/>
-                <reference id="RESTKit.OpenLocalApiFileAction"/>
+                <action id="RESTKit.OpenRequestLogAction" class="io.github.newhoo.restkit.toolwindow.toolbar.OpenRequestLogAction" text="Open Request Log"/>
+                <action id="RESTKit.OpenLocalApiFileAction" class="io.github.newhoo.restkit.toolwindow.toolbar.OpenLocalApiFileAction" text="Open Local Api File"/>
+                <group id="RESTKit.ShowToolsMenu.RequestScriptGroup" text="Request Script" popup="true">
+                    <action id="RESTKit.OpenPreScriptAction" class="io.github.newhoo.restkit.toolwindow.toolbar.OpenPreScriptAction" text="Open Pre-Request Script"/>
+                    <action id="RESTKit.OpenPostScriptAction" class="io.github.newhoo.restkit.toolwindow.toolbar.OpenPostScriptAction" text="Open Post-Request Script"/>
+                </group>
             </group>
             <group id="RESTKit.ShowSetting.Group" text="_Show Settings" icon="AllIcons.General.Settings" popup="true">
-                <action id="RESTKit.ShowCommonSetting" class="io.github.newhoo.restkit.toolwindow.action.toolbar.ShowCommonSettingAction" text="Common Setting"/>
-                <action id="RESTKit.ShowEnvironmentSetting" class="io.github.newhoo.restkit.toolwindow.action.toolbar.ShowEnvironmentSettingAction" text="Environment Setting"/>
+                <action id="RESTKit.ShowCommonSetting" class="io.github.newhoo.restkit.toolwindow.toolbar.ShowGlobalSettingAction" text="Global Setting"/>
+                <action id="RESTKit.ShowRequestSettingAction" class="io.github.newhoo.restkit.toolwindow.toolbar.ShowRequestSettingAction" text="Request Setting"/>
             </group>
-            <reference id="RESTKit.ViewDocument"/>
+            <action id="RESTKit.ViewDocument" class="io.github.newhoo.restkit.action.ViewDocumentAction" text="View Document" icon="AllIcons.Actions.Help"/>
         </group>
 
         <!-- Tree element popup menu-->
         <group id="RESTKit.NavigatorRootMenu">
-            <action id="Menu.LocalApiImportAction" class="io.github.newhoo.restkit.toolwindow.action.item.ImportApiAction" text="Import"/>
-            <action id="Menu.LocalApiExportAction" class="io.github.newhoo.restkit.toolwindow.action.item.ExportApiAction" text="Export"/>
+            <action id="RESTKit.Menu.ImportApiAction" class="io.github.newhoo.restkit.toolwindow.tree.ImportApiAction" text="Import"/>
+            <action id="RESTKit.Menu.ExportApiAction" class="io.github.newhoo.restkit.toolwindow.tree.ExportApiAction" text="Export"/>
+        </group>
+        <group id="RESTKit.NavigatorProjectMenu">
+            <reference id="RESTKit.Menu.ImportApiAction"/>
+            <reference id="RESTKit.Menu.ExportApiAction"/>
         </group>
         <group id="RESTKit.NavigatorModuleMenu">
-            <action id="Menu.LocalApiRenameModuleAction" class="io.github.newhoo.restkit.toolwindow.action.item.RenameModuleAction" text="Rename"/>
-            <action id="Menu.LocalApiDeleteModuleAction" class="io.github.newhoo.restkit.toolwindow.action.item.DeleteModuleAction" text="Delete"/>
-            <reference id="Menu.LocalApiExportAction"/>
+            <reference id="RESTKit.Menu.ExportApiAction"/>
+        </group>
+        <group id="RESTKit.NavigatorPackageMenu">
+            <reference id="RESTKit.Menu.ExportApiAction"/>
         </group>
         <group id="RESTKit.NavigatorServiceMenu">
-            <action id="Menu.EditSourceAction" class="io.github.newhoo.restkit.toolwindow.action.NavigateToSourceAction" text="Jump to Source"/>
-            <action id="Menu.CopyUrlAction" class="io.github.newhoo.restkit.toolwindow.action.CopyUrlAction" text="Copy URL"/>
-            <action id="Menu.MoveApiAction" class="io.github.newhoo.restkit.toolwindow.action.item.MoveApiAction" text="Move"/>
-            <action id="Menu.DelLocalApiAction" class="io.github.newhoo.restkit.toolwindow.action.item.DeleteApiAction" text="Delete"/>
-            <reference id="Menu.LocalApiExportAction"/>
+            <action id="RESTKit.Menu.EditSourceAction" class="io.github.newhoo.restkit.toolwindow.tree.NavigateToSourceAction" text="Jump to Source"/>
+            <action id="RESTKit.Menu.CopyUrlAction" class="io.github.newhoo.restkit.toolwindow.client.CopyUrlAction" text="Copy URL"/>
+            <reference id="RESTKit.Menu.ExportApiAction"/>
             <!-- <separator/> -->
         </group>
 
@@ -270,13 +191,13 @@
             </action>
             <separator/>
             -->
-            <action id="Menu.SaveLocalApiAction" class="io.github.newhoo.restkit.toolwindow.action.item.SaveApiAction" text="Save Api" icon="AllIcons.Actions.MenuSaveall"/>
-            <action id="Menu.CopyCurlAction" class="io.github.newhoo.restkit.toolwindow.action.CopyCurlAction" text="Copy as Curl" icon="AllIcons.Actions.Copy"/>
+            <action id="RESTKit.Menu.SaveLocalApiAction" class="io.github.newhoo.restkit.toolwindow.client.SaveApiAction" text="Save Api" icon="AllIcons.Actions.MenuSaveall"/>
+            <action id="RESTKit.Menu.CopyCurlAction" class="io.github.newhoo.restkit.toolwindow.client.CopyCurlAction" text="Copy as Curl" icon="AllIcons.Actions.Copy"/>
             <reference id="BasicEditorPopupMenu"/>
         </group>
         <group id="RESTKit.EditorContextMenu.ConfigTab">
-            <reference id="Menu.SaveLocalApiAction"/>
-            <reference id="Menu.CopyCurlAction"/>
+            <reference id="RESTKit.Menu.SaveLocalApiAction"/>
+            <reference id="RESTKit.Menu.CopyCurlAction"/>
             <reference id="BasicEditorPopupMenu"/>
         </group>
         <group id="RESTKit.EditorContextMenu.HeadersTab">
@@ -287,12 +208,20 @@
         </group>
         <group id="RESTKit.EditorContextMenu.BodyTab">
             <reference id="RESTKit.EditorContextMenu"/>
+            <action id="RESTKit.Menu.MinifyJSONAction" class="io.github.newhoo.restkit.toolwindow.client.MinifyJSONAction" text="Minify JSON" icon="AllIcons.Actions.Collapseall"/>
         </group>
-        <action id="Menu.SelectUploadFileAction" class="io.github.newhoo.restkit.toolwindow.action.editor.SelectUploadFileAction" text="Select Upload File" icon="AllIcons.Nodes.UpLevel">
+        <group id="RESTKit.EditorContextMenu.ResponseTab">
+            <reference id="RESTKit.EditorContextMenu"/>
+            <reference id="RESTKit.Menu.MinifyJSONAction"/>
+        </group>
+        <action id="RESTKit.Menu.SelectUploadFileAction" class="io.github.newhoo.restkit.toolwindow.client.SelectUploadFileAction" text="Select Upload File" icon="AllIcons.Actions.Upload">
             <add-to-group group-id="EditorContextBarMenu" anchor="last"/>
+            <add-to-group group-id="RESTKit.EditorContextMenu.ParamsTab" anchor="last"/>
         </action>
-        <action id="Menu.ShowDownloadFileAction" class="io.github.newhoo.restkit.toolwindow.action.editor.ShowDownloadFileAction" text="Show File" icon="AllIcons.Actions.MenuOpen">
+        <action id="RESTKit.Menu.ShowDownloadFileAction" class="io.github.newhoo.restkit.toolwindow.client.ShowDownloadFileAction" text="Show File" icon="AllIcons.Actions.MenuOpen">
             <add-to-group group-id="EditorContextBarMenu" anchor="last"/>
+            <add-to-group group-id="RESTKit.EditorContextMenu.ResponseTab" anchor="last"/>
+<!--            <add-to-group group-id="RESTKit.EditorContextMenu" anchor="first"/>-->
         </action>
     </actions>
 

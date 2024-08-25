@@ -8,20 +8,26 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import io.github.newhoo.restkit.common.NotProguard;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
  * @author zunrong
  */
+@NotProguard
 @UtilityClass
 public class JsonUtils {
 
     private static final Gson GSON = new GsonBuilder().serializeNulls().setPrettyPrinting().disableHtmlEscaping().create();
 
     public static String toJson(Object obj) {
+        if (obj == null || (obj instanceof CharSequence && ((CharSequence) obj).length() == 0)) {
+            return "";
+        }
         return GSON.toJson(obj);
     }
 
@@ -33,8 +39,20 @@ public class JsonUtils {
         return GSON.toJson(parse);
     }
 
+    public static String minify(String str) {
+        if (!isValidJson(str)) {
+            return str;
+        }
+        JsonElement parse = JsonParser.parseString(str);
+        return new GsonBuilder().serializeNulls().disableHtmlEscaping().create().toJson(parse);
+    }
+
     public static <T> T fromJson(String json, Class<T> classOfT) throws JsonSyntaxException {
         return GSON.fromJson(json, classOfT);
+    }
+
+    public static <T> T fromJson(String json, Type typeOfT) throws JsonSyntaxException {
+        return GSON.fromJson(json, typeOfT);
     }
 
     public static <T> List<T> fromJsonArr(String json, Class<T> classOfT) throws JsonSyntaxException {

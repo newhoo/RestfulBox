@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * RequestInfo
  */
+@NotProguard
 @Getter
 public class RequestInfo {
 

@@ -1,13 +1,21 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
 plugins {
     id("java")
     id('org.jetbrains.intellij') version '1.10.1'
 }
 
 group 'io.github.newhoo.restkit'
-version '2.1.2'
+version "${pluginVersion}"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -18,17 +26,22 @@ repositories {
 
 dependencies {
     implementation 'org.openjdk.nashorn:nashorn-core:15.4'
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
 }
 
 intellij {
-    pluginName.set('RESTKit')
-    version.set('2022.3')
-    type.set("IU")
+    pluginName.set('RestfulBox')
+    version.set('2024.1')
+//    type.set("IU")
     updateSinceUntilBuild.set(false)
     downloadSources.set(true)
     plugins.set(['java', 'Kotlin'])
-//    plugins.set('java, Kotlin'.split(',').map(String::trim).filter(String::isNotEmpty))
     sandboxDir.set("${rootProject.rootDir}/idea-sandbox")
+}
+
+tasks {
+    buildSearchableOptions {
+        enabled = false
+    }
 }

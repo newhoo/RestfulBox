@@ -8,6 +8,7 @@ import lombok.Data;
  * @author huzunrong
  * @since 2.0.0
  */
+@NotProguard
 @Data
 public class Response {
 

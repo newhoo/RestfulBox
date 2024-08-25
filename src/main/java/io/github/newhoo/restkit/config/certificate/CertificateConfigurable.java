@@ -1,12 +1,20 @@
 package io.github.newhoo.restkit.config.certificate;
 
 import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.project.Project;
+import io.github.newhoo.restkit.common.RestConstant;
+import io.github.newhoo.restkit.datasource.DataSource;
+import io.github.newhoo.restkit.datasource.DataSourceHelper;
+import io.github.newhoo.restkit.util.FileUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nls.Capitalization;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.io.FileInputStream;
+import java.util.Base64;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * CertificateConfigurable
@@ -16,12 +24,13 @@ import javax.swing.*;
  */
 public class CertificateConfigurable implements Configurable {
 
-    private final CertificateComponent certificateComponent;
     private final CertificateForm certificateForm;
 
-    private CertificateConfigurable(Project project) {
-        this.certificateComponent = CertificateComponent.getInstance();
-        this.certificateForm = new CertificateForm(project);
+    private final DataSource repository = DataSourceHelper.getDataSource();
+    private final List<Certificate> cacheList = new LinkedList<>();
+
+    public CertificateConfigurable() {
+        this.certificateForm = new CertificateForm();
     }
 
     @Nls(capitalization = Capitalization.Title)
@@ -30,7 +39,6 @@ public class CertificateConfigurable implements Configurable {
         return "Certificate";
     }
 
-    @Nullable
     @Override
     public JComponent createComponent() {
         return certificateForm;
@@ -38,16 +46,43 @@ public class CertificateConfigurable implements Configurable {
 
     @Override
     public boolean isModified() {
-        return certificateComponent.isModified(certificateForm.getCertificates());
+        return isModified(cacheList, certificateForm.getCertificates());
     }
 
     @Override
     public void apply() {
-        certificateComponent.setCertificates(certificateForm.getCertificates());
+        List<Certificate> certificates = certificateForm.getCertificates();
+        cacheList.clear();
+        cacheList.addAll(certificates);
+
+        if (!Objects.equals(repository.name(), RestConstant.DATA_SOURCE_IDE)) {
+            cacheList.forEach(certificate -> {
+                String filepath = FileUtils.expandUserHome(certificate.getPfxFile());
+                try (FileInputStream fis = new FileInputStream(filepath);) {
+                    byte[] bytes = fis.readAllBytes();
+                    String s = Base64.getEncoder().encodeToString(bytes);
+                    certificate.setPfxFileContent(s);
+                } catch (Exception e) {
+                    System.err.println("获取证书文件失败: " + e.toString());
+                }
+            });
+        }
+
+        repository.syncCertificate(cacheList, null);
     }
 
     @Override
     public void reset() {
-        certificateForm.reset(certificateComponent.getCertificates());
+        if (cacheList.isEmpty()) {
+            List<Certificate> certificates = repository.selectCertificate(null);
+            cacheList.addAll(certificates);
+        }
+        certificateForm.reset(cacheList);
+    }
+
+    private boolean isModified(List<Certificate> first, List<Certificate> second) {
+        String s1 = first.stream().map(Certificate::toString).collect(Collectors.joining());
+        String s2 = second.stream().map(Certificate::toString).collect(Collectors.joining());
+        return !s1.equals(s2);
     }
 }

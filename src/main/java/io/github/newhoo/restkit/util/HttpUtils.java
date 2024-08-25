@@ -2,8 +2,11 @@ package io.github.newhoo.restkit.util;
 
 import com.intellij.openapi.diagnostic.Logger;
 import io.github.newhoo.restkit.common.HttpMethod;
+import io.github.newhoo.restkit.common.NotProguard;
 import io.github.newhoo.restkit.common.RequestInfo;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpClientConnection;
@@ -12,7 +15,6 @@ import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -47,16 +49,19 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -64,11 +69,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_DEFAULT_TIMEOUT;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_DOWNLOAD_FILEPATH_PREFIX;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_DOWNLOAD_DIRECTORY;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_PREFIX;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PASSWD;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_PATH;
+import static io.github.newhoo.restkit.common.RestConstant.HTTP_P12_CONTENT;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_TIMEOUT;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_URL_HTTP;
 import static io.github.newhoo.restkit.common.RestConstant.HTTP_URL_HTTPS;
@@ -78,6 +85,7 @@ public class HttpUtils {
 
     private static final String HTTP_HOSTADDRESS = "http.hostAddress";
 
+    @NotProguard
     public static RequestInfo request(io.github.newhoo.restkit.restful.http.HttpRequest req) {
         if (req.getMethod() == null || HttpMethod.getByRequestMethod(req.getMethod()) == HttpMethod.UNDEFINED) {
             return new RequestInfo(req, "http method is null");
@@ -110,8 +118,8 @@ public class HttpUtils {
                 return new RequestInfo(req, new io.github.newhoo.restkit.restful.http.HttpResponse(response, HTTP_DOWNLOAD_FILEPATH_PREFIX + " " + downloadFile.getPath()), hostAddress, (System.currentTimeMillis() - startTs));
             }
             String result = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-            // unicode 转码
-            result = org.apache.commons.lang.StringEscapeUtils.unescapeJava(result);
+            // unicode 转码，会自动删除转义的反斜杠：https://github.com/newhoo/RESTKit/issues/35
+            // result = org.apache.commons.lang.StringEscapeUtils.unescapeJava(result);
 
             return new RequestInfo(req, new io.github.newhoo.restkit.restful.http.HttpResponse(response, result), hostAddress, (System.currentTimeMillis() - startTs));
         } catch (Exception e) {
@@ -196,7 +204,10 @@ public class HttpUtils {
         req.getHeaders().forEach(request::addHeader);
         if (request instanceof HttpEntityEnclosingRequest) {
             if (StringUtils.isNotEmpty(req.getBody())) {
-                StringEntity httpEntity = new StringEntity(req.getBody(), ContentType.APPLICATION_JSON);
+                String body = req.getBody().trim();
+                StringEntity httpEntity = (body.startsWith("{") || body.startsWith("["))
+                        ? new StringEntity(req.getBody(), ContentType.APPLICATION_JSON)
+                        : new StringEntity(req.getBody(), StandardCharsets.UTF_8);
                 ((HttpEntityEnclosingRequest) request).setEntity(httpEntity);
             } else {
                 // form params: Content-Type: application/x-www-form-urlencoded
@@ -233,7 +244,7 @@ public class HttpUtils {
             }
         }
 
-        String timeout = StringUtils.defaultIfEmpty(req.getConfig().get(HTTP_TIMEOUT), "60000");
+        String timeout = StringUtils.defaultIfEmpty(req.getConfig().get(HTTP_TIMEOUT), HTTP_DEFAULT_TIMEOUT + "");
         int requestTimeout = (int) Double.parseDouble(timeout);
         if (requestTimeout > 0) {
             RequestConfig requestConfig = RequestConfig.custom()
@@ -275,15 +286,16 @@ public class HttpUtils {
         SSLConnectionSocketFactory socketFactory = null;
         if (req.getUrl().startsWith(HTTP_URL_HTTPS)) {
             String p12Path = StringUtils.defaultString(req.getConfig().get(HTTP_P12_PATH));
+            String p12Content = StringUtils.defaultString(req.getConfig().get(HTTP_P12_CONTENT));
             String p12Passwd = StringUtils.defaultString(req.getConfig().get(HTTP_P12_PASSWD));
 
             // 单向认证
-            if (StringUtils.isAnyEmpty(p12Path, p12Passwd)) {
+            if (p12Path.isEmpty() && p12Content.isEmpty()) {
                 socketFactory = getOnewaySSLFactory();
             }
             // 双向认证
             else {
-                socketFactory = getTwowaySSLFactory(p12Path, p12Passwd);
+                socketFactory = getTwowaySSLFactory(p12Path, p12Content, p12Passwd);
             }
         }
         if (socketFactory != null) {
@@ -298,13 +310,22 @@ public class HttpUtils {
             SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build();
             return new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
         } catch (Exception e) {
-            LOG.error("单项认证配置异常: " + e);
+            LOG.error("Oneway SSL config exception: " + e.toString());
         }
         return null;
     }
 
-    private static SSLConnectionSocketFactory getTwowaySSLFactory(String p12Path, String passwd) {
-        try (InputStream inputStream = new FileInputStream(p12Path)) {
+    private static SSLConnectionSocketFactory getTwowaySSLFactory(String p12Path, String p12Content, String passwd) {
+        InputStream inputStream = null;
+        try {
+            if (new File(p12Path).exists()) {
+                inputStream = new FileInputStream(p12Path);
+            } else if (StringUtils.isNotEmpty(p12Content)) {
+                System.out.printf("p12 file not exist: %s. use base64 content as p12\n",p12Path);
+                inputStream = new ByteArrayInputStream(Base64.getDecoder().decode(p12Content));
+            } else {
+                return null;
+            }
             // 加载 keyStore
             KeyStore keyStore = KeyStore.getInstance("PKCS12");
             keyStore.load(inputStream, passwd.toCharArray());
@@ -335,7 +356,9 @@ public class HttpUtils {
 
             return new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
         } catch (Exception e) {
-            LOG.error("双向认证配置异常: " + e);
+            LOG.error("Two-way SSL config exception: " + e.toString());
+        } finally {
+            IOUtils.closeQuietly(inputStream);
         }
         return null;
     }
@@ -364,21 +387,25 @@ public class HttpUtils {
     }
 
     private static File doDownloadFile(io.github.newhoo.restkit.restful.http.HttpRequest req, CloseableHttpResponse response) throws IOException {
-        if (response.getStatusLine() == null || response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+        if (response.getStatusLine() == null || response.getStatusLine().getStatusCode() / 100 != 2) {
             return null;
         }
         String filename = null;
-        //Content-Disposition: attachment; filename="2d8e6de174899729ccd12f41230a5510.webp"; filename*=utf-8''2d8e6de174899729ccd12f41230a5510.webp
+        // Content-Disposition: attachment; filename="2d8e6de174899729ccd12f41230a5510.webp"; filename*=utf-8''2d8e6de174899729ccd12f41230a5510.webp
+        // Content-disposition: attachment;filename*=utf-8''aaa_%E5%85%AC%E8%B4%B9%E4%BC%9A%E8%AE%AE%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%9520230523.xlsx
         Header fileHeader = response.getFirstHeader("Content-Disposition");
+        Header contentType = response.getFirstHeader("Content-Type");
         if (fileHeader != null) {
             filename = Arrays.stream(fileHeader.getElements())
-                             .map(e -> e.getParameterByName("filename"))
+                             .map(e -> ObjectUtils.defaultIfNull(e.getParameterByName("filename"), e.getParameterByName("filename*")))
                              .filter(Objects::nonNull)
                              .map(NameValuePair::getValue)
                              .findFirst()
                              .filter(StringUtils::isNotEmpty)
+                             .map(s -> s.replace("utf-8''", "").replace("UTF-8''", ""))
+                             .map(s -> URLDecoder.decode(s, StandardCharsets.UTF_8))
                              .orElse("noname_file");
-        } else if (response.getFirstHeader("Content-Type") != null && StringUtils.contains(response.getFirstHeader("Content-Type").getValue(), "application/octet-stream")) {
+        } else if (contentType != null && StringUtils.containsAnyIgnoreCase(contentType.getValue(), "application/octet-stream", "application/pdf", "image/", "audio/", "video/")) {
             String url = req.getUrl();
             if (StringUtils.isEmpty(url) || StringUtils.endsWith(url, "/")) {
                 filename = "noname_file";
@@ -407,6 +434,13 @@ public class HttpUtils {
                 file.createNewFile();
             }
             FileUtils.copyToFile(response.getEntity().getContent(), file);
+//            if (!filename.contains(".")) {
+//                try (FileInputStream inputFile = new FileInputStream(file)) {
+//                    String mimeType = URLConnection.guessContentTypeFromStream(new BufferedInputStream(inputFile));
+//                    NotifierUtils.infoBalloon("", "Guess file type: " + mimeType, null, ProjectManager.getInstance().getDefaultProject());
+//                } catch (Exception e) {
+//                }
+//            }
             return file;
         }
         return null;

@@ -13,7 +13,7 @@ public interface SettingListener {
     Topic<SettingListener> ENV_UPDATE = Topic.create("EnvironmentUpdate", SettingListener.class);
 
     /**
-     * 切换当前环境
+     * 环境更新
      */
-    void changeEnv();
+    void changeEnv(String project);
 }

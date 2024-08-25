@@ -9,6 +9,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import io.github.newhoo.restkit.util.JsonUtils;
 import io.github.newhoo.restkit.util.TypeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -30,6 +31,9 @@ public class PsiClassHelper {
     }
 
     public static Object assemblePsiClass(String typeCanonicalText, Project project, int autoCorrelationCount, boolean putClass) {
+        if (StringUtils.isEmpty(typeCanonicalText)) {
+            return "";
+        }
         boolean containsGeneric = typeCanonicalText.contains("<");
         // 数组|集合
         if (TypeUtils.isArray(typeCanonicalText) || TypeUtils.isList(typeCanonicalText)) {
@@ -45,14 +49,14 @@ public class PsiClassHelper {
         if (psiClass == null) {
             //简单常用类型
             if (TypeUtils.isPrimitiveOrSimpleType(typeCanonicalText)) {
-                return TypeUtils.getExampleValue(typeCanonicalText, false);
+                return TypeUtils.getExampleValue(typeCanonicalText, project);
             }
             return Collections.emptyMap();
         }
 
         //简单常用类型
         if (TypeUtils.isPrimitiveOrSimpleType(typeCanonicalText)) {
-            return TypeUtils.getExampleValue(typeCanonicalText, false);
+            return TypeUtils.getExampleValue(typeCanonicalText, project);
         }
 
         // 枚举
@@ -110,7 +114,7 @@ public class PsiClassHelper {
      * 查找类
      *
      * @param typeCanonicalText 参数类型全限定名称
-     * @param project 当前project
+     * @param project           当前project
      * @return 查找到的类
      */
     public static PsiClass findPsiClass(String typeCanonicalText, Project project) {
@@ -129,7 +133,7 @@ public class PsiClassHelper {
         }
         PsiClass[] classesByName = PsiShortNamesCache.getInstance(project).getClassesByName(className, GlobalSearchScope.allScope(project));
         for (PsiClass psiClass : classesByName) {
-            if (typeCanonicalText.startsWith(psiClass.getQualifiedName())) {
+            if (psiClass.getQualifiedName() != null && typeCanonicalText.startsWith(psiClass.getQualifiedName())) {
                 return psiClass;
             }
         }

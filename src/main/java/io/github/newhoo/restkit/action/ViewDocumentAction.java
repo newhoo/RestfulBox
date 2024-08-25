@@ -1,17 +1,18 @@
 package io.github.newhoo.restkit.action;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.actionSystem.ActionPlaces;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
+import io.github.newhoo.restkit.i18n.RestBundle;
+import io.github.newhoo.restkit.intellij.BaseAnAction;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.util.Optional;
 
 /**
  * ViewDocumentAction
@@ -19,43 +20,26 @@ import java.awt.*;
  * @author huzunrong
  * @since 2.0.1
  */
-public class ViewDocumentAction extends AnAction {
-
-    private static final String GITHUB_URL = "https://github.com/newhoo/RESTKit";
-    private static final String GITEE_URL = "https://gitee.com/newhoo/RESTKit";
-    private static final String YUQUE_URL = "https://www.yuque.com/newhoo/restkit";
+public class ViewDocumentAction extends BaseAnAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        if (ActionPlaces.TOOLWINDOW_TOOLBAR_BAR.equals(e.getPlace())) {
-            e.getPresentation().setIcon(AllIcons.Actions.Help);
-        }
+        e.getPresentation().setText(() -> RestBundle.message("toolkit.action.viewdoc.text"));
     }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        if (!ActionPlaces.TOOLWINDOW_TOOLBAR_BAR.equals(e.getPlace())) {
-            BrowserUtil.browse(GITHUB_URL);
-            return;
-        }
-
         DefaultActionGroup generateActionGroup = new DefaultActionGroup(
-                new AnAction("Yuque") {
+                new BaseAnAction("Github") {
                     @Override
                     public void actionPerformed(@NotNull AnActionEvent e) {
-                        BrowserUtil.browse(YUQUE_URL);
+                        BrowserUtil.browse("https://github.com/newhoo/RestfulBox");
                     }
                 },
-                new AnAction("Github") {
+                new BaseAnAction("Gitee") {
                     @Override
                     public void actionPerformed(@NotNull AnActionEvent e) {
-                        BrowserUtil.browse(GITHUB_URL);
-                    }
-                },
-                new AnAction("Gitee") {
-                    @Override
-                    public void actionPerformed(@NotNull AnActionEvent e) {
-                        BrowserUtil.browse(GITEE_URL);
+                        BrowserUtil.browse("https://gitee.com/newhoo/RestfulBox");
                     }
                 }
         );
@@ -67,16 +51,11 @@ public class ViewDocumentAction extends AnAction {
                                                       e.getDataContext(),
                                                       JBPopupFactory.ActionSelectionAid.SPEEDSEARCH,
                                                       true);
-        Component anchor = e.getInputEvent().getComponent();
-        if (anchor.isValid()) {
-            popup.showUnderneathOf(anchor);
-        } else {
-            Component component = e.getData(PlatformDataKeys.CONTEXT_COMPONENT);
-            if (component != null) {
-                popup.showUnderneathOf(component);
-            } else {
-                popup.showInFocusCenter();
-            }
-        }
+        Optional.ofNullable(e.getInputEvent())
+                .map(ComponentEvent::getComponent)
+                .filter(Component::isValid)
+                .ifPresentOrElse(popup::showUnderneathOf, () -> Optional.ofNullable(e.getData(PlatformDataKeys.CONTEXT_COMPONENT))
+                                                                        .ifPresentOrElse(popup::showUnderneathOf, popup::showInFocusCenter)
+                );
     }
 }

@@ -7,11 +7,13 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiImportStatementBase;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiPolyadicExpression;
 import com.intellij.psi.PsiReferenceExpression;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -95,34 +97,93 @@ public class PsiAnnotationHelper {
             }
         } else if (value instanceof PsiPolyadicExpression) {
             String s = "";
-            for (PsiElement child : value.getChildren()) {
-                if (child instanceof PsiLiteralExpression) {
-                    s += ((PsiLiteralExpression) child).getValue().toString();
-                    continue;
-                }
-                PsiFile containingFile = child.getContainingFile();
-                if (child instanceof PsiReferenceExpression && containingFile instanceof PsiJavaFile) {
-                    PsiClass aClass = ((PsiJavaFile) containingFile).getClasses()[0];
-                    for (PsiField field : aClass.getFields()) {
-                        if (child.getText().endsWith(field.getName())) {
-                            s += field.computeConstantValue();
+            try {
+                for (PsiElement child : value.getChildren()) {
+                    if (child instanceof PsiLiteralExpression) {
+                        s += ((PsiLiteralExpression) child).getValue().toString();
+                        continue;
+                    }
+                    // 计算常量，最多支持两级内部类常量
+                    PsiFile containingFile = child.getContainingFile();
+                    if (child instanceof PsiReferenceExpression && containingFile instanceof PsiJavaFile && ((PsiJavaFile) containingFile).getImportList() != null) {
+                        PsiClass referedConstClass = null;
+                        String childText = child.getText();
+                        if (!childText.contains(".")) {
+                            PsiImportStatementBase singleImportStatement = ((PsiJavaFile) containingFile).getImportList().findSingleImportStatement(childText);
+                            if (singleImportStatement != null && singleImportStatement.getImportReference() != null) {
+                                String qualifiedName = singleImportStatement.getImportReference().getQualifiedName();
+                                String referConstClassQname = qualifiedName.substring(0, qualifiedName.indexOf(childText) - 1);
+                                referedConstClass = PsiClassHelper.findPsiClass(referConstClassQname, annotation.getProject());
+                            }
+                        } else {
+                            String s1 = childText.substring(0, childText.lastIndexOf("."));
+                            if (!s1.contains(".")) {
+                                PsiImportStatementBase singleImportStatement = ((PsiJavaFile) containingFile).getImportList().findSingleImportStatement(s1);
+                                if (singleImportStatement != null && singleImportStatement.getImportReference() != null) {
+                                    String referConstClassQname = singleImportStatement.getImportReference().getQualifiedName();
+                                    referedConstClass = PsiClassHelper.findPsiClass(referConstClassQname, annotation.getProject());
+                                }
+                            } else {
+                                // com.example.constants.C.PREFIX1
+                                PsiClass psiClass = PsiClassHelper.findPsiClass(s1, annotation.getProject());
+                                if (psiClass != null) {
+                                    referedConstClass = psiClass;
+                                } else {
+                                    // 内部类
+                                    String s2 = s1.substring(0, s1.lastIndexOf("."));
+                                    if (!s2.contains(".")) {
+                                        PsiImportStatementBase singleImportStatement = ((PsiJavaFile) containingFile).getImportList().findSingleImportStatement(s2);
+                                        if (singleImportStatement != null && singleImportStatement.getImportReference() != null) {
+                                            String referConstClassQname = singleImportStatement.getImportReference().getQualifiedName();
+                                            referedConstClass = PsiClassHelper.findPsiClass(referConstClassQname + s1.substring(s1.lastIndexOf(".")), annotation.getProject());
+                                        }
+                                    } else {
+                                        psiClass = PsiClassHelper.findPsiClass(s2, annotation.getProject());
+                                        if (psiClass != null) {
+                                            for (PsiClass innerClass : psiClass.getInnerClasses()) {
+                                                if (innerClass.getName() != null && innerClass.getName().equals(s1.substring(s1.lastIndexOf("." + 1)))) {
+                                                    referedConstClass = innerClass;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
+
+                        // 引用的常量所在类
+                        if (referedConstClass == null) {
+                            referedConstClass = ((PsiJavaFile) containingFile).getClasses()[0];
+                        }
+                        String cValue = "{{" + childText + "}}";
+                        for (PsiField field : referedConstClass.getFields()) {
+                            if (childText.endsWith(field.getName())) {
+                                cValue = String.valueOf(field.computeConstantValue());
+                                break;
+                            }
+                        }
+                        s += cValue;
                     }
                 }
+                values.add(s);
+            } catch (Exception e) {
             }
-            values.add(s);
         }
 
         return values;
     }
 
+    @NotNull
     public static String getAnnotationValue(PsiAnnotation annotation, String attributeName) {
+        if (annotation == null) {
+            return "";
+        }
         String paramName = null;
         PsiAnnotationMemberValue attributeValue = annotation.findDeclaredAttributeValue(attributeName);
 
         if (attributeValue instanceof PsiLiteralExpression) {
             paramName = (String) ((PsiLiteralExpression) attributeValue).getValue();
         }
-        return paramName;
+        return StringUtils.defaultString(paramName);
     }
 }

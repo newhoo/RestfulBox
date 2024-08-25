@@ -1,7 +1,10 @@
 package io.github.newhoo.restkit.config.certificate;
 
+import com.intellij.openapi.util.NlsContexts;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.ListTableModel;
+import io.github.newhoo.restkit.i18n.RestBundle;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -10,14 +13,15 @@ import org.jetbrains.annotations.Nullable;
  * @author huzunrong
  * @since 2.1.2
  */
+@SuppressWarnings("all")
 public class CertificateTableModel extends ListTableModel<Certificate> {
 
     public CertificateTableModel() {
         super(
-                new CertificateColumnInfo<Boolean>("Enable"),
-                new CertificateColumnInfo<String>("Host"),
-                new CertificateColumnInfo<String>("PFX file"),
-                new CertificateColumnInfo<String>("Passphrase")
+                new CertificateColumnInfo<String>("toolkit.config.certificate.table.header.host"),
+                new CertificateColumnInfo<String>("toolkit.config.certificate.table.header.pfxfile"),
+                new CertificateColumnInfo<String>("toolkit.config.certificate.table.header.passphrase"),
+                new CertificateColumnInfo<Boolean>("toolkit.config.certificate.table.header.enable")
         );
     }
 
@@ -31,17 +35,27 @@ public class CertificateTableModel extends ListTableModel<Certificate> {
             super(name);
         }
 
+        @Override
+        public @NlsContexts.ColumnName String getName() {
+            String name = super.getName();
+            if (StringUtils.isNotEmpty(name)) {
+                return RestBundle.message(name);
+            }
+            return name;
+        }
+
         @Nullable
         @Override
         public Aspect valueOf(Certificate certificate) {
-            switch (getName()) {
-                case "Enable":
+            String name = super.getName();
+            switch (name) {
+                case "toolkit.config.certificate.table.header.enable":
                     return (Aspect) certificate.getEnable();
-                case "Host":
+                case "toolkit.config.certificate.table.header.host":
                     return (Aspect) certificate.getHost();
-                case "PFX file":
+                case "toolkit.config.certificate.table.header.pfxfile":
                     return (Aspect) certificate.getPfxFile();
-                case "Passphrase":
+                case "toolkit.config.certificate.table.header.passphrase":
                     return (Aspect) certificate.getPassphrase();
                 default:
             }
@@ -50,17 +64,18 @@ public class CertificateTableModel extends ListTableModel<Certificate> {
 
         @Override
         public void setValue(Certificate certificate, Aspect value) {
-            switch (getName()) {
-                case "Enable":
+            String name = super.getName();
+            switch (name) {
+                case "toolkit.config.certificate.table.header.enable":
                     certificate.setEnable((Boolean) value);
                     break;
-                case "Host":
+                case "toolkit.config.certificate.table.header.host":
                     certificate.setHost((String) value);
                     break;
-                case "PFX file":
+                case "toolkit.config.certificate.table.header.pfxfile":
                     certificate.setPfxFile((String) value);
                     break;
-                case "Passphrase":
+                case "toolkit.config.certificate.table.header.passphrase":
                     certificate.setPassphrase((String) value);
                     break;
                 default:
@@ -69,7 +84,8 @@ public class CertificateTableModel extends ListTableModel<Certificate> {
 
         @Override
         public Class<?> getColumnClass() {
-            if ("Enable".equals(getName())) {
+            String name = super.getName();
+            if ("toolkit.config.certificate.table.header.enable".equals(name)) {
                 return Boolean.class;
             }
             return String.class;

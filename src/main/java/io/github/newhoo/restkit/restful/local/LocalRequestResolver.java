@@ -1,24 +1,18 @@
 package io.github.newhoo.restkit.restful.local;
 
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationListener;
-import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.concurrency.AppExecutorUtil;
 import io.github.newhoo.restkit.common.RestItem;
-import io.github.newhoo.restkit.config.CommonSetting;
-import io.github.newhoo.restkit.config.CommonSettingComponent;
-import io.github.newhoo.restkit.config.SettingConfigurable;
+import io.github.newhoo.restkit.common.RestRegistry;
+import io.github.newhoo.restkit.config.ConfigHelper;
+import io.github.newhoo.restkit.config.ide.CommonSetting;
 import io.github.newhoo.restkit.restful.RequestResolver;
 import io.github.newhoo.restkit.restful.ep.RestfulResolverProvider;
 import io.github.newhoo.restkit.util.FileUtils;
-import io.github.newhoo.restkit.util.HtmlUtil;
 import io.github.newhoo.restkit.util.JsonUtils;
-import io.github.newhoo.restkit.util.NotifierUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.event.HyperlinkEvent;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,7 +25,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static io.github.newhoo.restkit.common.RestConstant.WEB_FRAMEWORK_LOCAL;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 
@@ -48,13 +41,13 @@ public class LocalRequestResolver implements RequestResolver {
 
     public LocalRequestResolver(Project project) {
         this.project = project;
-        this.setting = CommonSettingComponent.getInstance(project).getState();
+        this.setting = ConfigHelper.getCommonSetting(project);
     }
 
     @NotNull
     @Override
     public String getFrameworkName() {
-        return WEB_FRAMEWORK_LOCAL;
+        return "Local Store";
     }
 
     @Override
@@ -62,20 +55,7 @@ public class LocalRequestResolver implements RequestResolver {
         return ScanType.STORAGE;
     }
 
-    @Override
-    public boolean checkConfig() {
-        if (StringUtils.isEmpty(setting.getApiFilePath())) {
-            NotifierUtils.infoBalloon("", "Local api store path is empty. " + HtmlUtil.link("Edit", "Edit"), new NotificationListener.Adapter() {
-                @Override
-                protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent e) {
-                    ShowSettingsUtil.getInstance().showSettingsDialog(project, SettingConfigurable.class);
-                }
-            }, project);
-            return false;
-        }
-        return true;
-    }
-
+    @NotNull
     @Override
     public List<RestItem> findRestItemInProject(@NotNull Project project) {
         return queryAll();
@@ -107,7 +87,9 @@ public class LocalRequestResolver implements RequestResolver {
                     item.setParams(restItem.getParams());
                     item.setBodyJson(restItem.getBodyJson());
                     item.setDescription(restItem.getDescription());
+                    item.setProject(restItem.getProject());
                     item.setModuleName(restItem.getModuleName());
+                    item.setPackageName(restItem.getPackageName());
                     item.setFramework(restItem.getFramework());
                     item.setTs(restItem.getTs());
                 });
@@ -163,6 +145,7 @@ public class LocalRequestResolver implements RequestResolver {
         try {
             Path path = Paths.get(apiFile);
             if (Files.notExists(path)) {
+                Files.createDirectories(path.getParent());
                 Files.createFile(path);
                 Files.write(path, JsonUtils.toJson(restItems).getBytes(StandardCharsets.UTF_8), CREATE);
                 return;
@@ -176,7 +159,10 @@ public class LocalRequestResolver implements RequestResolver {
     public static class FileResolverProvider implements RestfulResolverProvider {
         @Override
         public RequestResolver createRequestResolver(@NotNull Project project) {
-            return new LocalRequestResolver(project);
+            if (RestRegistry.enableLocalApi()) {
+                return new LocalRequestResolver(project);
+            }
+            return null;
         }
     }
 }

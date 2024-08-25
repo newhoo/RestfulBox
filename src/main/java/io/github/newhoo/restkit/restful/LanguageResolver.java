@@ -2,6 +2,7 @@ package io.github.newhoo.restkit.restful;
 
 import com.intellij.lang.Language;
 import com.intellij.psi.PsiElement;
+import io.github.newhoo.restkit.common.NotProguard;
 import io.github.newhoo.restkit.common.PsiRestItem;
 import io.github.newhoo.restkit.common.RestItem;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @author huzunrong
  * @since 2.0.1
  */
+@NotProguard
 public interface LanguageResolver {
 
     /**
@@ -43,17 +45,24 @@ public interface LanguageResolver {
      * 功能太弱了，不好区分不同框架，不建议外部使用
      *
      * @param psiElement 鼠标所在的元素
+     * @deprecated It's looks awful
      */
-    boolean canNavigateToTree(@NotNull PsiElement psiElement);
+    @Deprecated
+    default boolean canNavigateToTree(@NotNull PsiElement psiElement) {
+        return false;
+    }
 
     /**
      * 能否生成line marker图标，图标跳转
      *
      * @param psiElement 每行循环的元素
-     *
      * @since 2.0.5
+     * @deprecated It's looks awful
      */
-    boolean canGenerateLineMarker(@NotNull PsiElement psiElement);
+    @Deprecated
+    default boolean canGenerateLineMarker(@NotNull PsiElement psiElement) {
+        return false;
+    }
 
     /**
      * 根据PsiElement生成RestItem
@@ -63,8 +72,11 @@ public interface LanguageResolver {
      * 只要扫描写得好，一般用不到！！
      *
      * @param psiElement 每行循环的元素
-     *
      * @since 2.0.5
+     * @deprecated It's looks awful
      */
-    RestItem tryGenerateRestItem(@NotNull PsiElement psiElement);
+    @Deprecated
+    default RestItem tryGenerateRestItem(@NotNull PsiElement psiElement) {
+        return null;
+    }
 }

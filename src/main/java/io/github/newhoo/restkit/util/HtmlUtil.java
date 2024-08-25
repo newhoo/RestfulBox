@@ -1,5 +1,8 @@
 package io.github.newhoo.restkit.util;
 
+import io.github.newhoo.restkit.common.NotProguard;
+
+@NotProguard
 public final class HtmlUtil {
 
     public static final String BR = "<br/>";

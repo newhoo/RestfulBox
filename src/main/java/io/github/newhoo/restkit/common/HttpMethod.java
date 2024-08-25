@@ -1,12 +1,12 @@
 package io.github.newhoo.restkit.common;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * HTTP method
  */
+@NotProguard
 public enum HttpMethod {
     GET, POST, PUT, DELETE, PATCH, HEAD, UNDEFINED;
 
@@ -30,7 +30,8 @@ public enum HttpMethod {
     public static HttpMethod nameOf(String method) {
         HttpMethod httpMethod = methodMap.get(method.toUpperCase());
         if (httpMethod == null) {
-            throw new IllegalArgumentException("Not found enum constant in" + Arrays.toString(values()));
+            return UNDEFINED;
+//            throw new IllegalArgumentException("Not found enum constant in" + Arrays.toString(values()));
         }
         return httpMethod;
     }

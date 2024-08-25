@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.openapi.wm.ToolWindow;
@@ -15,9 +16,10 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.content.ContentManager;
 import io.github.newhoo.restkit.common.RestItem;
+import io.github.newhoo.restkit.config.ConfigHelper;
 import io.github.newhoo.restkit.util.IdeaUtils;
-import lombok.Getter;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -25,11 +27,11 @@ import java.util.function.Supplier;
  */
 public class RestServiceToolWindow extends SimpleToolWindowPanel {
 
-    @Getter
     private final ToolWindow myToolWindow;
     private final Project myProject;
 
     private RestServiceTree restServiceTree;
+    private RestServiceClient restServiceClient;
 
     public RestServiceToolWindow(Project myProject, ToolWindow toolWindow) {
         super(true, true);
@@ -44,8 +46,8 @@ public class RestServiceToolWindow extends SimpleToolWindowPanel {
         // 设置ToolWindow的顶部工具条
         final ActionManager actionManager = ActionManager.getInstance();
         ActionToolbar actionToolbar = actionManager.createActionToolbar(ActionPlaces.TOOLWINDOW_TOOLBAR_BAR,
-                (DefaultActionGroup) actionManager.getAction("RESTKit.NavigatorActionsToolbar"),
-                true);
+                                                                        (DefaultActionGroup) actionManager.getAction("RESTKit.NavigatorActionsToolbar"),
+                                                                        true);
         setToolbar(actionToolbar.getComponent());
 
         // 上下两部分：tree和RestServiceClient
@@ -53,12 +55,13 @@ public class RestServiceToolWindow extends SimpleToolWindowPanel {
         servicesContentPaneSplitter.setShowDividerControls(true);
         servicesContentPaneSplitter.setDividerWidth(10);
 
-        restServiceTree = new RestServiceTree(myProject);
+        restServiceTree = getRestServiceTree();
+        restServiceClient = new RestServiceClient(myProject);
         // 关系到获取dataContext
         actionToolbar.setTargetComponent(restServiceTree);
 
         servicesContentPaneSplitter.setFirstComponent(ScrollPaneFactory.createScrollPane(restServiceTree));
-        servicesContentPaneSplitter.setSecondComponent(new RestServiceClient(myProject));
+        servicesContentPaneSplitter.setSecondComponent(restServiceClient);
         setContent(servicesContentPaneSplitter);
 
         Content content = ApplicationManager.getApplication().getService(ContentFactory.class).createContent(this, "", false);
@@ -67,20 +70,26 @@ public class RestServiceToolWindow extends SimpleToolWindowPanel {
         contentManager.setSelectedContent(content, false);
 
         // update tree
-        IdeaUtils.runWhenProjectIsReady(myProject, () -> restServiceTree.updateTree(null));
+        IdeaUtils.runWhenProjectIsReady(myProject, () -> restServiceTree.updateTree(null, false));
     }
 
-    /**
-     * 跳转到节点
-     */
-    public void navigateToTree(PsiElement psiElement) {
-        navigateToTree(psiElement, null);
+    private RestServiceTree getRestServiceTree() {
+        boolean showMultiLevelServiceNode = ConfigHelper.getGlobalSetting().isShowMultiLevelServiceNode();
+        if (!showMultiLevelServiceNode) {
+            return new SimpleRestServiceTree(myProject);
+        }
+        // 普通版允许3个项目为多层级tree
+        Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
+        if (openProjects.length <= 3) {
+            return new RestServiceTree(myProject);
+        }
+        return new SimpleRestServiceTree(myProject);
     }
 
     /**
      * 跳转到节点，节点不存在时可生成请求
      */
-    public void navigateToTree(PsiElement psiElement, Supplier<RestItem> geneWhenNotExistNode) {
+    void navigateToTree(PsiElement psiElement, Supplier<RestItem> geneWhenNotExistNode) {
         if (myToolWindow.isDisposed() || !myToolWindow.isVisible()) {
             myToolWindow.show(() -> {
                 restServiceTree.navigateToTree(psiElement, geneWhenNotExistNode);
@@ -93,7 +102,7 @@ public class RestServiceToolWindow extends SimpleToolWindowPanel {
     /**
      * 跳转到节点
      */
-    public void navigateToTree(String url, String method, String moduleName) {
+    void navigateToTree(String url, String method, String moduleName) {
         if (myToolWindow.isDisposed() || !myToolWindow.isVisible()) {
             myToolWindow.show(() -> {
                 restServiceTree.navigateToTree(url, method, moduleName);
@@ -103,19 +112,34 @@ public class RestServiceToolWindow extends SimpleToolWindowPanel {
         }
     }
 
-    public void scheduleUpdateTree() {
+    public void scheduleUpdateTree(Consumer<Void> callAfterUpdate, boolean trySyncToDataSource) {
         IdeaUtils.runWhenProjectIsReady(myProject, () -> {
             if (myToolWindow.isDisposed() || !myToolWindow.isVisible()) {
                 myToolWindow.show(() -> {
-                    restServiceTree.updateTree(null);
+                    restServiceTree.updateTree(callAfterUpdate, trySyncToDataSource);
                 });
             } else {
-                restServiceTree.updateTree(null);
+                restServiceTree.updateTree(callAfterUpdate, trySyncToDataSource);
             }
         });
     }
 
     public void expandAll(boolean expand) {
         restServiceTree.expandAll(expand);
+    }
+
+    boolean isToolWindowDisposed() {
+        return myToolWindow.isDisposed();
+    }
+
+    boolean tryDispose() {
+        if (myProject.isDisposed()) {
+            this.restServiceTree.cleanup();
+            this.restServiceClient.cleanup();
+            this.restServiceTree = null;
+            this.restServiceClient = null;
+            return true;
+        }
+        return false;
     }
 }
