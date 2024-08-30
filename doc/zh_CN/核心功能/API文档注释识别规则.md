@@ -1,4 +1,4 @@
-# API文档注释识别规则
+# API Javadoc Rule
 
 ## api group name
 

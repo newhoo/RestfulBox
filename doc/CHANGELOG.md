@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 5.1.0
+
+- Fixed known issues.
+- New: Intelligent recognition of API documentation comments. <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD/API%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A%E8%AF%86%E5%88%AB%E8%A7%84%E5%88%99.md">see</a>
+- New：Improve the api export of Postman/Apifox types.
+- New: Support import runtime environment variable from Yaml file.
+- New: Support Yaml and Properties conversion. (Editor context menu)
+
+
+- 修复已知问题
+- 新增：智能识别API文档注释，<a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD/API%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A%E8%AF%86%E5%88%AB%E8%A7%84%E5%88%99.md">API文档注释识别规则</a>
+- 新增：完善对Postman/Apifox类型的接口导出
+- 新增：运行环境变量导入支持Yaml文件
+- 新增：Yaml和Properties互转（编辑器右键菜单）
+
 ## 5.0.0
 
 [5.0 Upgrade Guide - 5.0升级指南](./zh_CN/快速入门/5.0升级指南.md)
