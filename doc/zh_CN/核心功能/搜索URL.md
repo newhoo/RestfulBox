@@ -14,13 +14,13 @@
 
 ![img.png](images/1724581954179.png)
 
-`3.4.0`开始默认不匹配description部分，需手动勾选匹配
+`3.4.0`开始默认不匹配 description 部分，需手动勾选匹配
 
 ![img.png](images/1724582042342.png)
 
-可在设置中设置显示module/分组名称。
+可在设置中设置显示 module /分组名称。
 
-在search everywhere中选中具体的URL后，按 `Option` 或 `Alt` 可跳转到api tree中对应的列表项。
+在 search everywhere 中选中具体的 URL 后，按 `Option` 或 `Alt` 可跳转到 api tree 中对应的列表项。
 
 ## Service tree支持idea自身的输入搜索
 

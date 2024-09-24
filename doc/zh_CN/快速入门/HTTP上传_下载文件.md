@@ -6,7 +6,13 @@
 ## 二、上传文件
 支持`org.springframework.web.multipart.MultipartFile`参数识别。
 
-在 **Params编辑窗口** 中，文件参数表现为：`paramName: file@[filepath]`。选择参数上传，步骤如下图：
+在 **Params编辑窗口** 中，文件参数表现为：`paramName: file@[filepath]`。
+
+- 通过自动补全上传
+
+![img.png](images/1727200568948.png)
+
+- 选择参数上传，步骤如下图：
 
 ![img.png](images/1724578236844.png)
 

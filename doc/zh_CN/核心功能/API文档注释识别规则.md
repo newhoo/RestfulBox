@@ -84,12 +84,12 @@ public R<Map<String, User>> test();
 
 ## api、field ignore
 
-如果类、方法、字段的文档注释存在`@ignored`时，则忽略对应的接口、字段。如：
+如果类、方法、字段的文档注释存在`@ignore`时，则忽略对应的接口、字段。如：
 
 ```java
 /**
  * 忽略类、方法、字段、递归字段等
  *
- * @ignored
+ * @ignore
  */
 ```

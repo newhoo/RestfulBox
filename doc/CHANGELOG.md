@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## 5.2.0
+
+- New: API searchEvery supports tag filter.
+- New: Api nodes support displaying both name and URL. Change it in the Tool Window settings menu.
+- New: HTTP requests support setting User-Agent header (set in the Registry).
+- Optimize Toolbar: add split-screen, floating mode, double-click mode, remove scanning framework filter.
+- Refactoring request panel: auto-completion of environment variables and request headers, visualize setting tab, show response state.
+- Refactoring scanning api setting and merge api filtering setting.
+- Fixed known issues.
+
+
+- 新增: 随处搜索支持标记过滤
+- 新增：树节点支持同时展示名称和 URL，在 Tool Window 设置菜单中选择展示方式
+- 新增：HTTP 请求支持设置全局 User-Agent（在 Registry 中设置）
+- 优化Toolbar：增加分屏、浮动模式、双击模式等设置，移除扫描框架过滤器
+- 重构请求面板：编辑器支持自动补全环境变量和请求头，支持切换文档类型，可视化设置标签，展示响应状态
+- 重构扫描接口设置，合并原有的接口过滤设置
+- 修复已知问题
+
 ## 5.1.0
 
 - Fixed known issues.
