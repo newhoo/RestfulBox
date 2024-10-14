@@ -1,6 +1,18 @@
 # CHANGELOG
 
-## 5.2.0
+## 5.2.3
+
+- Fixed known issues.
+- New: Support for creating requests from simple cURL commands. \[Request tab right-click menu]
+- Save-api and Copy-as-cURL entrances migrated to \[Request Tab right-click menu].
+- Headers and Params editors support syntax highlighter.
+
+- 修复已知问题，优化性能
+- 新增：从 cURL 语句创建请求【入口：请求Tab右键菜单】
+- 保存接口、复制为cURL按钮迁移到【请求Tab右键菜单】
+- Headers 和 Params 编辑器添加语法高亮展示
+
+## 5.2.0 - 5.2.2
 
 - New: API searchEvery supports tag filter.
 - New: Api nodes support displaying both name and URL. Change it in the Tool Window settings menu.
