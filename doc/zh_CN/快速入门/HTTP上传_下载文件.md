@@ -26,4 +26,4 @@
 ```
 Content-Disposition: attachment; filename="2d8e6de174899729ccd12f41230a5510.webp"; filename*=utf-8''2d8e6de174899729ccd12f41230a5510.webp
 ```
-下载完成后在**Body编辑器**中会显示下载文件的绝对路径。
+下载完成后在**Body编辑器**中会显示下载文件的绝对路径，可点击上方下载按钮在文件管理器中打开文件。

@@ -4,7 +4,7 @@
 
 [简体中文](./README.zh_CN.md) | [Github](https://github.com/newhoo/RestfulBox) | [Gitee](https://gitee.com/newhoo/RestfulBox) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 
-This plugin is committed to enhancing development efficiency with useful features. From the initial RestfulToolkit and joined common core functions of dev tools, rich and complete features can greatly improve the efficiency of IDEA development.
+This plugin is committed to enhancing development efficiency with useful features. Rich and complete features can greatly improve the efficiency of IDEA development.
 
 ## Features ([5.0 Upgrade Guide](doc/zh_CN/快速入门/5.0升级指南.md))
 - [x] More supported jetbrains ides.
@@ -14,7 +14,7 @@ This plugin is committed to enhancing development efficiency with useful feature
   - Show restful service structure in tool window.
   - Service and Method jump to each other.
 - [x] Powerful request client:
-  - Multi-tab: support displaying and sending multiple requests at the same time.
+  - Multi-tab: support displaying, sending multiple requests at the same time, sending concurrent request.
   - Multi-protocol: support http by default.
   - Custom parameter format, support placeholder variable, formatted JSON.
   - Environment variable：define/manage/use/export/import, support preset function and script function.
@@ -42,20 +42,17 @@ This plugin is committed to enhancing development efficiency with useful feature
   - [x] Jax-Rs: supported by default from `3.3.0`. Support Java and Kotlin implement.
   - [x] Dubbo: supported by plugin. See [RestfulBox-Dubbo](https://github.com/newhoo/RestfulBox-Dubbo). Support scanning and sending dubbo request.
   - [x] Solon: supported by plugin. See [RestfulBox-Solon](https://github.com/newhoo/RestfulBox-Solon). Support scanning and sending http request.
-- Storage Type (Suggest using datasource instead)
-  - [x] Redis: supported by plugin. See [RESTKit-Redis](https://github.com/newhoo/RESTKit-Redis). Support store services to redis and sending simple redis command.
-  - [x] Local Store: supported by default. Support store services to local file.
 - Protocol
   - [x] HTTP/HTTPS: supported by default.
   - [x] DUBBO: see above.
-  - [x] Redis: see above.
+  - [x] Redis: [RESTKit-Redis](https://github.com/newhoo/RESTKit-Redis).
 - Datasource (Support store all data to selected datasource)
   - [x] Sqlite Datasource: supported by default from `3.0.0`.
   - [x] MySQL Datasource: supported by default from `3.0.1`.
 
 ## Document
 
-_Due to limited time, Chinese documents are more comprehensive. Please visit as needed._
+_Due to limited time, Chinese documents are more comprehensive. Please visit it with translation as needed._
 
 - [English Document](doc/en/README.md)
 - [中文文档-Github](https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)  [Gitee](https://gitee.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E7%9B%AE%E5%BD%95.md)
@@ -64,7 +61,7 @@ _Due to limited time, Chinese documents are more comprehensive. Please visit as 
 ## Contact & Feedback
 If you find any problems with this plugin, please give me feedback. If it helps, star for it! :star2:
 
-:fire: _If you want to experience the subscription feature more fully, i will provide 3 months of free use at a time. If you need, provide your [jetbrains account](https://account.jetbrains.com/profile-details) to me by email!_
+:fire: _If you want to experience the [subscription](doc/zh_CN/快速入门/订阅.md) feature more fully, i will provide 6 months of free use at a time. If you need, provide your [jetbrains account](https://account.jetbrains.com/profile-details) to me by email!_
 
 [Issues](https://github.com/newhoo/RestfulBox/issues) | [Email](mailto:huzunrong@foxmail.com) | [Ratings & Previews](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 

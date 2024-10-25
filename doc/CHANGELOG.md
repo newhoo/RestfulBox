@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 5.3.0
+
+[5.0 Upgrade Guide - 5.0升级指南](./zh_CN/快速入门/5.0升级指南.md)
+
+- Fixed: Save api tag; open downloaded file.
+- New: Able to cancel the HTTP request being sent finally.
+- New: Support sending concurrent requests. [Request Tab right-click menu]
+- New: HMAC and AES tools. Refactoring Toolbox pages.
+
+- 修复：接口标记保存、打开下载文件
+- 新增：终于能够取消正在发送中的HTTP请求
+- 新增：支持发送并发请求【入口：请求Tab右键菜单】
+- 新增：HMAC 和 AES加解密工具，重构工具箱页面
+
 ## 5.2.3
 
 - Fixed known issues.
