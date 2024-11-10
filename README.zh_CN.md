@@ -2,7 +2,7 @@
 
 ## 一套功能强大的 Restful 服务开发辅助工具集
 
-[英文](./README.md) | [Github](https://github.com/newhoo/RestfulBox) | [Gitee](https://gitee.com/newhoo/RestfulBox) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
+[英文](./README.md) | [Github](https://github.com/newhoo/RestfulBox) | [Gitee](https://gitee.com/newhoo/RestfulBox) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews) | [界面展示](doc/zh_CN/界面展示.md)
 
 **RestfulBox**插件致力于提升开发效率，只有实用常用好用的功能，丰富且完善的功能极大地提高了使用IDE开发的效率。
 

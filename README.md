@@ -2,7 +2,7 @@
 
 ## Powerful toolkit for restful services development.
 
-[简体中文](./README.zh_CN.md) | [Github](https://github.com/newhoo/RestfulBox) | [Gitee](https://gitee.com/newhoo/RestfulBox) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
+[简体中文](./README.zh_CN.md) | [Github](https://github.com/newhoo/RestfulBox) | [Gitee](https://gitee.com/newhoo/RestfulBox) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews) | [Screenshots](doc/zh_CN/界面展示.md)
 
 This plugin is committed to enhancing development efficiency with useful features. Rich and complete features can greatly improve the efficiency of IDEA development.
 
@@ -45,7 +45,7 @@ This plugin is committed to enhancing development efficiency with useful feature
 - Protocol
   - [x] HTTP/HTTPS: supported by default.
   - [x] DUBBO: see above.
-  - [x] Redis: [RESTKit-Redis](https://github.com/newhoo/RESTKit-Redis).
+  - [x] Redis: Simple demo: [RESTKit-Redis](https://github.com/newhoo/RESTKit-Redis).
 - Datasource (Support store all data to selected datasource)
   - [x] Sqlite Datasource: supported by default from `3.0.0`.
   - [x] MySQL Datasource: supported by default from `3.0.1`.
