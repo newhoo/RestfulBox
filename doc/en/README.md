@@ -387,7 +387,7 @@ For example:
     <extensions defaultExtensionNs="io.github.newhoo.restkit">
         <!-- your restful resolver implementation -->
         <restfulResolver implementation="io.github.newhoo.restkit.feature.javaimpl.spring.SpringRequestResolver$SpringRequestResolverProvider"/>
-        <languageResolver implementation="io.github.newhoo.restkit.feature.javaimpl.language.JavaLanguageResolver$JavaLanguageResolverProvider"/>
+        <languageResolver implementation="io.github.newhoo.restkit.api.feature.language.javaimpl.JavaLanguageResolver$JavaLanguageResolverProvider"/>
       
         <restfulResolver implementation="io.github.newhoo.restkit.ext.jaxrs.JaxrsResolverProvider"/>
     </extensions>

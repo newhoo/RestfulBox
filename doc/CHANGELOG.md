@@ -1,8 +1,30 @@
 # CHANGELOG
 
-## 5.3.0
-
 [5.0 Upgrade Guide - 5.0升级指南](./zh_CN/快速入门/5.0升级指南.md)
+
+5.4.0
+
+- [API] Fixed: scanning api linemarker navigation.
+- [API] New: Able to close built-in modules and customize toolbar buttons.
+- [API] New: Support tag and method pattern in Search Everywhere. Format: [tag|get|post|put|patch|delete] &lt;text&gt;
+- [API] New: Api management supports one-click copying of project.
+- [API] New: Support setting preset parameters for Header/Params/Body.
+- [API] Change: Optimize API import and export
+- [API] Change: Change the file parameter identifier from file@[filepath] to @, and support binary file upload as --data-binary in curl.
+- [Run Configuration] Change: Support disable parameter settings for the current project
+- [Switch Project] New：Integrated project switcher. No need to install <a href="https://github.com/newhoo/easy-open-project">Easy Open Project</a> anymore
+
+- [API] 修复：装订区域扫描接口跳转异常
+- [API] 新增：支持关闭模块和自定义工具窗口按钮
+- [API] 新增：随处搜索支持输入tag、method搜索，格式：[tag|get|post|put|patch|delete] &lt;text&gt;
+- [API] 新增：接口管理支持一键复制项目
+- [API] 新增：参数库轻松实现为Header/Params/Body等设置预置参数
+- [API] 改动：优化接口导入导出，新增导出名称、目录、域名拼接等选项
+- [API] 改动：文件参数标识符从 file@[filepath] 改为 @，同时支持二进制文件方式上传，参考curl中的 --data-binary
+- [运行配置] 改动：新增启用开关，可为当前项目关闭参数设置
+- [项目切换] 新增：集成项目切换，无需再安装：<a href="https://github.com/newhoo/easy-open-project">Easy Open Project</a>
+
+## 5.3.0
 
 - Fixed: Save api tag; open downloaded file.
 - New: Able to cancel the HTTP request being sent finally.
