@@ -29,9 +29,9 @@ This plugin is committed to enhancing development efficiency with useful feature
 - [x] Plugin extension: through this, you can try your great ideas.
 - [X] Have a convenient toolbox (Time conversion, Encryption & Decryption and etc.)
 - [X] Original command center, support rich custom commands.
+- [X] Support recognizing and opening git remote URL automatically.
 - [X] Support finding and opening of remote git repositories automatically.
-- [X] Support manage jvm parameters for IDEA/Android Studio.
-- [X] Extra: switch project conveniently: <a href="https://github.com/newhoo/easy-open-project">Easy Open Project</a>
+- [X] Support manage runtime environment variables for IDEA/Goland/Android Studio.
 - [X] Extra: auto execute mysql explain: <a href="https://github.com/newhoo/mysql-explain">MySQL Explain</a>
 - [X] Extra: invoke spring bean method conveniently: <a href="https://github.com/newhoo/bean-invoker">Spring Bean Invoker</a>
 
@@ -61,9 +61,7 @@ _Due to limited time, Chinese documents are more comprehensive. Please visit it 
 ## Contact & Feedback
 If you find any problems with this plugin, please give me feedback. If it helps, star for it! :star2:
 
-:fire: _If you want to experience the [subscription](doc/zh_CN/快速入门/订阅.md) feature more fully, i will provide 6 months of free use at a time. If you need, provide your [jetbrains account](https://account.jetbrains.com/profile-details) to me by email!_
-
-[Issues](https://github.com/newhoo/RestfulBox/issues) | [Email](mailto:huzunrong@foxmail.com) | [Ratings & Previews](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
+[Issues](https://github.com/newhoo/RestfulBox/issues) | [Email](mailto:dev2n@qq.com) | [Ratings & Previews](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 
 > Note  
 > Please provide necessary information when you feedback: IDEA version, plugin version, exception content, recreation way, desire, and etc.

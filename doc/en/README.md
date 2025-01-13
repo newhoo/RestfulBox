@@ -6,7 +6,7 @@
 
 This plugin is committed to enhancing development efficiency with useful features. Rich and complete features can greatly improve the efficiency of IDEA development.
 
-## Features ([4.0 Upgrade Guide](../zh_CN/快速入门/4.0升级指南.md))
+## Features ([5.0 Upgrade Guide](doc/zh_CN/快速入门/5.0升级指南.md))
 - [x] More supported jetbrains ides.
 - [x] Restful service automatic scanning and display.
   - Support searching service in native Search Everywhere. ( use: <kbd>Ctrl \\</kbd> )
@@ -14,7 +14,7 @@ This plugin is committed to enhancing development efficiency with useful feature
   - Show restful service structure in tool window.
   - Service and Method jump to each other.
 - [x] Powerful request client:
-  - Multi-tab: support displaying and sending multiple requests at the same time.
+  - Multi-tab: support displaying, sending multiple requests at the same time, sending concurrent request.
   - Multi-protocol: support http by default.
   - Custom parameter format, support placeholder variable, formatted JSON.
   - Environment variable：define/manage/use/export/import, support preset function and script function.
@@ -29,9 +29,9 @@ This plugin is committed to enhancing development efficiency with useful feature
 - [x] Plugin extension: through this, you can try your great ideas.
 - [X] Have a convenient toolbox (Time conversion, Encryption & Decryption and etc.)
 - [X] Original command center, support rich custom commands.
+- [X] Support recognizing and opening git remote URL automatically.
 - [X] Support finding and opening of remote git repositories automatically.
-- [X] Support manage jvm parameters for IDEA/Android Studio.
-- [X] Extra: switch project conveniently: <a href="https://github.com/newhoo/easy-open-project">Easy Open Project</a>
+- [X] Support manage runtime environment variables for IDEA/Goland/Android Studio.
 - [X] Extra: auto execute mysql explain: <a href="https://github.com/newhoo/mysql-explain">MySQL Explain</a>
 - [X] Extra: invoke spring bean method conveniently: <a href="https://github.com/newhoo/bean-invoker">Spring Bean Invoker</a>
 
@@ -42,13 +42,10 @@ This plugin is committed to enhancing development efficiency with useful feature
   - [x] Jax-Rs: supported by default from `3.3.0`. Support Java and Kotlin implement.
   - [x] Dubbo: supported by plugin. See [RestfulBox-Dubbo](https://github.com/newhoo/RestfulBox-Dubbo). Support scanning and sending dubbo request.
   - [x] Solon: supported by plugin. See [RestfulBox-Solon](https://github.com/newhoo/RestfulBox-Solon). Support scanning and sending http request.
-- Storage Type (Suggest using datasource instead)
-  - [x] Redis: supported by plugin. See [RESTKit-Redis](https://github.com/newhoo/RESTKit-Redis). Support store services to redis and sending simple redis command.
-  - [x] Local Store: supported by default. Support store services to local file.
 - Protocol
   - [x] HTTP/HTTPS: supported by default.
   - [x] DUBBO: see above.
-  - [x] Redis: see above.
+  - [x] Redis: Simple demo: [RESTKit-Redis](https://github.com/newhoo/RESTKit-Redis).
 - Datasource (Support store all data to selected datasource)
   - [x] Sqlite Datasource: supported by default from `3.0.0`.
   - [x] MySQL Datasource: supported by default from `3.0.1`.
@@ -461,9 +458,7 @@ Path: <kbd>Plugin Toolbar</kbd> > <kbd>Show Tools</kbd>
 ## Contact & Feedback
 If you find any problems with this plugin, please give me feedback. If it helps, star for it! :star2:
 
-:fire: **_If you want to experience the subscription feature more fully, i will provide 3 months of free use at a time. If you need, provide your [jetbrains account](https://account.jetbrains.com/profile-details) to me by email!_**
-
-[Issues](https://github.com/newhoo/RestfulBox/issues) | [Email](mailto:huzunrong@foxmail.com) | [Ratings & Previews](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
+[Issues](https://github.com/newhoo/RestfulBox/issues) | [Email](mailto:dev2n@qq.com) | [Ratings & Previews](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 
 > Note  
 > Please provide necessary information when you feedback: IDEA version, plugin version, exception content, recreation way(if can), desire, and etc.

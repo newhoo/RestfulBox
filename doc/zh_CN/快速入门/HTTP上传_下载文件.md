@@ -4,7 +4,7 @@
 从`2.0.8`开始支持，不建议在idea中下载大文件。
 
 ## 二、上传文件
-支持`org.springframework.web.multipart.MultipartFile`参数识别。
+默认支持`org.springframework.web.multipart.MultipartFile`参数识别，可在设置中配置更多。
 
 在 **Params编辑窗口** 中，文件参数表现为：`paramName: @filepath`。(`5.4.0`以前版本为`paramName: file@[filepath]`)
 

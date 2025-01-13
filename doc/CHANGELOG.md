@@ -2,6 +2,14 @@
 
 [5.0 Upgrade Guide - 5.0升级指南](./zh_CN/快速入门/5.0升级指南.md)
 
+5.5.0
+
+- [API] New: supports openapi export.
+- [ToolBox] New: Certificate analysis.
+
+- [API] 新增：支持 OPENAPI 导出
+- [工具箱] 新增：证书解析
+
 5.4.0
 
 - [API] Fixed: scanning api linemarker navigation.
