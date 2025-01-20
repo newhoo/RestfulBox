@@ -1,6 +1,4 @@
-<a href="https://plugins.jetbrains.com/plugin/14723-restfulbox">![bg](images/bg2.png)</a>
-
-## Powerful toolkit for restful services development.
+# Another powerful toolkit for restful development.
 
 [Github](https://github.com/newhoo/RestfulBox) | [Gitee](https://gitee.com/newhoo/RestfulBox) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 
