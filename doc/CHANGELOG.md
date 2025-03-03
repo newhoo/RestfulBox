@@ -2,6 +2,22 @@
 
 [5.0 Upgrade Guide - 5.0升级指南](./zh_CN/快速入门/5.0升级指南.md)
 
+5.6.0
+
+- [Global] Supports specifying alias for the current project, such as mapping shopping-app-copy to shopping-app
+- [API] New: supports openapi export.
+- [ToolBox] New: Certificate analysis.
+- [Run Configuration] Added a grouping mode to flexibly define multiple sets of environment variables for running apps.
+
+- [全局] 支持为当前项目指定别名，如将 shopping-app-copy 映射为 shopping-app
+- [API] 环境变量选择框新增右键菜单，支持刷新和打开设置按钮
+- [API] 发送请求按钮新增右键菜单，支持发起并发请求
+- [运行配置] 新增分组模式，可灵活定义多套运行环境变量
+
+![img.png](zh_CN/images/1740823090146.png)
+
+![img.png](zh_CN/images/1740822716744.png)
+
 5.5.0
 
 - [API] New: supports openapi export.
