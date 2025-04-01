@@ -46,26 +46,47 @@ public R<Map<String, User>> test();
 
 ## api return type
 
-若方法返回`java.lang.Object`类型，则会尝试从文档注释中的`@return`判断返回值的实际类型。如`R<PageRespVo<User>>`支持以下两种格式：
+_优先级从高到低_
+
+1. 在方法文档注释中存在tag`@return`，且方法返回`java.lang.Object`类型或者约定使用`use`关键词，则会尝试解析 `@return` 的值作为类型，如下示例
+2. 方法本身的返回类型
+
+`@return`示例，如`R<PageRespVo<User>>`支持以下两种格式（Kotlin请使用**格式2**）：
 
 - 格式1:
 
 ```java
 /**
- * 测试返回参数
+ * 方法返回`java.lang.Object`类型，从@return中解析返回类型
  *
  * @return {@link R<PageRespVo<User>>}
  */
+public Object get(@PathVariable BigInteger docId);
+
+/**
+ * 方法不返回`java.lang.Object`类型，约定使用use，从@return中解析返回类型
+ *
+ * @return use {@link R<PageRespVo<User>>}
+ */
+public Map get(@PathVariable BigInteger docId);
 ```
 
 - 格式2:
 
 ```java
 /**
- * 测试返回参数
+ * 方法返回`java.lang.Object`类型，从@return中解析返回类型
  *
  * @return com.example.bean.R#com.example.bean.PageRespVo#com.example.bean.User
  */
+public Object get(@PathVariable BigInteger docId);
+
+/**
+ * 方法不返回`java.lang.Object`类型，约定使用use，从@return中解析返回类型
+ *
+ * @return use com.example.bean.R#com.example.bean.PageRespVo#com.example.bean.User
+ */
+public Map get(@PathVariable BigInteger docId);
 ```
 
 ## api tag

@@ -2,6 +2,18 @@
 
 [5.0 Upgrade Guide - 5.0升级指南](./zh_CN/快速入门/5.0升级指南.md)
 
+5.7.0
+
+- [API] Optimize the recognition rules for scanning api return value. See  <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD/API%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A%E8%AF%86%E5%88%AB%E8%A7%84%E5%88%99.md#api-return-type">doc</a>
+- [API] Added a custom type description, see [Scanning API]
+- [API] Update openapi and apifox export.
+- [API] Support Spring Cloud OpenFeign.
+
+- [API] 优化扫描接口返回值的识别规则，见 <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD/API%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A%E8%AF%86%E5%88%AB%E8%A7%84%E5%88%99.md#api-return-type">doc</a>
+- [API] 新增自定义类型定义，见【扫描接口】设置
+- [API] 优化接口导出，增强OpenAPI和apifox导出
+- [API] 支持 Spring Cloud OpenFeign
+
 5.6.0
 
 - [Global] Supports specifying alias for the current project, such as mapping shopping-app-copy to shopping-app
