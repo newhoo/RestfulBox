@@ -2,6 +2,45 @@
 
 [5.0 Upgrade Guide - 5.0升级指南](./zh_CN/快速入门/5.0升级指南.md)
 
+5.8.0
+
+- Fix issues.
+- [API] Optimize interface analysis.
+- [API] Concurrent requests are upgraded to batch requests.
+- \[API] [HTTP Client] Support cookie management.
+- \[API] [HTTP Client] Support connection-timeout param and a random DNS strategy.
+- \[API] [Environment] New examples and debugging functions for Function variable.
+- \[API] [Script] New examples and debugging functions for Function variable.
+- [API] Add examples and synchronization entries for request scripts.
+- [API] Supports executing pre-script when copying cURL.
+- [Run Configuration] Support filter rule for variable pair.
+- [Switch Project] Add shortcut by default: `Control Shift P`
+
+- 修复已知问题
+- [API] 接口识别优化
+- [API] 并发请求升级为批量请求，支持并发/顺序/随机等模式，同时支持定时发起和取消请求
+- [API] HTTP 发起请求新增 Cookie 管理
+- [API] HTTP 发起请求新增 连接超时 参数，内置一个随机DNS策略
+- [API] 环境变量中的函数变量新增示例和调试功能
+- [API] 请求前置/后置脚本新增示例和同步入口
+- [API] 复制 cURL 时支持自动执行前置脚本
+- [运行配置] 每个变量支持单独配置过滤规则，见文档描述
+- [项目切换] 默认添加快捷键：`Control Shift P`
+
+图示：
+
+- 批量请求
+![img.png](zh_CN/快速入门/images/1746933136948.png)
+
+- Cookie 管理
+![img_1.png](zh_CN/快速入门/images/1746933292300.png)
+
+- 环境变量中的函数变量新增示例和调试功能
+![img_2.png](zh_CN/核心功能/images/1746933316808.png)
+
+- 请求前置/后置脚本新增示例和同步入口
+![img_2.png](zh_CN/核心功能/images/1746933335519.png)
+
 5.7.0
 
 - [API] Optimize the recognition rules for scanning api return value. See  <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD/API%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A%E8%AF%86%E5%88%AB%E8%A7%84%E5%88%99.md#api-return-type">doc</a>
@@ -179,7 +218,7 @@
 - 优化searchEverywhere搜索接口, 默认禁用description匹配
 - 支持自定义时间格式: ProjectSetting
 
-![](zh_CN/快速入门/images/1715007868752.png)
+![](zh_CN/images/changelog/1715007868752.png)
 
 
 ## 3.3.1
@@ -222,7 +261,7 @@
 
 1、扫描框架设置入口迁移到 Toolbar
 
-![](zh_CN/快速入门/images/1691681334145.png)
+![](zh_CN/images/changelog/1691681334145.png)
 
 2、请求参数导入导出入口：
 
@@ -230,17 +269,17 @@
 
 3、项目数据管理面板
 
-![](zh_CN/快速入门/images/1691681334146.png)
+![](zh_CN/images/changelog/1691681334146.png)
 
-![](zh_CN/快速入门/images/1691681334147.png)
+![](zh_CN/images/changelog/1691681334147.png)
 
 4、全局项目切换入口
 
-![](zh_CN/快速入门/images/1691681334148.png)
+![](zh_CN/images/changelog/1691681334148.png)
 
 5、关闭多层级树节点展示和多请求面板
 
-![](zh_CN/快速入门/images/1691889605770.png)
+![](zh_CN/images/changelog/1691889605770.png)
 
 
 ## 3.1.1

@@ -22,7 +22,7 @@ This plugin is committed to enhancing development efficiency with useful feature
   - Display request info like http packet, and save to log file.
 - [x] Language & Framework:
   - Support services using local store by default.
-  - Support Spring MVC and Jax-RS with java and kotlin in idea by default.
+  - Support Spring MVC / OpenFeign / Jax-RS with java and kotlin in idea by default.
 - [x] Datasource: Support multiple data sources. Local/Cloud/Custom.
 - [x] Plugin extension: through this, you can try your great ideas.
 - [X] Have a convenient toolbox (Time conversion, Encryption & Decryption and etc.)
@@ -38,6 +38,7 @@ This plugin is committed to enhancing development efficiency with useful feature
 - Scanning Type
   - [x] Spring MVC: supported by default. Support Java and Kotlin implement.
   - [x] Jax-Rs: supported by default from `3.3.0`. Support Java and Kotlin implement.
+  - [x] OpenFeign: supported by default from `5.7.0`. Support Java and Kotlin implement.
   - [x] Dubbo: supported by plugin. See [RestfulBox-Dubbo](https://github.com/newhoo/RestfulBox-Dubbo). Support scanning and sending dubbo request.
   - [x] Solon: supported by plugin. See [RestfulBox-Solon](https://github.com/newhoo/RestfulBox-Solon). Support scanning and sending http request.
 - Protocol

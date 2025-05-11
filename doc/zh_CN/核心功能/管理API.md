@@ -21,7 +21,7 @@ API接口可分为多个类型：
 
 ## 添加和更新
 
-在 Request Client 的任意编辑器区域右键，点击【Save Api】。已存在 api 时会提示。操作完成后执行结果将更新到数据源。
+在选中 Request Client Tab 右键，点击【Save Api】。已存在 api 时会提示。操作完成后执行结果将更新到数据源。
 
 ![](images/286551721234228.png)
 
