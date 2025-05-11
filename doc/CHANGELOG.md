@@ -2,7 +2,7 @@
 
 [5.0 Upgrade Guide - 5.0升级指南](./zh_CN/快速入门/5.0升级指南.md)
 
-5.8.0
+## 5.8.0
 
 - Fix issues.
 - [API] Optimize interface analysis.
@@ -30,18 +30,22 @@
 图示：
 
 - 批量请求
+
 ![img.png](zh_CN/快速入门/images/1746933136948.png)
 
 - Cookie 管理
+
 ![img_1.png](zh_CN/快速入门/images/1746933292300.png)
 
 - 环境变量中的函数变量新增示例和调试功能
+
 ![img_2.png](zh_CN/核心功能/images/1746933316808.png)
 
 - 请求前置/后置脚本新增示例和同步入口
+
 ![img_2.png](zh_CN/核心功能/images/1746933335519.png)
 
-5.7.0
+## 5.7.0
 
 - [API] Optimize the recognition rules for scanning api return value. See  <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD/API%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A%E8%AF%86%E5%88%AB%E8%A7%84%E5%88%99.md#api-return-type">doc</a>
 - [API] Added a custom type description, see [Scanning API]
@@ -53,7 +57,7 @@
 - [API] 优化接口导出，增强OpenAPI和apifox导出
 - [API] 支持 Spring Cloud OpenFeign
 
-5.6.0
+## 5.6.0
 
 - [Global] Supports specifying alias for the current project, such as mapping shopping-app-copy to shopping-app
 - [API] New: supports openapi export.
@@ -69,7 +73,7 @@
 
 ![img.png](zh_CN/images/1740822716744.png)
 
-5.5.0
+## 5.5.0
 
 - [API] New: supports openapi export.
 - [ToolBox] New: Certificate analysis.
@@ -77,7 +81,7 @@
 - [API] 新增：支持 OPENAPI 导出
 - [工具箱] 新增：证书解析
 
-5.4.0
+## 5.4.0
 
 - [API] Fixed: scanning api linemarker navigation.
 - [API] New: Able to close built-in modules and customize toolbar buttons.
