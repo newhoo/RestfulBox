@@ -2,6 +2,16 @@
 
 [5.0 Upgrade Guide - 5.0升级指南](./zh_CN/快速入门/5.0升级指南.md)
 
+##  5.9.0
+
+- Fix issues.
+- [API] Optimize scanning api rule
+- [API] Optimize download file rule
+- 修复已知问题, 优化细节
+
+- [API] 优化接口识别
+- [API] 优化下载文件
+
 ## 5.8.0
 
 - Fix issues.
@@ -69,9 +79,9 @@
 - [API] 发送请求按钮新增右键菜单，支持发起并发请求
 - [运行配置] 新增分组模式，可灵活定义多套运行环境变量
 
-![img.png](zh_CN/images/1740823090146.png)
+![img.png](zh_CN/images/changelog/1740823090146.png)
 
-![img.png](zh_CN/images/1740822716744.png)
+![img.png](zh_CN/快速入门/images/runvariable.png)
 
 ## 5.5.0
 
