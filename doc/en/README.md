@@ -4,7 +4,7 @@
 
 This plugin is committed to enhancing development efficiency with useful features. Rich and complete features can greatly improve the efficiency of IDEA development.
 
-## Features ([5.0 Upgrade Guide](doc/zh_CN/快速入门/5.0升级指南.md))
+## Features ([6.0 Upgrade Guide](doc/zh_CN/快速入门/6.0升级指南.md))
 - [x] More supported jetbrains ides.
 - [x] Restful service automatic scanning and display.
   - Support searching service in native Search Everywhere. ( use: <kbd>Ctrl \\</kbd> )
@@ -13,7 +13,7 @@ This plugin is committed to enhancing development efficiency with useful feature
   - Service and Method jump to each other.
 - [x] Powerful request client:
   - Multi-tab: support displaying, sending multiple requests at the same time, sending concurrent request.
-  - Multi-protocol: support http by default.
+  - Multi-protocol: support http and sse by default.
   - Custom parameter format, support placeholder variable, formatted JSON.
   - Environment variable：define/manage/use/export/import, support preset function and script function.
   - Global header：can use with Environment, also support preset function and script function.
@@ -21,7 +21,6 @@ This plugin is committed to enhancing development efficiency with useful feature
   - Request script：support pre-request and post-script script.
   - Display request info like http packet, and save to log file.
 - [x] Language & Framework:
-  - Support services using local store by default.
   - Support Spring MVC and Jax-RS with java and kotlin in idea by default.
 - [x] Datasource: Support multiple data sources. Local/Cloud/Custom.
 - [x] Plugin extension: through this, you can try your great ideas.
@@ -40,6 +39,7 @@ This plugin is committed to enhancing development efficiency with useful feature
   - [x] Jax-Rs: supported by default from `3.3.0`. Support Java and Kotlin implement.
   - [x] Dubbo: supported by plugin. See [RestfulBox-Dubbo](https://github.com/newhoo/RestfulBox-Dubbo). Support scanning and sending dubbo request.
   - [x] Solon: supported by plugin. See [RestfulBox-Solon](https://github.com/newhoo/RestfulBox-Solon). Support scanning and sending http request.
+  - [x] K8s: supported by default from `6.0.0`. Support scanning k8s deployments.
 - Protocol
   - [x] HTTP/HTTPS: supported by default.
   - [x] DUBBO: see above.
@@ -334,7 +334,8 @@ req.body = JSON.stringify({ reqBody: 'Hello world!' });
 // request: see pre-request script comment
 //
 // response attributes
-// original:    org.apache.http.HttpResponse,   original http response, from http-client 4.4.
+// status:      java.lang.String,               response status. readonly.
+// headers:     java.util.Map<String, String>,  response headers. readonly. not available in batch mode by default.
 // body:        java.lang.String,               response body can be modified by post-request script.
 //
 // environment: java.util.Map<String, String>,  current environment, defined in the Environment setting, readonly.
@@ -460,9 +461,3 @@ If you find any problems with this plugin, please give me feedback. If it helps,
 
 > Note  
 > Please provide necessary information when you feedback: IDEA version, plugin version, exception content, recreation way(if can), desire, and etc.
-
-
-## Sponsor
-You can take me a cup of coffee as you want. Thanks!
-
-![pay](images/pay.png)

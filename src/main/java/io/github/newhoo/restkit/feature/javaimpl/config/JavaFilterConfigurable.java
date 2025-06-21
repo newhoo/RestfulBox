@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * JavaFilterConfigurable
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.3
  */
 public class JavaFilterConfigurable implements Configurable {

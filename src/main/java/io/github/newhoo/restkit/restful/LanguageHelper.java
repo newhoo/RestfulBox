@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * LanguageHelper
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.0
  */
 @NotProguard

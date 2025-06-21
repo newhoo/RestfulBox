@@ -4,7 +4,7 @@
 
 **RestfulBox**插件致力于提升开发效率，只有实用常用好用的功能，丰富且完善的功能极大地提高了使用IDE开发的效率。
 
-## 特性 ([5.0升级指南](doc/zh_CN/快速入门/5.0升级指南.md))
+## 特性 ([6.0升级指南](doc/zh_CN/快速入门/6.0升级指南.md))
 - [x] 支持更多的jetbrains产品，不仅仅是idea
 - [x] 接口管理：接口自动扫描、展示、跳转和导入导出
   - 原生 Search Everywhere 支持搜索嗽口 (<kbd>Ctrl \\</kbd> or <kbd>Ctrl Alt N</kbd>)
@@ -13,7 +13,7 @@
   - URL 和 Method 相互跳转
 - [x] 强大好用的请求工具：
   - 多标签：可同时展示、发起多个请求、发起并发请求
-  - 多协议：默认支持 http，可扩展支持 Dubbo 等
+  - 多协议：默认支持 http，支持SSE推送，可扩展支持 Dubbo 等
   - 自定义参数格式，支持占位符变量，自动格式化
   - 环境变量：支持变量使用、管理及迁移，提供内置函数和脚本函数
   - 全局请求头：支持和环境变量一起使用，提供内置函数和脚本函数
@@ -21,7 +21,6 @@
   - 请求脚本：支持前置/后置请求脚本
   - 请求响应信息展示报文格式，支持保存到日志文件
 - [x] 语言和框架：
-  - 默认支持存储接口到本地文件
   - idea默认支持 SpringMvc / OpenFeign / Jax-RS 体系接口 (Java and Kotlin)
 - [x] 数据源: 支持多种数据源存储数据，更安全更可控，可本地可云端同步可定制
 - [x] 插件扩展：提供多个扩展点，便于自定义需求的实现
@@ -42,6 +41,7 @@
   - [x] OpenFeign：从`5.7.0`开始默认支持，支持Java and Kotlin实现
   - [x] Dubbo：通过插件支持，见 [RestfulBox-Dubbo](https://github.com/newhoo/RestfulBox-Dubbo) ，支持扫描和发送请求
   - [x] Solon：通过插件支持，见 [RestfulBox-Solon](https://github.com/newhoo/RestfulBox-Solon) ，支持扫描和请求发送
+  - [x] K8s：从`6.0.0`开始默认支持，支持扫描项目中的 K8s 部署文件
 - 协议类型
   - [x] HTTP/HTTPS：默认支持
   - [x] DUBBO：同上
@@ -56,7 +56,7 @@
 - [CHANGELOG](doc/CHANGELOG.md)
 
 ## 关于插件
-该插件的所有功能源于我本人日常开发中的点点滴滴，持续维护，为爱发电。希望各位大佬支持一下，点亮小星星，同时也欢迎提供宝贵的建议。:star2:
+该插件的所有功能源于我本人日常开发中的点点滴滴，持续维护，为爱发电。请各位大佬支持一下，点亮小星星，同时也欢迎提供宝贵的建议。:star2:
 
 [Issues](https://github.com/newhoo/RestfulBox/issues) | [Email](mailto:dev2n@qq.com) | [Jetbrains评分](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 
@@ -67,4 +67,4 @@
 ## 支持作者
 你的支持是鼓励我前行的动力，非常感谢~
 
-![pay](doc/en/images/pay.png)
+![赞助](doc/en/images/pay.png)

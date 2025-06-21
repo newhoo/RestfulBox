@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * Certificate
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.1.2
  */
 @NotProguard

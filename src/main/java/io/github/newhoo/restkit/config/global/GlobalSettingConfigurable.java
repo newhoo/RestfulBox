@@ -13,7 +13,7 @@ import javax.swing.*;
 /**
  * CertificateConfigurable
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.1.2
  */
 public class GlobalSettingConfigurable implements Configurable {

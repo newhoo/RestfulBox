@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * provide module scope search way
  *
- * @author huzunrong
+ * @author newhoo
  */
 @NotProguard
 public abstract class BaseRequestResolver implements RequestResolver {

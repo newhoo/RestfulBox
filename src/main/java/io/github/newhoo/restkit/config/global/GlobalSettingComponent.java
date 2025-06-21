@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * GlobalSettingComponent
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.1.2
  */
 @State(name = "RESTKit_GlobalSetting", storages = {@Storage("RESTKit_GlobalSetting.xml")})

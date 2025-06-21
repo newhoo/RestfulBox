@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 /**
  * i18n
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0
  */
 public class RestBundle {

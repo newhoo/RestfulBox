@@ -3,7 +3,7 @@ package io.github.newhoo.restkit.common;
 /**
  * Constant
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 public class RestConstant {

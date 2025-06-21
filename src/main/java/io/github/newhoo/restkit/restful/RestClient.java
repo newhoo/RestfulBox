@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * rest client extension point
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.3
  */
 @NotProguard

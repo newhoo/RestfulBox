@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * TypeUtils
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.0
  */
 @NotProguard

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * JavaLanguageResolver, will work when Java enabled
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 public class JavaLanguageResolver implements LanguageResolver {

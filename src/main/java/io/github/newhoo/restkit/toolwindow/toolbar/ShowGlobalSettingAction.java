@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * ShowGlobalSettingAction
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.0
  */
 public class ShowGlobalSettingAction extends BaseAnAction implements DumbAware {

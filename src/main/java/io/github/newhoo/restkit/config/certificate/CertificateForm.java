@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author huzunrong
+ * @author newhoo
  * @since 2.1.2
  */
 public class CertificateForm extends JPanel {

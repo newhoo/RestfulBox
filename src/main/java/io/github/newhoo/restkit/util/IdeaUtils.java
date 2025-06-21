@@ -31,7 +31,7 @@ import java.awt.datatransfer.StringSelection;
 /**
  * IdeaUtil
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.0
  */
 @NotProguard

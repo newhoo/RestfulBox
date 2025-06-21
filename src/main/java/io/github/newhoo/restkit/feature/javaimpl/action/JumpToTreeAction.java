@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * JumpToTreeAction
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 public class JumpToTreeAction extends BaseAnAction {

@@ -23,7 +23,7 @@ import static io.github.newhoo.restkit.util.IdeaUtils.getEditorText;
 /**
  * ScriptEditDialog
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0
  */
 public class ScriptEditDialog extends DialogWrapper {

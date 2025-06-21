@@ -22,7 +22,7 @@ import static java.nio.file.StandardOpenOption.CREATE;
 /**
  * RestLog
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.0
  */
 public class FileUtils {

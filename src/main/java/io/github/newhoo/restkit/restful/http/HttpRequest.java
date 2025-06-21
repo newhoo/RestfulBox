@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 /**
  * http request
  *
- * @author huzunrong
+ * @author newhoo
  * @date 2022/3/12 3:08 PM
  * @since 2.0.3
  */

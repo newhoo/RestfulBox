@@ -63,7 +63,7 @@ import java.util.Set;
 /**
  * RestSearchEverywhereContributor
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.8
  */
 public class RestApiSearchEverywhereContributor implements WeightedSearchEverywhereContributor<RestItem> {

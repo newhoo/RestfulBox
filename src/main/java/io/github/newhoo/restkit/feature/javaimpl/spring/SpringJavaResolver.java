@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 /**
  * Spring api Java Resolver, will work when Java enabled
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 public class SpringJavaResolver extends BaseSpringResolver {

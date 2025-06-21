@@ -5,7 +5,7 @@ import com.intellij.util.messages.Topic;
 /**
  * RestParameterListener
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.8
  */
 public interface RestParameterListener {

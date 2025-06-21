@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * CertificateTableModel
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.1.2
  */
 @SuppressWarnings("all")

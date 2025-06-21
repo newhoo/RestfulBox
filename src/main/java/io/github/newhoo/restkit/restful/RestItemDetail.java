@@ -10,7 +10,7 @@ import javax.swing.*;
 /**
  * rest item detail extension point
  *
- * @author huzunrong
+ * @author newhoo
  * @since 3.0.0
  */
 @NotProguard

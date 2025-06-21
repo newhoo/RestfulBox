@@ -33,7 +33,7 @@ import static io.github.newhoo.restkit.common.RestConstant.HTTP_FILE_PREFIX;
 /**
  * SelectUploadFileAction
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.8
  */
 public class SelectUploadFileAction extends BaseAnAction {

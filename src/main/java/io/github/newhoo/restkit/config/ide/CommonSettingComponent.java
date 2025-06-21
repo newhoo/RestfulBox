@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * RequestSettingComponent
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 @State(name = "RESTKit_CommonSetting", storages = {@Storage("restkit/RESTKit_CommonSetting.xml")})

@@ -40,7 +40,7 @@ import static io.github.newhoo.restkit.feature.javaimpl.spring.SpringRequestMeth
 /**
  * Spring api Kotlin Resolver, will work when Kotlin enabled
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 public class SpringKotlinResolver extends BaseSpringResolver {

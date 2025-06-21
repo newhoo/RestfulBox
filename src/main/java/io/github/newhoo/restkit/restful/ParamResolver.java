@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * resolver params from psiElement
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.2
  */
 @NotProguard

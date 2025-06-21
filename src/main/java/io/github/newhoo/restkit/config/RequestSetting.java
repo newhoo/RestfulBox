@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * common setting
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 @NotProguard

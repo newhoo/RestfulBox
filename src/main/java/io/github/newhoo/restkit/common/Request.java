@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Request
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 @NotProguard

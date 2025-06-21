@@ -31,7 +31,7 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 /**
  * 本地缓存实现
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.1
  */
 public class LocalRequestResolver implements RequestResolver {

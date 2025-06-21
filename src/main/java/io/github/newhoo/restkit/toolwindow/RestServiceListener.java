@@ -6,7 +6,7 @@ import io.github.newhoo.restkit.common.RestItem;
 /**
  * RestServiceListener
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.8
  */
 public interface RestServiceListener {

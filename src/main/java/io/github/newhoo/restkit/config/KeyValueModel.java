@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * KeyValueTableModel
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0
  */
 public class KeyValueModel extends ListTableModel<BKV> {

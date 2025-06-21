@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * EnvModel
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.8
  */
 @Data

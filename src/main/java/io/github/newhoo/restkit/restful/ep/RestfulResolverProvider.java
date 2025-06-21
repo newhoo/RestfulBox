@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * RestfulResolverProvider
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 @NotProguard

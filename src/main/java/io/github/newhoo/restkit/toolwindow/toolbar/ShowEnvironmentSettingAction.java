@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * ShowEnvironmentSettingAction
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 public class ShowEnvironmentSettingAction extends BaseAnAction implements DumbAware {

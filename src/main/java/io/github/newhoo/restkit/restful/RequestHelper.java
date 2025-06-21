@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 /**
  * 服务相关工具类
  *
- * @author huzunrong
+ * @author newhoo
  */
 @NotProguard
 public class RequestHelper {

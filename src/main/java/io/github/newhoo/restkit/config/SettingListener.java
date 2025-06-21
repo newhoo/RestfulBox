@@ -5,7 +5,7 @@ import com.intellij.util.messages.Topic;
 /**
  * EnvUpdateListener
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.0
  */
 public interface SettingListener {

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * ShowRequestSettingAction
  *
- * @author huzunrong
+ * @author newhoo
  * @since 3.0.3
  */
 public class ShowRequestSettingAction extends BaseAnAction implements DumbAware {

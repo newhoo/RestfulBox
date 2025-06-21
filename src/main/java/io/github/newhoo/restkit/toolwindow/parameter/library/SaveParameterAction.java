@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * SaveParameterAction
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.8
  */
 public class SaveParameterAction extends BaseAnAction implements CustomComponentAction {

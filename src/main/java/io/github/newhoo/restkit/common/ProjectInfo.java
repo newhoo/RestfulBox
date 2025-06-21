@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * ProjectInfo
  *
- * @author huzunrong
+ * @author newhoo
  * @since 3.0.1
  */
 @NotProguard

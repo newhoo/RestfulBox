@@ -22,7 +22,7 @@ import java.nio.file.Paths;
 /**
  * open local api store file in editor
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.2
  */
 public class OpenLocalApiFileAction extends BaseAnAction implements DumbAware {

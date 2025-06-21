@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * PsiClassHelper in Java
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 public class PsiClassHelper {

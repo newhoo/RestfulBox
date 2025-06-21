@@ -47,7 +47,7 @@ import static io.github.newhoo.restkit.feature.javaimpl.spring.SpringRequestPara
 /**
  * Base spring resolver for SpringRequestResolver in Java and kotlin
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 public abstract class BaseSpringResolver extends BaseRequestResolver implements ParamResolver {

@@ -12,7 +12,7 @@ import java.util.List;
  * <p>
  * ToString(): Read access is allowed from inside read-action (or EDT) only (see com.intellij.openapi.application.Application.runReadAction())
  *
- * @author huzunrong
+ * @author newhoo
  */
 @NotProguard
 @Getter

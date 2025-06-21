@@ -38,7 +38,7 @@ import static io.github.newhoo.restkit.common.RestConstant.DATA_SOURCE_IDE;
 /**
  * ImportApiAction
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.1
  */
 public class ImportApiAction extends BaseAnAction {

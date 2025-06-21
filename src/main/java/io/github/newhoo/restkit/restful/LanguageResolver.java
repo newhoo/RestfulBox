@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * resolver for some operations associated with language
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.1
  */
 @NotProguard

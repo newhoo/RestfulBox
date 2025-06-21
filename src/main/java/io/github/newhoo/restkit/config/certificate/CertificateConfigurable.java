@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * CertificateConfigurable
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.1.2
  */
 public class CertificateConfigurable implements Configurable {

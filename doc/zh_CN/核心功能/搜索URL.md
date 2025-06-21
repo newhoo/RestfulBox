@@ -22,7 +22,7 @@
 
 在 search everywhere 中选中具体的 URL 后，按 `Option` 或 `Alt` 可跳转到 api tree 中对应的列表项。
 
-## Service tree支持idea自身的输入搜索
+## API tree支持idea自身的输入搜索
 
 当焦点在RestfulBox窗口中，直接输入关键词
 

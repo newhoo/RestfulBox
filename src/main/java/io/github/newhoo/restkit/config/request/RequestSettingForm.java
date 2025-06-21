@@ -71,7 +71,7 @@ import static java.nio.file.StandardOpenOption.CREATE;
 /**
  * MultiSettingForm
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0
  */
 public class RequestSettingForm {

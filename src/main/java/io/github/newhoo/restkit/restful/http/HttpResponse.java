@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 /**
  * http response
  *
- * @author huzunrong
+ * @author newhoo
  * @date 2022/3/12 3:10 PM
  * @since 2.0.3
  */

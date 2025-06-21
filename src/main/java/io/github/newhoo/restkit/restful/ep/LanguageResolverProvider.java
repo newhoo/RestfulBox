@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * LanguageResolverProvider
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.1
  */
 @NotProguard

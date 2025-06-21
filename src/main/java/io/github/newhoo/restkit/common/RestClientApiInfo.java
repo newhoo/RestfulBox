@@ -3,7 +3,7 @@ package io.github.newhoo.restkit.common;
 import lombok.Data;
 
 /**
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.8
  */
 @NotProguard

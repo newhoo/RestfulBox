@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject;
 /**
  * KotlinLanguageResolver, will work when Kotlin enabled
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 public class KotlinLanguageResolver implements LanguageResolver {

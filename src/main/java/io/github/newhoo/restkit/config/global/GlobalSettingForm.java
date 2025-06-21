@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.util.Arrays;
 
 /**
- * @author huzunrong
+ * @author newhoo
  * @since 2.1.2
  */
 public class GlobalSettingForm {

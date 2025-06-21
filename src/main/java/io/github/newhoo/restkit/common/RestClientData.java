@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * rest client info
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 @NotProguard

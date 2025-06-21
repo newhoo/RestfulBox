@@ -1,6 +1,25 @@
 # CHANGELOG
 
-[5.0 Upgrade Guide - 5.0升级指南](./zh_CN/快速入门/5.0升级指南.md)
+[6.0 Upgrade Guide - 6.0升级指南](./zh_CN/快速入门/6.0升级指南.md)
+
+## 6.0.0
+
+- \[API] 重构扫描接口，优化扫描配置及性能
+- \[API] 新增支持扫描K8s部署文件
+- \[API] 新增支持仅同步已选择的接口到数据源
+- \[API] HTTP请求支持 SSE 流式输出
+- \[API] HTTP请求支持添加重名请求头
+- \[API] 请求后置脚本新增属性`response.headers`
+- \[命令中心] 新增内置变量 `{{$projectName}}`, `{{$projectPath}}`
+
+- \[API] Reconstruct the scanning api
+- \[API] Added support for scanning K8s deployment files
+- \[API] Added support for syncing selected apis
+- \[API] Added support for HTTP SSE request
+- \[API] Added support for HTTP headers with same keys
+- \[API] Added attr `response.headers` for post-request script
+- \[Command] Added preset variables: `{{$projectName}}`, `{{$projectPath}}`
+
 
 ##  5.9.0
 

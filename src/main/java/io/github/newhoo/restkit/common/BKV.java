@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 /**
  * Boolean Key Value
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.8
  */
 @NotProguard

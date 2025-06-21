@@ -20,7 +20,7 @@ import static io.github.newhoo.restkit.common.RestConstant.HTTP_DOWNLOAD_FILEPAT
 /**
  * ShowDownloadFileAction
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.11
  */
 public class ShowDownloadFileAction extends BaseAnAction {

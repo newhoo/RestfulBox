@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.swing.*;
 
 /**
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.3
  */
 public class JavaFilterForm extends JPanel {

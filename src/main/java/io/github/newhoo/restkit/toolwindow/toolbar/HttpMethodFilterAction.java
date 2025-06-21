@@ -31,7 +31,7 @@ import java.util.Set;
 /**
  * HttpMethodFilterAction
  *
- * @author huzunrong
+ * @author newhoo
  * @see com.intellij.ide.actions.bigPopup.ShowFilterAction
  */
 public class HttpMethodFilterAction extends BaseToggleAction {

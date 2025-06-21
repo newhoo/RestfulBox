@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * open post-request script in editor
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.1
  */
 public class OpenPostScriptAction extends OpenPreScriptAction {

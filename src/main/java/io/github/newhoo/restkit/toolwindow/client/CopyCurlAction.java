@@ -44,7 +44,7 @@ import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
 /**
  * CopyCurlAction
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.1
  */
 public class CopyCurlAction extends BaseAnAction {

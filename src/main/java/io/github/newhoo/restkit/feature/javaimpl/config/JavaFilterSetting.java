@@ -16,7 +16,7 @@ import static io.github.newhoo.restkit.common.RestConstant.DATA_SOURCE_IDE;
 /**
  * 过滤参数
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.3 update 3.2.1
  */
 @Data

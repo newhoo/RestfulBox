@@ -50,7 +50,7 @@ import static io.github.newhoo.restkit.common.RestConstant.PROTOCOL_HTTP;
 /**
  * http client
  *
- * @author huzunrong
+ * @author newhoo
  * @date 2022/3/12 2:12 PM
  * @since 2.0.3
  */

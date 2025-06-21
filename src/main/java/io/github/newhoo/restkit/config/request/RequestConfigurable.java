@@ -19,7 +19,7 @@ import static io.github.newhoo.restkit.config.SettingListener.ENV_UPDATE;
 /**
  * RequestConfigurable
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0
  */
 public class RequestConfigurable implements Configurable {

@@ -27,7 +27,7 @@ import java.util.Objects;
 /**
  * open pre-request script in editor
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.1
  */
 public class OpenPreScriptAction extends BaseAnAction implements DumbAware {

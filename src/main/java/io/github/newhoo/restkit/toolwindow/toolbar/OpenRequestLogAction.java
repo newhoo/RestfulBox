@@ -22,7 +22,7 @@ import java.nio.file.Paths;
 /**
  * open request log in editor
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.1
  */
 public class OpenRequestLogAction extends BaseAnAction implements DumbAware {

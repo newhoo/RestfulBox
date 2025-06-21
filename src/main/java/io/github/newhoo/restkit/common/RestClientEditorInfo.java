@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * tree editor info
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.8
  */
 @NotProguard

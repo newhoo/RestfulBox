@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * PsiAnnotationHelper in Java
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.0
  */
 public class PsiAnnotationHelper {

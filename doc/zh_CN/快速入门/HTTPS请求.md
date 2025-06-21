@@ -17,7 +17,7 @@ curl -X GET https://www.yourdomain.com/server-api/health -k
 `baseUrl`中以`https://`开头，其他配置如下。
 
 #### 证书全局管理
-如图。双击单元格编辑内容；选中【PFX file】单元格，右键双击可选择文件。
+如图。双击单元格编辑内容；选中【PFX file】单元格，右键双击可选择文件，一般扩展名为`.p12`。
 
 ![](images/553845514232195.png)
 

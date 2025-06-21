@@ -7,7 +7,7 @@ import io.github.newhoo.restkit.restful.RestItemDetail;
 /**
  * RestItemDetailProvider
  *
- * @author huzunrong
+ * @author newhoo
  * @since 3.0.0
  */
 @NotProguard

@@ -26,7 +26,7 @@ import static io.github.newhoo.restkit.common.RestConstant.EDITOR_FILENAME_PREFI
 /**
  * 利用监视动作提供参数库操作
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.8
  */
 public class ParameterLibraryActionProvider implements InspectionWidgetActionProvider {

@@ -17,7 +17,7 @@ import java.util.Optional;
 /**
  * ViewDocumentAction
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.1
  */
 public class ViewDocumentAction extends BaseAnAction {

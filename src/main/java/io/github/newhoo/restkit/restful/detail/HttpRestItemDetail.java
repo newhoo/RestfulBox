@@ -19,7 +19,7 @@ import static io.github.newhoo.restkit.common.ToolkitIcons.UNDEFINED;
 /**
  * http restItm detail
  *
- * @author huzunrong
+ * @author newhoo
  * @since 3.0.0
  */
 public class HttpRestItemDetail implements RestItemDetail {

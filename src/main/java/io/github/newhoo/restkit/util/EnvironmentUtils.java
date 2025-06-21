@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * EnvironmentUtils
  *
- * @author huzunrong
+ * @author newhoo
  * @since 1.0.0
  */
 public class EnvironmentUtils {

@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 /**
  * SupportFrameworkFilterAction
  *
- * @author huzunrong
+ * @author newhoo
  * @see com.intellij.ide.actions.bigPopup.ShowFilterAction
  */
 public class SupportFrameworkFilterAction extends BaseToggleAction {

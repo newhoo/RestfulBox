@@ -7,7 +7,7 @@ import io.github.newhoo.restkit.restful.RestClient;
 /**
  * RestClientProvider
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.3
  */
 @NotProguard

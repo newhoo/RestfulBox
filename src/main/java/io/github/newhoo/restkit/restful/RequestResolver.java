@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * resolve restful apis in project
  *
- * @author huzunrong
+ * @author newhoo
  * @since 2.0.1
  */
 @NotProguard

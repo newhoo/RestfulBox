@@ -63,7 +63,7 @@ import static javax.swing.JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT;
 /**
  * ShowParameterAction
  *
- * @author huzunrong
+ * @author newhoo
  * @see com.intellij.openapi.wm.impl.welcomeScreen.RecentProjectPanel
  * @since 1.0.8
  */
