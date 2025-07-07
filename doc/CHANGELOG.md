@@ -2,15 +2,19 @@
 
 [6.0 Upgrade Guide - 6.0升级指南](./zh_CN/快速入门/6.0升级指南.md)
 
-## 6.0.0
+## 6.1.0
 
-- \[API] 重构扫描接口，优化扫描配置及性能
-- \[API] 新增支持扫描K8s部署文件
-- \[API] 新增支持仅同步已选择的接口到数据源
-- \[API] HTTP请求支持 SSE 流式输出
-- \[API] HTTP请求支持添加重名请求头
-- \[API] 请求后置脚本新增属性`response.headers`
-- \[命令中心] 新增内置变量 `{{$projectName}}`, `{{$projectPath}}`
+- \[API] Reconstruct api filter. Support filter by protocol, method,tag and keywords.
+- \[API] Update api search Everywhere. Support custom commands.
+- \[API] Api right-click menu supports api-overview and copy-url in api linemarker and method.
+- \[Project-Switcher] Update search Everywhere. Support custom commands.
+<br/><br/>
+- \[API] 重构接口过滤，支持按协议、方法、标签、关键词过滤
+- \[API] 优化随处搜索，适配 IDE 自定义搜索命令，新增多类搜索指令
+- \[API] 导航图标、接口源码右键新增接口概览、复制URL等操作
+- \[切换项目] 优化随处搜索，自定义命令支持在资源管理器中打开所选项目、支持在浏览器中打开 Git 项目
+
+## 6.0.0
 
 - \[API] Reconstruct the scanning api
 - \[API] Added support for scanning K8s deployment files
@@ -19,7 +23,14 @@
 - \[API] Added support for HTTP headers with same keys
 - \[API] Added attr `response.headers` for post-request script
 - \[Command] Added preset variables: `{{$projectName}}`, `{{$projectPath}}`
-
+<br/><br/>
+- \[API] 重构扫描接口，优化扫描配置及性能
+- \[API] 新增支持扫描K8s部署文件
+- \[API] 新增支持仅同步已选择的接口到数据源
+- \[API] HTTP请求支持 SSE 流式输出
+- \[API] HTTP请求支持添加重名请求头
+- \[API] 请求后置脚本新增属性`response.headers`
+- \[命令中心] 新增内置变量 `{{$projectName}}`, `{{$projectPath}}`
 
 ##  5.9.0
 
@@ -139,7 +150,7 @@
 - New: Support sending concurrent requests. [Request Tab right-click menu]
 - New: HMAC and AES tools. Refactoring Toolbox pages.
 
-- 修复：接口标记保存、打开下载文件
+- 修复：接口标签保存、打开下载文件
 - 新增：终于能够取消正在发送中的HTTP请求
 - 新增：支持发送并发请求【入口：请求Tab右键菜单】
 - 新增：HMAC 和 AES加解密工具，重构工具箱页面
@@ -167,7 +178,7 @@
 - Fixed known issues.
 
 
-- 新增: 随处搜索支持标记过滤
+- 新增: 随处搜索支持标签过滤
 - 新增：树节点支持同时展示名称和 URL，在 Tool Window 设置菜单中选择展示方式
 - 新增：HTTP 请求支持设置全局 User-Agent（在 Registry 中设置）
 - 优化Toolbar：增加分屏、浮动模式、双击模式等设置，移除扫描框架过滤器
@@ -202,7 +213,7 @@
 
 
 - 全面重构，优化使用体验
-- 新增：接口标记支持，可作为收藏，亦支持过滤
+- 新增：接口标签支持，可作为收藏，亦支持过滤
 - 新增：运行环境变量管理，支持Java和Golang
 - 新增：扫描接口URL中的未知字符串支持自定义替换规则
 - 新增：接口导入导出（Markdown/OpenAPI/Postman/Apifox)

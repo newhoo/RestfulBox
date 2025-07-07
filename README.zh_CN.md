@@ -7,7 +7,7 @@
 ## 特性 ([6.0升级指南](doc/zh_CN/快速入门/6.0升级指南.md))
 - [x] 支持更多的jetbrains产品，不仅仅是idea
 - [x] 接口管理：接口自动扫描、展示、跳转和导入导出
-  - 原生 Search Everywhere 支持搜索嗽口 (<kbd>Ctrl \\</kbd> or <kbd>Ctrl Alt N</kbd>)
+  - 原生 Search Everywhere 支持搜索嗽口 (<kbd>Ctrl \\</kbd>)
   - 跨IDE跨项目同时浏览所有接口
   - 窗口显示多层级接口树
   - URL 和 Method 相互跳转
@@ -56,13 +56,14 @@
 - [CHANGELOG](doc/CHANGELOG.md)
 
 ## 关于插件
-该插件的所有功能源于我本人日常开发中的点点滴滴，持续维护，为爱发电。请各位大佬支持一下，点亮小星星，同时也欢迎提供宝贵的建议。:star2:
+该插件的所有功能源于我本人日常开发中的点点滴滴，持续维护，为爱发电。望各位大佬支持一下，点亮小星星，同时也欢迎提供宝贵的建议。:star2:
 
 [Issues](https://github.com/newhoo/RestfulBox/issues) | [Email](mailto:dev2n@qq.com) | [Jetbrains评分](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 
 > 注意  
 > 反馈时请务必附上必要信息：Idea版本、插件版本、异常内容、复现方式、诉求等。
 
+仓库源码已更新到 4.0，出于某些原因暂时不会开源当前最新版本源码，请放心使用。
 
 ## 支持作者
 你的支持是鼓励我前行的动力，非常感谢~
