@@ -143,9 +143,42 @@ public class UserInfo {
 }
 ```
 
+### 接口入参
+
+_从`6.2.0`支持, 已适配 SpringMVC, 支持映射RequestBody参数_
+
+1. 在方法文档注释中存在tag`@param`，则会尝试解析 `@param` 的值作为类型，如下示例
+2. 参数本身的返回类型
+
+`@param`示例，如`com.example.bean.ListQuery`支持以下两种格式（Kotlin请使用**格式2**）：
+
+- 示例 格式1:
+
+```java
+/**
+ * param中解析参数类型
+ *
+ * @param user {@link ListQuery} 用户信息
+ */
+@RequestMapping(method = {RequestMethod.POST})
+public R addUser(@RequestBody String user) {}
+```
+
+- 示例 格式2:
+
+```java
+/**
+ * param中解析参数类型
+ *
+ * @param user @com.example.bean.ListQuery 用户信息
+ */
+@RequestMapping(method = {RequestMethod.POST})
+public R addUser(@RequestBody String user) {}
+```
+
 ### 接口返回值
 
-1. 在方法文档注释中存在tag`@return`，且方法返回`java.lang.Object`类型；或者约定使用`use`关键词，则会尝试解析 `@return` 的值作为类型，如下示例
+1. 在方法文档注释中存在tag`@return`，则会尝试解析 `@return` 的值作为类型，如下示例
 2. 方法本身的返回类型
 
 `@return`示例，如`R<PageRespVo<User>>`支持以下两种格式（Kotlin请使用**格式2**）：
@@ -154,36 +187,22 @@ public class UserInfo {
 
 ```java
 /**
- * 方法返回`java.lang.Object`类型，从@return中解析返回类型
+ * 从@return中解析返回类型
  *
  * @return {@link R<PageRespVo<User>>}
  */
 public Object get(@PathVariable BigInteger docId);
-
-/**
- * 方法不返回`java.lang.Object`类型，约定使用use，从@return中解析返回类型
- *
- * @return use {@link R<PageRespVo<User>>}
- */
-public Map get(@PathVariable BigInteger docId);
 ```
 
 - 示例 格式2:
 
 ```java
 /**
- * 方法返回`java.lang.Object`类型，从@return中解析返回类型
+ * 从@return中解析返回类型
  *
- * @return com.example.bean.R#com.example.bean.PageRespVo#com.example.bean.User
+ * @return @com.example.bean.R#com.example.bean.PageRespVo#com.example.bean.User
  */
 public Object get(@PathVariable BigInteger docId);
-
-/**
- * 方法不返回`java.lang.Object`类型，约定使用use，从@return中解析返回类型
- *
- * @return use com.example.bean.R#com.example.bean.PageRespVo#com.example.bean.User
- */
-public Map get(@PathVariable BigInteger docId);
 ```
 
 ### 接口标签
@@ -210,7 +229,7 @@ public Map get(@PathVariable BigInteger docId);
 
 类名和注解名配置规则：
 - 在表格上填写**类名或注解名**，勾选启用则生效
-- 若按类名过滤，则只需填写类名；
+- 若按类名过滤，则只需填写全路径类名，支持 `*` 匹配包下所有类（如: `org.springdoc.webmvc.ui.*`）；
 - 当填写注解时，**注解字段名可选填**。**未填写则以包含该注解进行过滤**，填写条件如下：
   - 等值匹配(`key=value`): 从注解中取出的key字段值必须等于该value, 非默认值
   - 不相等匹配(`key!=value`): 从注解中取出的key字段值必须不等于该value, 非默认值
