@@ -2,13 +2,28 @@
 
 [6.0 Upgrade Guide - 6.0升级指南](./zh_CN/快速入门/6.0升级指南.md)
 
+## 6.2.0
+
+- \[API] Add "Filter out non-HTTP apis" option for api export
+- \[API] Optimize api export order for OpenAPI
+- \[API] Add module filter and persistent conditions for api tree
+- \[API] Supports filtering java apis by package name
+- \[API] Supports specifying custom parameter type for java apis. See: <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%2FJava%E6%8E%A5%E5%8F%A3%E6%89%AB%E6%8F%8F%E9%85%8D%E7%BD%AE.md">Java Scanning API</a>
+  <br/><br/>
+- \[API] 导出接口新增仅导出HTTP接口选项
+- \[API] 导出接口优化OpenAPI导出顺序
+- \[API] 接口树新增按模块过滤, 过滤条件持久化
+- \[API] Java过滤接口支持按包名过滤
+- \[API] Java扫描接口入参支持指定参数类型, 见文档: <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%2FJava%E6%8E%A5%E5%8F%A3%E6%89%AB%E6%8F%8F%E9%85%8D%E7%BD%AE.md">Java接口扫描配置</a>
+
+
 ## 6.1.0
 
 - \[API] Reconstruct api filter. Support filter by protocol, method,tag and keywords.
 - \[API] Update api search Everywhere. Support custom commands.
 - \[API] Api right-click menu supports api-overview and copy-url in api linemarker and method.
 - \[Project-Switcher] Update search Everywhere. Support custom commands.
-<br/><br/>
+  <br/><br/>
 - \[API] 重构接口过滤，支持按协议、方法、标签、关键词过滤
 - \[API] 优化随处搜索，适配 IDE 自定义搜索命令，新增多类搜索指令
 - \[API] 导航图标、接口源码右键新增接口概览、复制URL等操作
@@ -23,7 +38,7 @@
 - \[API] Added support for HTTP headers with same keys
 - \[API] Added attr `response.headers` for post-request script
 - \[Command] Added preset variables: `{{$projectName}}`, `{{$projectPath}}`
-<br/><br/>
+  <br/><br/>
 - \[API] 重构扫描接口，优化扫描配置及性能
 - \[API] 新增支持扫描K8s部署文件
 - \[API] 新增支持仅同步已选择的接口到数据源
