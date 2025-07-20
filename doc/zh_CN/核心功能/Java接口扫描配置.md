@@ -104,17 +104,17 @@ _优先级从高到低_
 ```java
 @Data
 public class User {
-    /**
-     * 添加时间
-     */
-    @com.fasterxml.jackson.annotation.JsonProperty("create_time")
-    private LocalDateTime createTime;
+  /**
+   * 添加时间
+   */
+  @com.fasterxml.jackson.annotation.JsonProperty("create_time")
+  private LocalDateTime createTime;
 
-    /**
-     * 用户名，没配置不生效
-     */
-    @com.alibaba.fastjson.annotation.JSONField(name = "user_name")
-    private String username;
+  /**
+   * 用户名，没配置不生效
+   */
+  @com.alibaba.fastjson.annotation.JSONField(name = "user_name")
+  private String username;
 }
 ```
 
@@ -135,74 +135,12 @@ _优先级从高到低_
 ```java
 @Data
 public class UserInfo {
-    /**
-     * 描述
-     */
-    @io.swagger.v3.oas.annotations.media.Schema(description = "主键") // 优先级最高
-    private String id;
+  /**
+   * 描述
+   */
+  @io.swagger.v3.oas.annotations.media.Schema(description = "主键") // 优先级最高
+  private String id;
 }
-```
-
-### 接口入参
-
-_从`6.2.0`支持, 已适配 SpringMVC, 支持映射RequestBody参数_
-
-1. 在方法文档注释中存在tag`@param`，则会尝试解析 `@param` 的值作为类型，如下示例
-2. 参数本身的返回类型
-
-`@param`示例，如`com.example.bean.ListQuery`支持以下两种格式（Kotlin请使用**格式2**）：
-
-- 示例 格式1:
-
-```java
-/**
- * param中解析参数类型
- *
- * @param user {@link ListQuery} 用户信息
- */
-@RequestMapping(method = {RequestMethod.POST})
-public R addUser(@RequestBody String user) {}
-```
-
-- 示例 格式2:
-
-```java
-/**
- * param中解析参数类型
- *
- * @param user @com.example.bean.ListQuery 用户信息
- */
-@RequestMapping(method = {RequestMethod.POST})
-public R addUser(@RequestBody String user) {}
-```
-
-### 接口返回值
-
-1. 在方法文档注释中存在tag`@return`，则会尝试解析 `@return` 的值作为类型，如下示例
-2. 方法本身的返回类型
-
-`@return`示例，如`R<PageRespVo<User>>`支持以下两种格式（Kotlin请使用**格式2**）：
-
-- 示例 格式1:
-
-```java
-/**
- * 从@return中解析返回类型
- *
- * @return {@link R<PageRespVo<User>>}
- */
-public Object get(@PathVariable BigInteger docId);
-```
-
-- 示例 格式2:
-
-```java
-/**
- * 从@return中解析返回类型
- *
- * @return @com.example.bean.R#com.example.bean.PageRespVo#com.example.bean.User
- */
-public Object get(@PathVariable BigInteger docId);
 ```
 
 ### 接口标签
@@ -344,6 +282,69 @@ public class User {
 ```
 
 ## 四、类型规则
+
+### 接口入参
+
+_从`6.2.0`支持, 已适配 SpringMVC, 支持映射RequestBody参数_
+
+1. 在方法文档注释中存在tag`@param`，则会尝试解析 `@param` 的值作为类型，如下示例
+2. 参数本身的返回类型
+
+`@param`示例，如`com.example.bean.ListQuery`支持以下两种格式（Kotlin请使用**格式2**）：
+
+- 示例 格式1:
+
+```java
+/**
+ * param中解析参数类型
+ *
+ * @param user {@link ListQuery} 用户信息
+ */
+@RequestMapping(method = {RequestMethod.POST})
+public R addUser(@RequestBody String user) {}
+```
+
+- 示例 格式2:
+
+```java
+/**
+ * param中解析参数类型
+ *
+ * @param user @com.example.bean.ListQuery 用户信息
+ */
+@RequestMapping(method = {RequestMethod.POST})
+public R addUser(@RequestBody String user) {}
+```
+
+### 接口返回值
+
+1. 在方法文档注释中存在tag`@return`，则会尝试解析 `@return` 的值作为类型，如下示例
+2. 方法本身的返回类型
+
+`@return`示例，如`R<PageRespVo<User>>`支持以下两种格式（Kotlin请使用**格式2**）：
+
+- 示例 格式1:
+
+```java
+/**
+ * 从@return中解析返回类型
+ *
+ * @return {@link R<PageRespVo<User>>}
+ */
+public Object get(@PathVariable BigInteger docId);
+```
+
+- 示例 格式2:
+
+```java
+/**
+ * 从@return中解析返回类型
+ *
+ * @return @com.example.bean.R#com.example.bean.PageRespVo#com.example.bean.User
+ */
+public Object get(@PathVariable BigInteger docId);
+```
+
 
 ### 自定义类型及字段信息
 
