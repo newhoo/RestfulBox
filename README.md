@@ -6,12 +6,12 @@ This plugin is committed to enhancing development efficiency with useful feature
 
 ## Features ([6.0 Upgrade Guide](doc/zh_CN/快速入门/6.0升级指南.md))
 - [x] More supported jetbrains ides.
-- [x] Restful service automatic scanning and display.
+- [x] Restful apis automatic scanning and display.
   - Support searching service in native Search Everywhere. ( use: <kbd>Ctrl \\</kbd> )
   - View services in different IDE and project.
   - Show restful service structure in tool window.
   - Service and Method jump to each other.
-- [x] Powerful request client:
+- [x] Request client:
   - Multi-tab: support displaying, sending multiple requests at the same time, sending concurrent request.
   - Multi-protocol: support http and sse by default.
   - Custom parameter format, support placeholder variable, formatted JSON.

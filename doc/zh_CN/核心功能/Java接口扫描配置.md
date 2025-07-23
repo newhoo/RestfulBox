@@ -104,17 +104,17 @@ _优先级从高到低_
 ```java
 @Data
 public class User {
-  /**
-   * 添加时间
-   */
-  @com.fasterxml.jackson.annotation.JsonProperty("create_time")
-  private LocalDateTime createTime;
+    /**
+     * 添加时间
+     */
+    @com.fasterxml.jackson.annotation.JsonProperty("create_time")
+    private LocalDateTime createTime;
 
-  /**
-   * 用户名，没配置不生效
-   */
-  @com.alibaba.fastjson.annotation.JSONField(name = "user_name")
-  private String username;
+    /**
+     * 用户名，没配置不生效
+     */
+    @com.alibaba.fastjson.annotation.JSONField(name = "user_name")
+    private String username;
 }
 ```
 
@@ -135,11 +135,11 @@ _优先级从高到低_
 ```java
 @Data
 public class UserInfo {
-  /**
-   * 描述
-   */
-  @io.swagger.v3.oas.annotations.media.Schema(description = "主键") // 优先级最高
-  private String id;
+    /**
+     * 描述
+     */
+    @io.swagger.v3.oas.annotations.media.Schema(description = "主键") // 优先级最高
+    private String id;
 }
 ```
 
