@@ -14,7 +14,6 @@ This plugin is committed to enhancing development efficiency with useful feature
 - [x] Request client:
   - Multi-tab: support displaying, sending multiple requests at the same time, sending concurrent request.
   - Multi-protocol: support http and sse by default.
-  - Custom parameter format, support placeholder variable, formatted JSON.
   - Environment variable：define/manage/use/export/import, support preset function and script function.
   - Global header：can use with Environment, also support preset function and script function.
   - Parameter library：support display/save/delete in Headers/Params/Body tab.
@@ -26,7 +25,6 @@ This plugin is committed to enhancing development efficiency with useful feature
 - [x] Plugin extension: through this, you can try your great ideas.
 - [X] Have a convenient toolbox (Time conversion, Encryption & Decryption and etc.)
 - [X] Original command center, support rich custom commands.
-- [X] Support recognizing and opening git remote URL automatically.
 - [X] Support finding and opening of remote git repositories automatically.
 - [X] Support manage runtime environment variables for IDEA/Goland/Android Studio.
 - [X] Extra: auto execute mysql explain: <a href="https://github.com/newhoo/mysql-explain">MySQL Explain</a>

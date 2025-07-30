@@ -2,6 +2,18 @@
 
 [6.0 Upgrade Guide - 6.0升级指南](./zh_CN/快速入门/6.0升级指南.md)
 
+## 6.3.0
+
+- Fixed bugs
+- \[API] Optimize batch concurrent request
+- \[API] Add editor tab mode for api and request client panel
+- \[Switch Project] Optimize the order of open projects.
+<br/><br/>
+- 修复一些已知问题
+- \[API] 优化并发请求，轻松测试接口
+- \[API] 接口和请求客户端新增编辑器标签页模式
+- \[切换项目] 优化已打开项目的顺序，将上次访问的项目放第一位
+
 ## 6.2.0
 
 - \[API] Add "Filter out non-HTTP apis" option for api export
@@ -257,8 +269,8 @@
 关联文档：
 - [工具箱](zh_CN/核心功能/工具箱.md)
 - [命令中心](zh_CN/核心功能/命令中心.md)
-- [Git识别](zh_CN/核心功能/Git识别.md)
-- [Jvm参数管理](zh_CN/核心功能/运行参数管理)
+- ~~[Git识别](#)~~ (`6.x` 中已迁移到项目切换功能中)
+- [Jvm参数管理](zh_CN/核心功能/运行配置管理)
 
 ## 3.4.1
 
