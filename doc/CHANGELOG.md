@@ -2,6 +2,14 @@
 
 [6.0 Upgrade Guide - 6.0升级指南](./zh_CN/快速入门/6.0升级指南.md)
 
+## 6.4.0
+
+- Fixed bugs
+- \[Toolbox] Support favorite template and RSA
+  <br/><br/>
+- 修复一些已知问题
+- \[工具箱] 新增收藏记录，新增RSA，增强AES
+
 ## 6.3.0
 
 - Fixed bugs

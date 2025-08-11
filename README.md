@@ -8,9 +8,9 @@ This plugin is committed to enhancing development efficiency with useful feature
 - [x] More supported jetbrains ides.
 - [x] Restful apis automatic scanning and display.
   - Support searching service in native Search Everywhere. ( use: <kbd>Ctrl \\</kbd> )
-  - View services in different IDE and project.
-  - Show restful service structure in tool window.
-  - Service and Method jump to each other.
+  - View apis in different IDE and project.
+  - Show restful api structure in tool window.
+  - Api and Method jump to each other.
 - [x] Request client:
   - Multi-tab: support displaying, sending multiple requests at the same time, sending concurrent request.
   - Multi-protocol: support http and sse by default.
