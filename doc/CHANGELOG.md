@@ -2,6 +2,12 @@
 
 [6.0 Upgrade Guide - 6.0升级指南](./zh_CN/快速入门/6.0升级指南.md)
 
+## 6.5.0
+
+- Api scanning supports parsing extra request parameters and body types. see <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%2FJava%E6%8E%A5%E5%8F%A3%E6%89%AB%E6%8F%8F%E9%85%8D%E7%BD%AE.md%23%E9%A2%9D%E5%A4%96%E8%A7%A3%E6%9E%90%E6%8E%A5%E5%8F%A3%E4%BF%A1%E6%81%AF">Java接口扫描配置</a>
+  <br/><br/>
+- 接口扫描支持识别额外的请求参数和body类型，具体参考 <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%2FJava%E6%8E%A5%E5%8F%A3%E6%89%AB%E6%8F%8F%E9%85%8D%E7%BD%AE.md%23%E9%A2%9D%E5%A4%96%E8%A7%A3%E6%9E%90%E6%8E%A5%E5%8F%A3%E4%BF%A1%E6%81%AF">Java接口扫描配置</a>
+
 ## 6.4.0
 
 - Fixed bugs

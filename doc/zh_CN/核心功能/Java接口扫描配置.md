@@ -287,8 +287,10 @@ public class User {
 
 _从`6.2.0`支持, 已适配 SpringMVC, 支持映射RequestBody参数_
 
+特别说明：此处参数解析要求方法本身存在对应的参数，且未设置忽略。否则，可参考下面【补充接口信息解析】。
+
 1. 在方法文档注释中存在tag`@param`，则会尝试解析 `@param` 的值作为类型，如下示例
-2. 参数本身的返回类型
+2. 参数本身的类型
 
 `@param`示例，如`com.example.bean.ListQuery`支持以下两种格式（Kotlin请使用**格式2**）：
 
@@ -411,6 +413,67 @@ public R<UserInfo> getUser(String id) {}
  */
 @PostMapping(name = "上传文件")
 public void uploadFile(@com.example.MyFileAnno com.example.MyFile file) {}
+```
+
+### 额外解析接口信息
+
+_从`6.5.0`支持, 已适配 SpringMVC 和 Jax-Rs_
+
+即使方法接口不存在相应参数，也可通过以下规则补充解析。
+
+#### 请求头
+
+```java
+/**
+ * 额外解析 Header，只支持解析key和value
+ *
+ * @reqHeader headerName headerValue
+ * @reqHeader h1 v1
+ * @reqHeader h2 v2
+ */
+@RequestMapping(method = {RequestMethod.POST})
+public R addUser(HttpServletRequest request) {}
+```
+#### Query 和 Param
+
+```java
+/**
+ * 额外解析 Query 和 Param，只支持解析key和value
+ *
+ * @reqParam paramName paramValue
+ * @reqParam p1 v1
+ * @reqParam p2 v2
+ */
+@RequestMapping(method = {RequestMethod.POST})
+public R addUser(HttpServletRequest request) {}
+```
+
+#### 请求体 Body 参数类型
+
+`@reqBody`示例，如`com.example.bean.ListQuery`支持以下两种格式（Kotlin请使用**格式2**）：
+
+- 示例 格式1:
+
+```java
+/**
+ * 额外解析body参数类型
+ *
+ * @reqBody {@link ListQuery}
+ */
+@RequestMapping(method = {RequestMethod.POST})
+public R addUser(HttpServletRequest request) {}
+```
+
+- 示例 格式2:
+
+```java
+/**
+ * 额外解析body参数类型
+ *
+ * @reqBody @com.example.bean.ListQuery
+ */
+@RequestMapping(method = {RequestMethod.POST})
+public R addUser(HttpServletRequest request) {}
 ```
 
 ## 五、替换规则
