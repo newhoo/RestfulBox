@@ -287,7 +287,7 @@ public class User {
 
 _从`6.2.0`支持, 已适配 SpringMVC, 支持映射RequestBody参数_
 
-特别说明：此处参数解析要求方法本身存在对应的参数，且未设置忽略。否则，可参考下面【补充接口信息解析】。
+特别说明：此处参数解析要求方法本身存在对应的参数，且未设置忽略。否则，可参考下面【额外解析接口信息】。
 
 1. 在方法文档注释中存在tag`@param`，则会尝试解析 `@param` 的值作为类型，如下示例
 2. 参数本身的类型
@@ -423,26 +423,31 @@ _从`6.5.0`支持, 已适配 SpringMVC 和 Jax-Rs_
 
 #### 请求头
 
+通过注释添加，格式：`@xheader headerName #jsonType #description #required #value`。其中jsonType可选值为：`string`, `integer`, `number`, `boolean`
+
 ```java
 /**
- * 额外解析 Header，只支持解析key和value
+ * 额外解析 Header
  *
- * @reqHeader headerName headerValue
- * @reqHeader h1 v1
- * @reqHeader h2 v2
+ * @xheader headerName #jsonType #description #required #value
+ * @xheader h1 #string #123 #true #v1
+ * @xheader h2 #int #456 #false #2
  */
 @RequestMapping(method = {RequestMethod.POST})
 public R addUser(HttpServletRequest request) {}
 ```
 #### Query 和 Param
 
+通过注释添加，格式：`@xparam paramName #jsonType #description #required #value`。其中jsonType可选值为：`string`, `integer`, `number`, `boolean`, `file`
+
 ```java
 /**
- * 额外解析 Query 和 Param，只支持解析key和value
+ * 额外解析 Query 和 Param
  *
- * @reqParam paramName paramValue
- * @reqParam p1 v1
- * @reqParam p2 v2
+ * @xparam paramName #jsonType #description #required #value
+ * @xparam p1 #string #123 #true #v1
+ * @xparam p1 #int #123 #true #123
+ * @xparam p3 #file #123 #true #@filepath
  */
 @RequestMapping(method = {RequestMethod.POST})
 public R addUser(HttpServletRequest request) {}
@@ -450,7 +455,7 @@ public R addUser(HttpServletRequest request) {}
 
 #### 请求体 Body 参数类型
 
-`@reqBody`示例，如`com.example.bean.ListQuery`支持以下两种格式（Kotlin请使用**格式2**）：
+`@xbody`示例，如`com.example.bean.ListQuery`支持以下两种格式（Kotlin请使用**格式2**）：
 
 - 示例 格式1:
 
@@ -458,7 +463,7 @@ public R addUser(HttpServletRequest request) {}
 /**
  * 额外解析body参数类型
  *
- * @reqBody {@link ListQuery}
+ * @xbody {@link ListQuery}
  */
 @RequestMapping(method = {RequestMethod.POST})
 public R addUser(HttpServletRequest request) {}
@@ -470,7 +475,7 @@ public R addUser(HttpServletRequest request) {}
 /**
  * 额外解析body参数类型
  *
- * @reqBody @com.example.bean.ListQuery
+ * @xbody @com.example.bean.ListQuery
  */
 @RequestMapping(method = {RequestMethod.POST})
 public R addUser(HttpServletRequest request) {}
