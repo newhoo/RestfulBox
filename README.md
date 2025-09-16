@@ -21,6 +21,7 @@ This plugin is committed to enhancing development efficiency with useful feature
   - Display request info like http packet, and save to log file.
 - [x] Language & Framework:
   - Support Spring MVC / OpenFeign / Jax-RS with java and kotlin in idea by default.
+  - Support Actix-Web with rust by default.
 - [x] Datasource: Support multiple data sources. Local/Cloud/Custom.
 - [x] Plugin extension: through this, you can try your great ideas.
 - [X] Have a convenient toolbox (Time conversion, Encryption & Decryption and etc.)
@@ -39,6 +40,7 @@ This plugin is committed to enhancing development efficiency with useful feature
   - [x] Dubbo: supported by plugin. See [RestfulBox-Dubbo](https://github.com/newhoo/RestfulBox-Dubbo). Support scanning and sending dubbo request.
   - [x] Solon: supported by plugin. See [RestfulBox-Solon](https://github.com/newhoo/RestfulBox-Solon). Support scanning and sending http request.
   - [x] K8s: supported by default from `6.0.0`. Support scanning k8s deployments.
+  - [x] Actix-Web: supported by default from `6.6.0`.
 - Protocol
   - [x] HTTP/HTTPS: supported by default.
   - [x] DUBBO: see above.
@@ -61,10 +63,9 @@ If you find any problems with this plugin, please give me feedback. If it helps,
 [Issues](https://github.com/newhoo/RestfulBox/issues) | [Email](mailto:dev2n@qq.com) | [Ratings & Previews](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 
 > Note  
-> Please provide necessary information when you feedback: IDEA version, plugin version, exception content, recreation way, desire, and etc.
+> Please provide necessary information when you feedback: IDE version, plugin version, exception content, recreation way, desire, and etc.
 
 
 ## Sponsor
-You can take me a cup of coffee as you want. Thanks!
 
 ![Sponsor](doc/en/images/pay.png)

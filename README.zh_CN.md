@@ -2,7 +2,7 @@
 
 [英文](./README.md) | [Github](https://github.com/newhoo/RestfulBox) | [Gitee](https://gitee.com/newhoo/RestfulBox) | [Jetbrains](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews) | [界面展示](doc/zh_CN/界面展示.md)
 
-**RestfulBox**插件致力于提升开发效率，只有实用常用好用的功能，丰富且完善的功能极大地提高了使用IDE开发的效率。
+**RestfulBox**插件致力于提升开发效率，只有实用常用好用的功能，丰富的功能极大地提高了使用IDE开发的效率。
 
 ## 特性 ([6.0升级指南](doc/zh_CN/快速入门/6.0升级指南.md))
 - [x] 支持更多的jetbrains产品，不仅仅是idea
@@ -21,6 +21,7 @@
   - 请求响应信息展示报文格式，支持保存到日志文件
 - [x] 语言和框架：
   - Java 默认支持 SpringMvc / OpenFeign / Jax-RS 体系接口 (Java and Kotlin)
+  - Rust 默认支持 Actix-Web
 - [x] 数据源: 支持多种数据源存储数据，更安全更可控，可本地可云端同步可定制
 - [x] 插件扩展：提供多个扩展点，便于自定义需求的实现
 - [X] 工具箱：支持时间转换、常用加解密、证书解析等
@@ -40,6 +41,7 @@
   - [x] Dubbo：通过插件支持，见 [RestfulBox-Dubbo](https://github.com/newhoo/RestfulBox-Dubbo) ，支持扫描和发送请求
   - [x] Solon：通过插件支持，见 [RestfulBox-Solon](https://github.com/newhoo/RestfulBox-Solon) ，支持扫描和请求发送
   - [x] K8s：从`6.0.0`开始默认支持，支持扫描项目中的 K8s 部署文件
+  - [x] Actix-Web: 从`6.6.0`开始默认支持
 - 协议类型
   - [x] HTTP/HTTPS：默认支持
   - [x] DUBBO：同上
@@ -54,16 +56,15 @@
 - [CHANGELOG](doc/CHANGELOG.md)
 
 ## 关于插件
-该插件的所有功能源于我本人日常开发中的点点滴滴，持续维护，为爱发电。望各位大佬支持一下，点亮小星星，同时也欢迎提供宝贵的建议。:star2:
+该插件的所有功能源于我本人日常开发中的点点滴滴，持续维护，还望各位大佬支持一下，同时也欢迎提供宝贵的建议。
+
+仓库源码已更新到 4.0，暂时不会同步最新版本源码。
 
 [Issues](https://github.com/newhoo/RestfulBox/issues) | [Email](mailto:dev2n@qq.com) | [Jetbrains评分](https://plugins.jetbrains.com/plugin/14723-restfulbox/reviews)
 
 > 注意  
-> 反馈时请务必附上必要信息：Idea版本、插件版本、异常内容、复现方式、诉求等。
-
-仓库源码已更新到 4.0，出于某些原因暂时不会开源当前最新版本源码，请放心使用。
+> 反馈时请务必附上必要信息：IDE 版本、插件版本、异常内容、复现方式、诉求等。
 
 ## 支持作者
-你的支持是鼓励我前行的动力，非常感谢~
 
 ![赞助](doc/en/images/pay.png)

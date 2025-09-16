@@ -104,17 +104,17 @@ _优先级从高到低_
 ```java
 @Data
 public class User {
-    /**
-     * 添加时间
-     */
-    @com.fasterxml.jackson.annotation.JsonProperty("create_time")
-    private LocalDateTime createTime;
+  /**
+   * 添加时间
+   */
+  @com.fasterxml.jackson.annotation.JsonProperty("create_time")
+  private LocalDateTime createTime;
 
-    /**
-     * 用户名，没配置不生效
-     */
-    @com.alibaba.fastjson.annotation.JSONField(name = "user_name")
-    private String username;
+  /**
+   * 用户名，没配置不生效
+   */
+  @com.alibaba.fastjson.annotation.JSONField(name = "user_name")
+  private String username;
 }
 ```
 
@@ -199,13 +199,13 @@ public class UseController {}
 @com.example.annotation.Ignore
 public class UseController2 {
 
-    /**
-     * 单独过滤方法
-     * @ignore
-     */
-    @com.example.annotation.Ignore
-    @GetMapping(name = "获取用户列表")
-    public R<List<User>> selectList() {}
+  /**
+   * 单独过滤方法
+   * @ignore
+   */
+  @com.example.annotation.Ignore
+  @GetMapping(name = "获取用户列表")
+  public R<List<User>> selectList() {}
 }
 ```
 
@@ -272,12 +272,12 @@ _优先级从高到低_
  */
 @Data
 public class User {
-    /**
-     * 年龄信息
-     * @ignore 优先级次之
-     */
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    private UserAge age;
+  /**
+   * 年龄信息
+   * @ignore 优先级次之
+   */
+  @com.fasterxml.jackson.annotation.JsonIgnore
+  private UserAge age;
 }
 ```
 
@@ -287,7 +287,7 @@ public class User {
 
 _从`6.2.0`支持, 已适配 SpringMVC, 支持映射RequestBody参数_
 
-特别说明：此处参数解析要求方法本身存在对应的参数，且未设置忽略。否则，可参考下面【额外解析接口信息】。
+特别说明：此处参数解析要求方法本身存在对应的参数，且未设置忽略。否则，可参考下面【六、额外解析接口信息】。
 
 1. 在方法文档注释中存在tag`@param`，则会尝试解析 `@param` 的值作为类型，如下示例
 2. 参数本身的类型
@@ -415,13 +415,23 @@ public R<UserInfo> getUser(String id) {}
 public void uploadFile(@com.example.MyFileAnno com.example.MyFile file) {}
 ```
 
-### 额外解析接口信息
+## 五、替换规则
+
+### URL 替换规则
+
+当扫描出来的接口包含未正常解析到的变量时，可配置替换规则，重新扫描
+
+如: 接口扫出来的路径包含 `Constants.API`, 则配置后会自动替换为 `/api/v1`
+
+![img.png](images/1750491649962.png)
+
+## 六、额外解析接口信息
 
 _从`6.5.0`支持, 已适配 SpringMVC 和 Jax-Rs_
 
 即使方法接口不存在相应参数，也可通过以下规则补充解析。
 
-#### 请求头
+### 请求头
 
 通过注释添加，格式：`@xheader headerName #jsonType #description #required #value`。其中jsonType可选值为：`string`, `integer`, `number`, `boolean`
 
@@ -436,7 +446,7 @@ _从`6.5.0`支持, 已适配 SpringMVC 和 Jax-Rs_
 @RequestMapping(method = {RequestMethod.POST})
 public R addUser(HttpServletRequest request) {}
 ```
-#### Query 和 Param
+### Query 和 Param
 
 通过注释添加，格式：`@xparam paramName #jsonType #description #required #value`。其中jsonType可选值为：`string`, `integer`, `number`, `boolean`, `file`
 
@@ -453,7 +463,7 @@ public R addUser(HttpServletRequest request) {}
 public R addUser(HttpServletRequest request) {}
 ```
 
-#### 请求体 Body 参数类型
+### 请求体 Body 参数类型
 
 `@xbody`示例，如`com.example.bean.ListQuery`支持以下两种格式（Kotlin请使用**格式2**）：
 
@@ -480,13 +490,3 @@ public R addUser(HttpServletRequest request) {}
 @RequestMapping(method = {RequestMethod.POST})
 public R addUser(HttpServletRequest request) {}
 ```
-
-## 五、替换规则
-
-### URL 替换规则
-
-当扫描出来的接口包含未正常解析到的变量时，可配置替换规则，重新扫描
-
-如: 接口扫出来的路径包含 `Constants.API`, 则配置后会自动替换为 `/api/v1`
-
-![img.png](images/1750491649962.png)

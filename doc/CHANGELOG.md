@@ -2,6 +2,16 @@
 
 [6.0 Upgrade Guide - 6.0升级指南](./zh_CN/快速入门/6.0升级指南.md)
 
+## 6.6.0
+
+- update global sort
+- \[API] Restore the default creation of a request client when the tool window is opened for the first time. Disable path: Settings -> RestfulBox -> API Request
+- \[API] Support Actix-Web api scanning for the Rust language. See: <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%2FRust%E6%8E%A5%E5%8F%A3%E6%89%AB%E6%8F%8F%E9%85%8D%E7%BD%AE.md">Rust Scanning API</a>
+<br/><br/>
+- 优化全局排序
+- \[API] 恢复首次打开工具窗口时默认创建一个请求客户端，可在设置中关闭：设置 -> RestfulBox -> 接口请求
+- \[API] 为 Rust 语言支持 Actix-Web 接口扫描, 文档说明: <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%2FRust%E6%8E%A5%E5%8F%A3%E6%89%AB%E6%8F%8F%E9%85%8D%E7%BD%AE.md">Rust接口扫描配置</a>
+
 ## 6.5.0
 
 - Api scanning supports parsing extra request parameters and body types. see <a href="https://github.com/newhoo/RestfulBox/blob/main/doc/zh_CN/%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%2FJava%E6%8E%A5%E5%8F%A3%E6%89%AB%E6%8F%8F%E9%85%8D%E7%BD%AE.md%23%E9%A2%9D%E5%A4%96%E8%A7%A3%E6%9E%90%E6%8E%A5%E5%8F%A3%E4%BF%A1%E6%81%AF">Java接口扫描配置</a>
