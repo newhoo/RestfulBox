@@ -72,23 +72,6 @@ public class PsiAnnotationHelper {
         return null;
     }
 
-    public static String getSimpleAnnotationMemberValue(PsiAnnotationMemberValue value) {
-        if (value instanceof PsiReferenceExpression reference) {
-            PsiElement resolved = reference.resolve();
-            if (resolved instanceof PsiField) {
-                Object constantValue = ((PsiField) resolved).computeConstantValue();
-                if ((constantValue) != null) {
-                    return String.valueOf(constantValue);
-                }
-            }
-            return reference.getText();
-
-        } else if (value instanceof PsiLiteralExpression) {
-            return String.valueOf(((PsiLiteralExpression) value).getValue());
-        }
-        return null;
-    }
-
     @NotNull
     public static List<String> getAnnotationAttributeValues(PsiAnnotation annotation, String attr) {
         List<String> values = new ArrayList<>();
@@ -100,17 +83,17 @@ public class PsiAnnotationHelper {
         //只有注解
         //一个值 class com.intellij.psi.impl.source.tree.java.PsiLiteralExpressionImpl
         //多个值  class com.intellij.psi.impl.source.tree.java.PsiArrayInitializerMemberValueImpl
-        String simpleValue;
-        if ((simpleValue = getSimpleAnnotationMemberValue(value)) != null) {
-            values.add(simpleValue);
+        if (value instanceof PsiReferenceExpression) {
+            PsiReferenceExpression expression = (PsiReferenceExpression) value;
+            values.add(expression.getText());
+        } else if (value instanceof PsiLiteralExpression) {
+//            values.add(psiNameValuePair.getLiteralValue());
+            values.add(((PsiLiteralExpression) value).getValue().toString());
         } else if (value instanceof PsiArrayInitializerMemberValue) {
             PsiAnnotationMemberValue[] initializers = ((PsiArrayInitializerMemberValue) value).getInitializers();
-            for (PsiAnnotationMemberValue item : initializers) {
-                String itemValue = getSimpleAnnotationMemberValue(item);
-                values.add(itemValue != null
-                        ? itemValue
-                        : item.getText().replaceAll("\"", "")
-                );
+
+            for (PsiAnnotationMemberValue initializer : initializers) {
+                values.add(initializer.getText().replaceAll("\"", ""));
             }
         } else if (value instanceof PsiPolyadicExpression) {
             String s = "";
