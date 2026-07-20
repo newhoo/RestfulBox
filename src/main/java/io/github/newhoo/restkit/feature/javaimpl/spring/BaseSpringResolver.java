@@ -25,7 +25,6 @@ import io.github.newhoo.restkit.restful.RequestHelper;
 import io.github.newhoo.restkit.util.TypeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -242,7 +241,7 @@ public abstract class BaseSpringResolver extends BaseRequestResolver implements 
         for (PsiParameter psiParameter : psiParameters) {
             String paramTypeName = psiParameter.getType().getCanonicalText();
             if (paramFilterTypes.contains(paramTypeName)
-                    || CollectionUtils.containsAny(paramFilterTypes, Arrays.stream(psiParameter.getAnnotations()).map(PsiAnnotation::getQualifiedName).collect(Collectors.toSet()))) {
+                    || !Collections.disjoint(paramFilterTypes, Arrays.stream(psiParameter.getAnnotations()).map(PsiAnnotation::getQualifiedName).collect(Collectors.toSet()))) {
                 continue;
             }
 

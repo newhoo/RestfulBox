@@ -9,7 +9,6 @@ import io.github.newhoo.restkit.i18n.RestBundle;
 import io.github.newhoo.restkit.intellij.BaseAnAction;
 import io.github.newhoo.restkit.util.IdeaUtils;
 import io.github.newhoo.restkit.util.NotifierUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -24,7 +23,7 @@ public class CopyUrlAction extends BaseAnAction implements DumbAware {
     @Override
     public void actionPerformed(AnActionEvent e) {
         List<RestItem> serviceItems = RestDataKey.SELECTED_SERVICE.getData(e.getDataContext());
-        if (CollectionUtils.isEmpty(serviceItems)) {
+        if (serviceItems == null || serviceItems.isEmpty()) {
             return;
         }
         StringBuilder sb = new StringBuilder();

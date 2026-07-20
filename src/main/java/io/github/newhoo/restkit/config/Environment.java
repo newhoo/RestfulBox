@@ -5,7 +5,6 @@ import io.github.newhoo.restkit.common.EnvList;
 import io.github.newhoo.restkit.common.NotProguard;
 import io.github.newhoo.restkit.util.ScriptUtils;
 import lombok.Data;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,7 +33,7 @@ public class Environment {
     private String script;
 
     public String getCurrentEnv() {
-        if (CollectionUtils.isEmpty(envList)) {
+        if (envList == null || envList.isEmpty()) {
             return "";
         }
         String currentEnv = ConfigHelper.getGlobalSetting().getProjectCurrentEnvMap().get(project);
@@ -54,13 +53,13 @@ public class Environment {
     }
 
     public List<String> getEnvKeys() {
-        return CollectionUtils.isEmpty(envList)
+        return envList == null || envList.isEmpty()
                 ? Collections.emptyList()
                 : envList.stream().map(EnvList::getEnv).distinct().collect(Collectors.toList());
     }
 
     public Map<String, String> getEnabledEnvMap(String currentEnv) {
-        if (StringUtils.isEmpty(currentEnv) || CollectionUtils.isEmpty(envList)) {
+        if (StringUtils.isEmpty(currentEnv) || envList == null || envList.isEmpty()) {
             return Collections.emptyMap();
         }
         Map<String, String> map = new LinkedHashMap<>(8);

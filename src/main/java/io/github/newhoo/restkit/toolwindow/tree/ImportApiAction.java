@@ -21,7 +21,6 @@ import io.github.newhoo.restkit.restful.RequestResolver;
 import io.github.newhoo.restkit.toolwindow.ToolWindowHelper;
 import io.github.newhoo.restkit.util.JsonUtils;
 import io.github.newhoo.restkit.util.NotifierUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,7 +66,7 @@ public class ImportApiAction extends BaseAnAction {
                 return;
             }
             restItems = JsonUtils.fromJsonArr(data, RestItem.class);
-            if (CollectionUtils.isEmpty(restItems) || restItems.stream().anyMatch(item -> StringUtils.isEmpty(item.getUrl()))) {
+            if (restItems == null || restItems.isEmpty() || restItems.stream().anyMatch(item -> StringUtils.isEmpty(item.getUrl()))) {
                 NotifierUtils.errorBalloon(RestBundle.message("toolkit.toolwindow.tree.importapi.title"), RestBundle.message("toolkit.toolwindow.tree.importapi.content", "format error"), project);
                 return;
             }

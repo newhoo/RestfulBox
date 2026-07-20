@@ -4,7 +4,6 @@ import com.intellij.openapi.options.Configurable;
 import io.github.newhoo.restkit.datasource.DataSource;
 import io.github.newhoo.restkit.datasource.DataSourceHelper;
 import io.github.newhoo.restkit.util.JsonUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nls.Capitalization;
 import org.jetbrains.annotations.Nullable;
@@ -56,9 +55,9 @@ public class JavaFilterConfigurable implements Configurable {
         Set<String> fileTypeSet = Arrays.stream(javaFilterForm.getFileParameterTypeModel().toArray())
                                         .map(String::valueOf)
                                         .collect(Collectors.toSet());
-        return !CollectionUtils.isEqualCollection(javaFilterSetting.getFilterClassQualifiedNames(), classTypeSet)
-                || !CollectionUtils.isEqualCollection(javaFilterSetting.getFilterParamQualifiedNames(), typeSet)
-                || !CollectionUtils.isEqualCollection(javaFilterSetting.getFileParameterQualifiedNames(), fileTypeSet);
+        return !javaFilterSetting.getFilterClassQualifiedNames().equals(classTypeSet)
+                || !javaFilterSetting.getFilterParamQualifiedNames().equals(typeSet)
+                || !javaFilterSetting.getFileParameterQualifiedNames().equals(fileTypeSet);
 
     }
 

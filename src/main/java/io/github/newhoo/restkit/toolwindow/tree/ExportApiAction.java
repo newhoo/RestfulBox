@@ -14,7 +14,6 @@ import io.github.newhoo.restkit.intellij.BaseAnAction;
 import io.github.newhoo.restkit.util.IdeaUtils;
 import io.github.newhoo.restkit.util.JsonUtils;
 import io.github.newhoo.restkit.util.NotifierUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -37,7 +36,7 @@ public class ExportApiAction extends BaseAnAction {
     public void actionPerformed(@NotNull AnActionEvent e) {
         Project project = e.getRequiredData(CommonDataKeys.PROJECT);
         List<RestItem> serviceItems = RestDataKey.SELECTED_SERVICE.getData(e.getDataContext());
-        if (CollectionUtils.isEmpty(serviceItems)) {
+        if (serviceItems == null || serviceItems.isEmpty()) {
             e.getPresentation().setVisible(false);
             return;
         }

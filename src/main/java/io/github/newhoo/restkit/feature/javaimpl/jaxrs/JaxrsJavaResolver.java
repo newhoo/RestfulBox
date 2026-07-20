@@ -22,7 +22,6 @@ import io.github.newhoo.restkit.intellij.JavaCompactHelper;
 import io.github.newhoo.restkit.restful.RequestHelper;
 import io.github.newhoo.restkit.restful.RequestResolver;
 import io.github.newhoo.restkit.restful.ep.RestfulResolverProvider;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -163,8 +162,8 @@ public class JaxrsJavaResolver extends BaseJaxrsResolver {
         for (PsiParameter psiParameter : psiParameters) {
             String paramTypeName = psiParameter.getType().getCanonicalText();
             Set<String> annos = Arrays.stream(psiParameter.getAnnotations()).map(PsiAnnotation::getQualifiedName).collect(Collectors.toSet());
-            if (paramFilterTypes.contains(paramTypeName) || CollectionUtils.containsAny(paramFilterTypes, annos)
-                    || CollectionUtils.containsAny(paramAnnotationSet, annos)) {
+            if (paramFilterTypes.contains(paramTypeName) || !Collections.disjoint(paramFilterTypes, annos)
+                    || !Collections.disjoint(paramAnnotationSet, annos)) {
                 continue;
             }
             return PsiClassHelper.convertClassToJSON(psiParameter.getType().getCanonicalText(), psiMethod.getProject());

@@ -4,7 +4,6 @@ import io.github.newhoo.restkit.common.BKV;
 import io.github.newhoo.restkit.common.KV;
 import io.github.newhoo.restkit.common.NotProguard;
 import lombok.Data;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class CommonHeader {
     private List<BKV> globalHeaderList = Collections.emptyList();
 
     public List<KV> getEnabledGlobalHeader() {
-        if (CollectionUtils.isEmpty(globalHeaderList)) {
+        if (globalHeaderList == null || globalHeaderList.isEmpty()) {
             return Collections.emptyList();
         }
         List<KV> list = new ArrayList<>();

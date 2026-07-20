@@ -58,7 +58,6 @@ import io.github.newhoo.restkit.util.NotifierUtils;
 import io.github.newhoo.restkit.util.ScriptUtils;
 import io.github.newhoo.restkit.util.ToolkitUtil;
 import lombok.Getter;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
@@ -303,7 +302,7 @@ public class RestServiceClientPanel extends JPanel {
                                 @Override
                                 public void actionPerformed(@NotNull AnActionEvent e) {
                                     List<KV> parameters = DataSourceHelper.getDataSource().selectParameter(restClientEditorInfo, project);
-                                    if (CollectionUtils.isEmpty(parameters)) {
+                                    if (parameters == null || parameters.isEmpty()) {
                                         NotifierUtils.infoBalloon("", RestBundle.message("toolkit.toolwindow.client.parameter.export.empty.msg", title), null, project);
                                         return;
                                     }
@@ -325,7 +324,7 @@ public class RestServiceClientPanel extends JPanel {
                                             return;
                                         }
                                         List<KV> kvs = JsonUtils.fromJsonArr(data, KV.class);
-                                        if (CollectionUtils.isEmpty(kvs) || kvs.stream().anyMatch(o -> StringUtils.isAnyEmpty(o.getKey(), o.getValue()))) {
+                                        if (kvs == null || kvs.isEmpty() || kvs.stream().anyMatch(o -> StringUtils.isAnyEmpty(o.getKey(), o.getValue()))) {
                                             NotifierUtils.errorBalloon(RestBundle.message("toolkit.toolwindow.client.parameter.import.empty.title"), RestBundle.message("toolkit.toolwindow.client.parameter.import.empty.msg"), project);
                                             return;
                                         }
@@ -549,7 +548,7 @@ public class RestServiceClientPanel extends JPanel {
     }
 
     private void showRequest(String url, HttpMethod method, List<KV> config, List<KV> headers, List<KV> params, String body) {
-        if ((CollectionUtils.isEmpty(params) && StringUtils.isNotEmpty(body))) {
+        if ((params == null || params.isEmpty()) && StringUtils.isNotEmpty(body)) {
             tabbedPane.setSelectedIndex(3);
         } else {
             tabbedPane.setSelectedIndex(2);
