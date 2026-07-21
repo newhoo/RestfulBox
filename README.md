@@ -64,8 +64,3 @@ If you find any problems with this plugin, please give me feedback. If it helps,
 
 > Note  
 > Please provide necessary information when you feedback: IDE version, plugin version, exception content, recreation way, desire, and etc.
-
-
-## Sponsor
-
-![Sponsor](doc/en/images/pay.png)
